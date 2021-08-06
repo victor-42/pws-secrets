@@ -1,0 +1,70 @@
+@import '~igniteui-angular/lib/core/styles/themes/index';
+@import './src/scss/vars';
+
+$dark-bottom-nav: igx-bottom-nav-theme(
+        $active-item-color: $secrets-primary-color
+);
+
+.igx-bottom-nav__menu, .igx-bottom-nav__menu--bottom, .igx-bottom-nav__menu--top {
+  position: sticky;
+  display: block;
+}
+
+:host {
+  ::ng-deep {
+    @include igx-bottom-nav($dark-bottom-nav);
+    html {
+      font-family: Arial, serif;
+    }
+  }
+}
+
+.sticky-app-title {
+  background: #ffff !important;
+  box-shadow: 0 3px 12px 0 rgba(0,0,0,.08);
+  position: sticky;
+  top: 0;
+  height: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 8;
+
+  img {
+    height: 35px;
+    width: auto;
+  }
+}
+
+.content {
+  margin: 0;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  padding-bottom: 75px;
+}
+
+.navbar-bottom {
+  igx-tab-panel {
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.router-nav-link{
+  fa-icon {
+    font-size: 1.2em;
+    color: rgba(0,0,0,0.62);
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.router-nav-link.active fa-icon{
+  color: $secrets-primary-color;
+  transition: all 0.2s ease-in-out;
+}

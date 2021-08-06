@@ -1,0 +1,18 @@
+# IDEA and Finder
+.idea
+secrets.pws-agency.com.iml
+.DS_Store
+
+# Python
+venv
+*.pyc
+__pycache__/
+
+# Django
+db.sqlite3
+configuration/local_settings.py
+
+# Custom
+log/
+backend/secrets.json
+

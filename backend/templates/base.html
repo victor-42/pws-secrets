@@ -1,0 +1,133 @@
+{% load static %}
+
+<!DOCTYPE html>
+<!--[if IE 8 ]><html class="no-js oldie ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="no-js oldie ie9" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+
+    <!--- Basic Page Needs
+   ================================================== -->
+    <meta charset="utf-8">
+    <title>pws_secrets</title>
+
+    <!--- SEO
+   ================================================== -->
+    <meta name="description" content="With this app you can send self-destructive and encrypted one-way messages over the world wide web. Messages destroy themselves after first opening or after 24/48/72 hours.">
+    <meta name="author" content="Pascal Roth">
+    <meta name="author" content="Victor Hug">
+    <meta name="keywords" content="Augsburg, Website, secrets, Secret, Sharing, Share, pws_agency, Web, Victor, Hug, Pascal, Roth, Partner, Server, PWS, Service, expert, django, python, Python, Framework, Notes, Access Data, Data, Access, Zugriffsdaten, Zugriff, portal, Portal, credentials, pictures">
+    <meta name="robots" content="index,follow">
+    <meta name="revisit-after" content="2 days">
+    <meta name="audience" content="all">
+
+    <!-- Mobile Specific Metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fa.all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <!-- Modernizr
+    =================================================== -->
+    <script src="{% static 'js/modernizr.js' %}"></script>
+
+    <!-- Favicons
+    =================================================== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicons/apple-touch-icon.png' %}?v=2">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicons/favicon-32x32.png' %}?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicons/favicon-16x16.png' %}?v=2">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
+    <meta name="msapplication-TileColor" content="#313131">
+    <meta name="msapplication-TileImage" content="{% static 'favicons/mstile-150x150.png' %}?v=2">
+    <meta name="theme-color" content="#ffffff">
+
+</head>
+
+<body>
+
+<!-- content-wrap -->
+<div id="content-wrap">
+
+    <!-- main  -->
+    <main class="row">
+        <div class="col-12">
+            <header class="site-header">
+                <div class="logo">
+                    <a href="/"></a>
+                </div>
+            </header>
+
+            <div id="main-content" class="twelve columns">
+
+                <!-- Form -->
+                <div id="mc-signup">
+                  <p>{% block site_title %}With this app you can send self-destructive and encrypted one-way messages over the world wide web. Messages <u>destroy themselves</u> after first opening or after <u>24/48/72 hours</u>.{% endblock site_title %}</p>
+                    <hr>
+                    <br>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p><code>{{ message }}</code></p>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% block content %}
+                    {% endblock %}
+
+                </div> <!-- /sign-up form -->
+
+            </div><!-- /main-content -->
+
+        </div>
+    </main>
+
+</div><!-- /content-wrap -->
+
+<!-- Footer
+=================================================== -->
+<footer class="group">
+
+    <!--<ul class="footer-social">
+          <li><a href="https://www.pws-agency.com"><i class="fa fa-dribbble"></i></a></li>
+    </ul>-->
+
+    <ul class="footer-copyright">
+        <li><a href="https://www.pws-agency.com/en/imprint">Imprint</a></li>
+        <li><a href="https://www.pws-agency.com/en/terms">Terms</a></li>
+    </ul>
+
+</footer>
+
+<div id="preloader">
+    <div id="loader">
+    </div>
+</div>
+
+<!-- Script
+=================================================== -->
+<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery-migrate-1.2.1.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/clipboard.min.js' %}"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn');
+
+    clipboard.on('success', function (e) {
+        console.log(e);
+    });
+
+    clipboard.on('error', function (e) {
+        console.log(e);
+    });
+</script>
+
+</body>
+</html>

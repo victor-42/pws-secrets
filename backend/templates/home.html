@@ -1,0 +1,56 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>pws_secrets</title>
+    <base href="/">
+
+    <meta name="description" content="With this app you can send self-destructive and encrypted one-way messages over the world wide web. Messages destroy themselves after first opening or after 24/48/72 hours.">
+    <meta name="author" content="Victor Hug">
+    <meta name="keywords" content="Augsburg, Website, secrets, Secret, Sharing, Share, pws_agency, Web Services, Victor, Hug, Pascal, Roth, Partner, Server, PWS, pascalwebservices, pascal web, web, services, Service, Experte, expert, pascal, django, python, Python, Framework, Notes, Access Data, Data, Access, Zugriffsdaten, Zugriff, portal, Portal">
+    <meta name="robots" content="index,follow">
+    <meta name="revisit-after" content="2 days">
+    <meta name="audience" content="all">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% if DEBUG %}
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'ang/assets/favicon/apple-touch-icon.png' %}?v=2">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'ang/assets/favicon/favicon-32x32.png' %}?v=2">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'ang/assets/favicon/favicon-16x16.png' %}?v=2">
+        <link rel="manifest" href="{% static 'ang/assets/favicon/site.webmanifest' %}">
+    {% else %}
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'ang_prod/assets/favicon/apple-touch-icon.png' %}?v=2">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'ang_prod/assets/favicon/favicon-32x32.png' %}?v=2">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'ang_prod/assets/favicon/favicon-16x16.png' %}?v=2">
+        <link rel="stylesheet" href="{% static 'ang_prod/styles.css' %}">
+        <link rel="manifest" href="{% static 'ang_prod/assets/favicon/site.webmanifest' %}">
+   {% endif %}
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <meta name="msapplication-TileColor" content="#333333">
+    <meta name="theme-color" content="#333333">
+ </head>
+<body>
+    <app-root>
+
+    </app-root>
+
+    {% if DEBUG %}
+        <script type="text/javascript" src="{% static 'ang/runtime.js' %}"></script>
+        <script type="text/javascript" src="{% static 'ang/polyfills.js' %}"></script>
+        <script type="text/javascript" src="{% static 'ang/main.js' %}"></script>
+        <script type="text/javascript" src="{% static 'ang/styles.js' %}"></script>
+        <script type="text/javascript" src="{% static 'ang/vendor.js' %}"></script>
+    {% else %}
+        <script src="{% static 'ang_prod/runtime-es2015.js' %}" type="module"></script>
+        <script src="{% static 'ang_prod/runtime-es5.js' %}" nomodule defer></script>
+        <script src="{% static 'ang_prod/polyfills-es5.js' %}" nomodule defer></script>
+        <script src="{% static 'ang_prod/polyfills-es2015.js' %}" type="module"></script>
+        <script src="{% static 'ang_prod/main-es2015.js' %}" type="module"></script>
+        <script src="{% static 'ang_prod/main-es5.js' %}" nomodule defer></script>
+    {% endif %}
+</body>
+</html>

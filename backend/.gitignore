@@ -1,0 +1,17 @@
+# Secrets
+secrets.json
+id_store.json
+db.sqlite3
+
+# Python
+*.pyc
+venv
+__pycache__/
+/*/__pycache__/
+/*/*/__pycache__/
+log/app.log
+media/images/
+!media/images/.gitkeep
+
+# Angular files
+static/ang/*

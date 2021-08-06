@@ -1,0 +1,44 @@
+<div class="sticky-app-title">
+      <img src="{{asset_dir}}/images/one_secrets.png" alt="Secrets">
+</div>
+<div class="content" #content>
+      <router-outlet></router-outlet>
+</div>
+
+<igx-bottom-nav class="navbar-bottom">
+    <igx-tab-panel>
+        <ng-template igxTab>
+            <a [routerLink]="['/', 'home']" class="router-nav-link" [routerLinkActive]="'active'">
+                <fa-icon [icon]="faHome"></fa-icon>
+            </a>
+        </ng-template>
+    </igx-tab-panel>
+    <igx-tab-panel>
+        <ng-template igxTab>
+            <a [routerLink]="['/', 'note']" class="router-nav-link" [routerLinkActive]="'active'">
+                <fa-icon [icon]="faNote"></fa-icon>
+            </a>
+        </ng-template>
+    </igx-tab-panel>
+    <igx-tab-panel>
+        <ng-template igxTab>
+            <a [routerLink]="['/', 'credentials']" class="router-nav-link" [routerLinkActive]="'active'">
+                <fa-icon [icon]="faKey"></fa-icon>
+            </a>
+        </ng-template>
+    </igx-tab-panel>
+    <igx-tab-panel>
+        <ng-template igxTab>
+            <a [routerLink]="['/', 'image']" class="router-nav-link" [routerLinkActive]="'active'">
+                <fa-icon [icon]="faImage"></fa-icon>
+            </a>
+        </ng-template>
+    </igx-tab-panel>
+    <igx-tab-panel *ngIf="!mobile">
+        <ng-template igxTab>
+            <a [routerLink]="['/', 'info']" class="router-nav-link" [routerLinkActive]="'active'">
+                <fa-icon [icon]="faInfo"></fa-icon>
+            </a>
+        </ng-template>
+    </igx-tab-panel>
+</igx-bottom-nav>

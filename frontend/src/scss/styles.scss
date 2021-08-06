@@ -1,0 +1,101 @@
+// CSS Reset, comment out if not required or using a different module
+@import '~minireset.css/minireset';
+/* You can add global styles to this file, and also import other style files */
+@import "vars";
+@import "~igniteui-angular/lib/core/styles/themes/index";
+// Uncomment the following lines if you want to add a custom palette:
+// $primary: #731963 !default;
+// $secondary: #ce5712 !default;
+// $app-palette: igx-palette($primary, $secondary);
+
+/* autoprefixer grid: on */
+@include igx-core();
+@include igx-theme($default-palette);
+
+
+html, body {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+igx-bottom-nav igx-tab .igx-bottom-nav__menu-item--selected .tab-icon {
+  color: $secrets-primary-color;
+}
+
+.row {
+  margin: 0 0;
+}
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+
+.title {
+  font-size: 2em;
+  margin-bottom: 25px;
+  margin-top: 50px;
+  font-family: "Space Grotesk Bold", -apple-system, BlinkMacSystemFont,
+  Roboto, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: 300;
+  letter-spacing: -1px;
+
+  strong {
+    font-weight: bold;
+  }
+}
+
+.submit-button {
+  background-color: $secrets-primary-color !important;
+  color: white;
+  padding: 14px 18px !important;
+  min-height: 20px !important;
+  line-height: 20px !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: $secrets-primary-color !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: $secrets-primary-color !important;
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: $secrets-primary-color !important;
+}
+
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: $secrets-primary-color !important;
+}
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: $secrets-primary-color;
+}
+
+.mat-progress-spinner svg {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.mat-progress-spinner {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.secrets-item-size {
+  width: $secrets-width;
+  max-width: $secrets-max-width;
+}
