@@ -21,3 +21,11 @@ class SecretImage(models.Model):
         except (FileNotFoundError, FileExistsError):
             pass
         super(SecretImage, self).delete(args, kwargs)
+
+
+class Secret(models.Model):
+    id = models.CharField(max_length=36, null=False, blank=False, unique=True, primary_key=True)
+    type = models.CharField(max_length=1, null=False, blank=False, default='n')
+    expiration = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    opened_at = models.DateTimeField(null=True, blank=True)

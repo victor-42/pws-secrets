@@ -146,56 +146,10 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'standard': {
-            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
-            'datefmt': '%d/%b/%Y %H:%M:%S',
-            'encoding': 'utf-8',
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'standard',
-            'encoding': 'utf-8',
-            'filename': BASE_DIR + '/log/app.log',
-        },
-        'console': {
-            'level': 'WARNING',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard',
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-        }
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file', 'console', 'mail_admins'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'portal': {
-            'handlers': ['file', 'console', 'mail_admins'],
-            'propagate': True,
-            'level': 'WARNING',
-        },
-    },
-}
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [],
     'DEFAULT_PERMISSION_CLASSES': [],
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
-    }
-}
+KEYFILE_PATH = os.path.join(BASE_DIR, 'keys.private')
+MAX_EXPIRATION_MINUTES = 60 * 24 * 1

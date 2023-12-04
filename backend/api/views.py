@@ -11,6 +11,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
+from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError
@@ -19,8 +20,62 @@ from cryptography.fernet import Fernet
 from django.core.files.base import ContentFile
 
 from .crypting import PWSCrypto
-from .serializer import LogInSecretSerializer, NoteSecretSerializer, ImageSecretSerializer
-from .models import SecretImage
+from .keys import KeyManager, AlreadyRotatedError
+from .serializer import LogInSecretSerializer, NoteSecretSerializer, ImageSecretSerializer, SecretSerializer
+from .models import SecretImage, Secret
+
+key_manager = KeyManager()
+
+
+class SecretsView(APIView):
+    class SecretsRetrieveSerializer(serializers.Serializer):
+        ids = serializers.ListField(child=serializers.IntegerField())
+
+    def get_ids(self, request):
+        """
+        Get ids from request
+        :param request:
+        :return:
+        """
+        serializer = self.SecretsRetrieveSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return serializer.data['ids']
+
+    def put(self, request):
+        """
+        Get all Secret Meta Information of the user
+        :param request:
+        :return:
+        """
+        ids = self.get_ids(request)
+        secrets = Secret.objects.filter(id__in=ids)
+        serializer = SecretSerializer(secrets, many=True)
+        return Response(serializer.data, status=200)
+
+    def delete(self, request):
+        """
+        Delete all Secret Meta Information of the user
+        :param request:
+        :return:
+        """
+        ids = self.get_ids(request)
+        secrets = Secret.objects.filter(id__in=ids)
+        secrets.delete()
+        return Response(status=204)
+
+
+class KeyRotateView(APIView):
+    def post(self, request):
+        """
+        Rotate the Key
+        :param request:
+        :return:
+        """
+        try:
+            key_manager.rotate_keys()
+        except AlreadyRotatedError:
+            return Response(status=403, data={'detail': 'Key already rotated. Wait...'})
+        return Response(status=200, data={'detail': 'Key rotated'})
 
 
 class PwsViewMixin(object):

@@ -15,14 +15,14 @@ class LogInSecretSerializer(serializers.Serializer):
 
 
 class NoteSecretSerializer(serializers.Serializer):
-    note = serializers.CharField(max_length=2000, required=True, allow_blank=False)
+    note = serializers.CharField(max_length=1750, required=True, allow_blank=False)
 
     def clean_note(self, value):
         return value.replace(settings.SEPERATOR, settings.SEPERATOR_REPLACEMENT)
 
 
 class ImageSecretSerializer(serializers.ModelSerializer):
-    note = serializers.CharField(max_length=20000, allow_blank=True, allow_null=True)
+    note = serializers.CharField(max_length=1750, allow_blank=True, allow_null=True)
 
     class Meta:
         model = SecretImage
@@ -33,3 +33,9 @@ class ImageSecretSerializer(serializers.ModelSerializer):
 
     def clean_image(self, value):
         value.name = value.name.replace(settings.SEPERATOR, settings.SEPERATOR_REPLACEMENT)
+
+
+class SecretSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SecretImage
+        fields = '__all__'
