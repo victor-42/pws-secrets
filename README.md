@@ -178,6 +178,25 @@ Secret notes and credentials aren't stored on the server, only a hash value of t
 
 You have another question? Then please send us an email to secrets@pws-agency.com.
 
+
+## Encryption Message:
+The Encrypted Message consists of:
+- Message ID
+- Message Content
+
+The Message ID refers to the Sqlite DB Entry including:
+- Message ID
+- Expiration Datetime
+- Opened at Datetime (obviously including opened flag)
+- Message Type 
+
+This information is saved to reduce the information needed in the URL. So that more space is available for the encrypted data.
+
+The Data can be purged by the user who knows the uuids, and by a monthly cronjob.
+There is no way to request the list of id's to protect the users privacy.
+
+UUIDs are used to prevent guessing of the ID's.
+
 <!-- ROADMAP -->
 ## Roadmap
 

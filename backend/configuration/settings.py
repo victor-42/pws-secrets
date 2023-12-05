@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 import json
 import os
-
+from datetime import timedelta
 
 from django.contrib.messages import constants as messages
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,34 +20,18 @@ from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# JSON Based secret module from 'Two scoops of Django 1.11'
-with open(os.path.join(BASE_DIR, 'secrets.json')) as f:
-    SECRETS = json.loads(f.read())
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'jadfsoijfaiodsfjoiano')
+SECRETS_FOLDER_PATH = os.path.join(BASE_DIR, 'not_secret')
 
-
-def get_secret(setting, secrets=SECRETS):
-    try:
-        return secrets[setting]
-    except KeyError:
-        error_msg = 'Set the {0} environment variable'.format(setting)
-        raise ImproperlyConfigured(error_msg)
-
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_secret('SECRET_KEY')
-ENCRYPTION_KEY = bytes(get_secret('ENCRYPTION_KEY').encode('ascii'))
-KEY_SEPARATOR = '!)#'
+SEPARATOR = '!)#'
 SEPARATOR_REPLACEMENT = '//!//)//#'
 ID_LOG_FILE = BASE_DIR + '/id_store.json'
 
-KEY_MAX_AGE = 259200
-KEY_DEFAULT_AGE = 86400
-BOT_KEYWORDS = ['WhatsApp', 'Slackbot', 'Discordbot', 'mattermost']
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DJANGO_DEBUG = os.environ.get('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = ['secrets.pws-agency.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['secrets.pws-agency.com', 'localhost', '127.0.0.1', os.environ.get('DJANGO_ALLOWED_HOSTS',
+                                                                                    'pws-secrets.com')]
 
 # Application definition
 
@@ -63,54 +47,14 @@ INSTALLED_APPS = [
     'rest_framework'
 ]
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'INFO',
-            'filters': ['require_debug_true'],
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'propagate': True,
-            'level': 'INFO'
-        }
-    }
-}
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'api.cache_middleware.CacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'configuration.urls'
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/tmp',
-        'TIMEOUT': 300,
-    }
-}
 
 TEMPLATES = [
     {
@@ -142,14 +86,23 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [],
     'DEFAULT_PERMISSION_CLASSES': [],
+    'UNAUTHENTICATED_USER': None
 }
 
-KEYFILE_PATH = os.path.join(BASE_DIR, 'keys.private')
+KEYFILE_PATH = os.path.join(SECRETS_FOLDER_PATH, 'keys.private')
+
 MAX_EXPIRATION_MINUTES = 60 * 24 * 1
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(SECRETS_FOLDER_PATH, 'unsecreted.db')
+    }
+}

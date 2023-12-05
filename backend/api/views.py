@@ -1,35 +1,32 @@
-# -*- coding: utf-8 -*-
-import time
-import hashlib
-import json
-import uuid
-import datetime
-import io
-
 from cryptography.fernet import InvalidToken
-from django.conf import settings
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.views import View
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import ParseError
-from rest_framework.parsers import FileUploadParser, MultiPartParser
-from cryptography.fernet import Fernet
-from django.core.files.base import ContentFile
 
-from .crypting import PWSCrypto
 from .keys import KeyManager, AlreadyRotatedError
-from .serializer import LogInSecretSerializer, NoteSecretSerializer, ImageSecretSerializer, SecretSerializer
-from .models import SecretImage, Secret
+from .serializer import LogInSecretSerializer, NoteSecretSerializer, ImageSecretSerializer, SecretSerializer, \
+    NoteSecretSerializerMixin, LogInSecretSerializerMixin, ImageSecretSerializerMixin
+from .models import Secret
 
 key_manager = KeyManager()
+
+serializer_map = {
+    'p': LogInSecretSerializer,
+    'n': NoteSecretSerializer,
+    'i': ImageSecretSerializer
+}
+
+serializer_mixin_map = {
+    'p': LogInSecretSerializerMixin,
+    'n': NoteSecretSerializerMixin,
+    'i': ImageSecretSerializerMixin
+}
 
 
 class SecretsView(APIView):
     class SecretsRetrieveSerializer(serializers.Serializer):
-        ids = serializers.ListField(child=serializers.IntegerField())
+        ids = serializers.ListField(child=serializers.UUIDField())
 
     def get_ids(self, request):
         """
@@ -48,23 +45,27 @@ class SecretsView(APIView):
         :return:
         """
         ids = self.get_ids(request)
-        secrets = Secret.objects.filter(id__in=ids)
+        secrets = Secret.objects.filter(uuid__in=ids)
         serializer = SecretSerializer(secrets, many=True)
         return Response(serializer.data, status=200)
 
-    def delete(self, request):
+    def patch(self, request):
         """
         Delete all Secret Meta Information of the user
         :param request:
         :return:
         """
         ids = self.get_ids(request)
-        secrets = Secret.objects.filter(id__in=ids)
+        secrets = Secret.objects.filter(uuid__in=ids)
         secrets.delete()
         return Response(status=204)
 
 
 class KeyRotateView(APIView):
+    def get(self, request):
+        # Returns status of key rotation
+        return Response(status=200, data={'rotated': key_manager.rotated})
+
     def post(self, request):
         """
         Rotate the Key
@@ -78,226 +79,48 @@ class KeyRotateView(APIView):
         return Response(status=200, data={'detail': 'Key rotated'})
 
 
-class PwsViewMixin(object):
-    permission_classes = []
+class SecretView(APIView):
 
-    def __init__(self, *args, **kwargs):
-        self.crypto = PWSCrypto()
-        super(PwsViewMixin, self).__init__(*args, **kwargs)
+    def invalid(self):
+        return Response(status=404, data={'detail': 'Secret not found'})
 
-    def perform_authentication(self, request):
+    def post(self, request):
         """
-        Disable standard authentication method to prevent startup fail.
-        (Without this the startup can fail, because there are no authentication MiddlewareClasses used)
-        :param request: DjangoRequest
+        Create a new Secret
+        :param request:
         :return:
         """
-        return None
+        typ = request.data.get('type')
+        if typ not in serializer_map:
+            raise ParseError('Invalid type')
 
-    def expired(self):
-        raise ParseError(detail={'detail': 'The msg is expired or invalid'}, code=498)
+        serializer = serializer_map[typ](data=request.data)
+        serializer.is_valid(raise_exception=True)
+        to_encrypt, secret_obj = serializer.save()
+        cryptic = key_manager.encrypt(to_encrypt, secret_obj)
 
-    def get_timedelta(self):
-        time_delta = self.request.data.get('time_delta', None)
-        if time_delta:
-            try:
-                time_delta = int(time_delta)
-            except ValueError:
-                raise ParseError(detail={'time_delta': 'Invalid number.'}, code=400)
+        url = request.build_absolute_uri('/secret/{}'.format(cryptic.decode('ascii')))
+        return Response(status=201, data={'url': url})
 
-            if time_delta > settings.KEY_MAX_AGE:
-                time_delta = settings.KEY_MAX_AGE
-        else:
-            time_delta = settings.KEY_DEFAULT_AGE
-
-        return time_delta
-
-    def get_msg(self):
-        msg = self.request.GET.get('msg', None)
-        if not msg:
-            raise ParseError(detail={'detail': 'No msg given'}, code=498)
-        return msg
-
-    def get_image_key_iid(self, image_not_note):
-        msg = self.get_msg()
-
-        # Try to decrypt the message
-        try:
-            decrypted_data = self.crypto.decrypt(msg)
-            iid, key, secret_type = decrypted_data.rsplit(self.crypto.sep, 2)
-            instance = SecretImage.objects.get(id=iid)
-        except (InvalidToken, TypeError, ValueError, SecretImage.DoesNotExist) as e:
-            return self.expired()
-
-        crypto2 = PWSCrypto(key=key)
-        if image_not_note:
-            image = crypto2.plain_decrypt(instance.image.file.read())
-            return image, instance
-        else:
-            note = crypto2.plain_decrypt(instance.note.encode())
-            return note, instance
-
-    def clean_images(self):
-        # Deleting old entrys
-        for obj in SecretImage.objects.filter(
-                created_at__lte=datetime.datetime.now() - datetime.timedelta(seconds=settings.KEY_MAX_AGE)):
-            obj.delete()
-
-
-class AngularTemplateView(View):
-    @staticmethod
-    def process_request(request):
+    def get(self, request, cryptic):
         """
-        Prevent common bots from decrypt messages over the angular frontend.
+        Get a Secret
+        :param cryptic: Encrypted Secret Message
+        :param request:
+        :return:
         """
-        for k in settings.BOT_KEYWORDS:
-            if k in request.META['HTTP_USER_AGENT']:
-                return render(request, 'bot.html')
-        return render(request, 'home.html')
+        if cryptic is None:
+            return self.invalid()
 
-    def get(self, request, *args, **kwargs):
-        return self.process_request(request)
+        cryptic = bytes(cryptic, 'ascii')
+        response = key_manager.decrypt(cryptic)
+        if response is None:
+            return self.invalid()
 
-    def post(self, request, *args, **kwargs):
-        return self.process_request(request)
+        secret, value = response
+        serializer = serializer_mixin_map[secret.type].from_encryption_string(value)
 
+        if serializer is None:
+            return self.invalid()
 
-class SecretView(PwsViewMixin, APIView):
-    cid = 'msgs'
-    permission_classes = []
-
-    def post(self, request, format=None):
-        s_type = self.request.data.get('type', None)
-        if not s_type:
-            raise ParseError(detail={'type': 'This field is required.'}, code=400)
-        elif s_type == 'note':
-            form = NoteSecretSerializer(data=request.data)
-        elif s_type == 'login':
-            form = LogInSecretSerializer(data=request.data)
-        else:
-            raise ParseError(detail={'type': "Invalid type. Use: 'note', 'login'"}, code=400)
-
-        # Build data chain
-        if form.is_valid():
-            if s_type == 'note':
-                encrypt_data = form.data['note']
-                encrypt_data += self.crypto.sep + 'n'
-            elif s_type == 'login':
-                password = form.data['password']
-                username = form.data['username']
-                encrypt_data = password + self.crypto.sep + username
-                encrypt_data += self.crypto.sep + 'p'
-            else:
-                encrypt_data = ''
-
-            time_delta = self.get_timedelta()
-            kid = self.crypto.encrypt(encrypt_data, time_delta)
-            return Response({'msg': kid}, status=200)
-        else:
-            raise ParseError(form.errors, code=400)
-
-    def get(self, request, format=None):
-        """
-        Return messages from encrypted value.
-        :param request: DjangoRequest
-        :param format:
-        :return: HTTPResponse {type:"note|login"; ?note; ?username; ?password}
-        """
-        msg = self.get_msg()
-
-        # Try to decrypt the message
-        try:
-            decrypted_data = self.crypto.decrypt(msg)
-            decrypted_data, secret_type = decrypted_data.rsplit(self.crypto.sep, 1)
-        except (InvalidToken, TypeError, ValueError):
-            return self.expired()
-
-        # Main expiration validation #
-        # The decrypted messages are saved temporary in the cache, but
-        # only for message ages below the maximum age. (settings.KEY_MAX_AGE)
-        #
-        # Privacy Notices:
-        #  - Only hashes of the encrypted messages are being used
-        #  - The saved messages will be removed after the max age passed
-        msg = msg.encode('ascii')
-        msg_hash = hashlib.sha224(msg).hexdigest()
-        c = json.load(open(settings.ID_LOG_FILE, 'r'))
-        if not c:
-            c = []
-        else:
-            for i in reversed(c):
-                if i[1] < time.time() - settings.KEY_MAX_AGE:
-                    c.remove(i)
-                elif i[0] == msg_hash:
-                    return self.expired()
-
-        c.append([msg_hash, time.time()])
-        with open(settings.ID_LOG_FILE, 'w') as id_file:
-            json.dump(c, id_file)
-
-        if secret_type == 'n':
-            return Response({'type': 'note', 'note': decrypted_data}, status=200)
-        elif secret_type == 'p':
-            password, username = decrypted_data.rsplit(self.crypto.sep, 1)
-            return Response({'type': 'login', 'username': username, 'password': password}, status=200)
-        else:
-            self.expired()
-
-
-class SecretImageView(PwsViewMixin, APIView):
-    parser_classes = [MultiPartParser]
-
-    def post(self, request, format=None):
-        """
-        Generates key and id for a new SecretImage instance, than the key will be used to encrypt the note
-        and the image file, than key and id will get encrypted and this resulting kid will be send back
-        :param request: DjangoRequest Object
-        :param format:
-        :return: HttpResponse
-        """
-        form = ImageSecretSerializer(data={
-            'image': request.data.get('image', None),
-            'note': request.data.get('note', None)
-        })
-        if form.is_valid():
-            key = Fernet.generate_key()
-            iid = uuid.uuid4()
-            time_delta = self.get_timedelta()
-
-            msg_data = str(iid) + self.crypto.sep + str(key, 'ascii') + self.crypto.sep + 'i'
-            kid = self.crypto.encrypt(msg_data, time_delta)
-
-            crypto2 = PWSCrypto(key=key)
-            data = form.validated_data
-            encrypted_image = crypto2.plain_encrypt(data['image'].file.read())
-            encrypted_note = crypto2.plain_encrypt(
-                data['note'].encode('utf-8') if data['note'] else data['image'].name.encode())
-            instance = SecretImage(id=iid,
-                                   image=ContentFile(
-                                       content=encrypted_image,
-                                       name=str(crypto2.plain_encrypt(data['image'].name.encode()), 'ascii')
-                                   ),
-                                   note=str(encrypted_note, 'utf-8'))
-            instance.save()
-            del key
-            return Response({'msg': kid}, status=200)
-        else:
-            raise ParseError(form.errors, code=400)
-
-    def get(self, request, format=None):
-        note, instance = self.get_image_key_iid(False)
-        self.clean_images()
-
-        return Response({'type': 'image', 'note': note}, status=200)
-
-
-class SecretImageFileView(PwsViewMixin, View):
-    def get(self, request, *args, **kwargs):
-        self.clean_images()
-
-        try:
-            image, instance = self.get_image_key_iid(True)
-            instance.delete()
-        except ParseError:
-            return HttpResponse(status=400)
-        return HttpResponse(content=image, content_type='image/*')
+        return Response(serializer.data, status=200)

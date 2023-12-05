@@ -9,11 +9,10 @@ fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'images'))
 
 
 class SecretImage(models.Model):
-    id = models.CharField(max_length=36, null=False, blank=False, unique=True, primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4, blank=False, unique=True, primary_key=True)
     image = models.ImageField(blank=False, null=False,
                               storage=fs)
     note = models.CharField(max_length=20000, null=False, blank=False, default='')
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def delete(self, *args, **kwargs):
         try:
@@ -24,8 +23,8 @@ class SecretImage(models.Model):
 
 
 class Secret(models.Model):
-    id = models.CharField(max_length=36, null=False, blank=False, unique=True, primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
     type = models.CharField(max_length=1, null=False, blank=False, default='n')
     expiration = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    opened_at = models.DateTimeField(null=True, blank=True)
+    opened_at = models.DateTimeField(null=True, blank=True, default=None)
