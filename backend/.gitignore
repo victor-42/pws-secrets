@@ -15,4 +15,4 @@ media/images/
 
 # Angular files
 static/ang/*
-not_secret/*
+not_secret/keys.private
