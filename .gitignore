@@ -16,3 +16,6 @@ configuration/local_settings.py
 log/
 backend/secrets.json
 
+backend/backend.iml
+build/build.iml
+app/app.iml
