@@ -24,12 +24,25 @@ class SecretsTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       primarySwatch: createMaterialColor(const Color(0xfffc3742)),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Color(0xffffffff),
+        foregroundColor: Color(0xff000000),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Color(0xffffffff),
+        selectedItemColor: Color(0xfffc3742),
+        unselectedItemColor: Color(0xff000000),
+      ),
     );
   }
 
   static ThemeData get darkTheme {
     return ThemeData.dark().copyWith(
       primaryColor: const Color(0xfffc3742),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        selectedItemColor: Color(0xfffc3742),
+        unselectedItemColor: Color(0xffffffff),
+      ),
     );
   }
 }

@@ -79,7 +79,6 @@ ENV SERVER_NAME 0.0.0.0
 
 # Expose the ports
 EXPOSE 80
-EXPOSE 443
 
 # Run Migration and collect static files
 RUN python manage.py migrate --noinput
