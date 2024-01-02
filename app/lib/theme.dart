@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+Color primary_color = const Color(0xfffc3742);
+
+
 MaterialColor createMaterialColor(Color color) {
   List strengths = <double>[.05];
   Map<int, Color> swatch = {};
@@ -23,7 +26,7 @@ MaterialColor createMaterialColor(Color color) {
 class SecretsTheme {
   static ThemeData get lightTheme {
     return ThemeData(
-      primarySwatch: createMaterialColor(const Color(0xfffc3742)),
+      primarySwatch: createMaterialColor(primary_color),
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xffffffff),
         foregroundColor: Color(0xff000000),
