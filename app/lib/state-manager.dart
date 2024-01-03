@@ -13,16 +13,4 @@ class StateManager with ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  Future<void> setThemeMode(ThemeMode themeMode) async {
-    await _prefs.setInt('themeMode', themeMode.index);
-    notifyListeners();
-  }
-
-  ThemeMode getThemeMode() {
-    final int? themeModeIndex = _prefs.getInt('themeMode');
-    if (themeModeIndex == null) {
-      return ThemeMode.system;
-    }
-    return ThemeMode.values[themeModeIndex];
-  }
 }

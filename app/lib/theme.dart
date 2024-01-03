@@ -26,6 +26,7 @@ MaterialColor createMaterialColor(Color color) {
 class SecretsTheme {
   static ThemeData get lightTheme {
     return ThemeData(
+      useMaterial3: false,
       primarySwatch: createMaterialColor(primary_color),
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xffffffff),
@@ -41,6 +42,7 @@ class SecretsTheme {
 
   static ThemeData get darkTheme {
     return ThemeData.dark().copyWith(
+      useMaterial3: false,
       primaryColor: const Color(0xfffc3742),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         selectedItemColor: Color(0xfffc3742),
