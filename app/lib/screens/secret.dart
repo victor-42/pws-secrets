@@ -12,7 +12,6 @@ class SecretScreen extends StatefulWidget {
   State<SecretScreen> createState() => SecretScreenState();
 }
 
-
 class SecretScreenState extends State<SecretScreen> {
   int _mode = 0;
   final List<Widget> _forms = [
@@ -25,49 +24,53 @@ class SecretScreenState extends State<SecretScreen> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(height: 24),
+        // Radio Selection
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 24),
-            // Radio Selection
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RadioCardButton(
-                  title: 'Note',
-                  iconWidget: const Icon(Icons.lock),
-                  active: _mode == 0,
-                  onClicked: () {
-                    setState(() {
-                      _mode = 0;
-                    });
-                  },
-                ),
-                RadioCardButton(
-                  title: 'Login',
-                  iconWidget: const Icon(Icons.note),
-                  active: _mode == 1,
-                  onClicked: () {
-                    setState(() {
-                      _mode = 1;
-                    });
-                  },
-                ),
-                RadioCardButton(
-                  title: 'Image',
-                  iconWidget: const Icon(Icons.image),
-                  active: _mode == 2,
-                  onClicked: () {
-                    setState(() {
-                      _mode = 2;
-                    });
-                  },
-                ),
-              ],
+            RadioCardButton(
+              title: 'Note',
+              iconWidget: const Icon(Icons.lock),
+              active: _mode == 0,
+              onClicked: () {
+                setState(() {
+                  _mode = 0;
+                });
+              },
             ),
-
-            SizedBox(height: 24),
-            // Form
-            _forms[_mode],
+            RadioCardButton(
+              title: 'Login',
+              iconWidget: const Icon(Icons.note),
+              active: _mode == 1,
+              onClicked: () {
+                setState(() {
+                  _mode = 1;
+                });
+              },
+            ),
+            RadioCardButton(
+              title: 'Image',
+              iconWidget: const Icon(Icons.image),
+              active: _mode == 2,
+              onClicked: () {
+                setState(() {
+                  _mode = 2;
+                });
+              },
+            ),
           ],
-        );
+        ),
+
+        SizedBox(height: 24),
+        // Form
+        Container(
+            constraints: BoxConstraints(
+              maxWidth: 600,
+            ),
+            child: _forms[_mode]),
+      ],
+    );
   }
 }

@@ -41,9 +41,13 @@ class SecretsTheme {
   }
 
   static ThemeData get darkTheme {
-    return ThemeData.dark().copyWith(
-      useMaterial3: false,
+    return ThemeData.dark(useMaterial3: false).copyWith(
       primaryColor: const Color(0xfffc3742),
+      focusColor: const Color(0xfffc3742),
+      colorScheme: const ColorScheme.dark(
+        primary: Color(0xfffc3742),
+        surface: Color(0xff414141),
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         selectedItemColor: Color(0xfffc3742),
         unselectedItemColor: Color(0xffffffff),
