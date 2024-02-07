@@ -14,3 +14,20 @@ class StateManager with ChangeNotifier {
   }
 
 }
+
+
+class SecretArchive {
+  final String uuid;
+  final String type;
+  final String expiration;
+  final String createdAt;
+  final String openedAt;
+
+  SecretArchive({
+    required this.uuid,
+    required this.type,
+    required this.expiration,
+    required this.createdAt,
+    required this.openedAt,
+  });
+}

@@ -61,8 +61,12 @@ class NoteForm extends StatefulWidget {
 }
 
 class _NoteFormState extends State<NoteForm> {
+
+
   @override
   Widget build(BuildContext context) {
+    var secretUrl;
+    secretUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     return Column(
       children: [
         TextField(
@@ -75,6 +79,7 @@ class _NoteFormState extends State<NoteForm> {
         SizedBox(height: 20),
         SizedBox(
           width: double.infinity,
+          height: 50,
           child: ElevatedButton(
 
             onPressed: () {
@@ -84,8 +89,29 @@ class _NoteFormState extends State<NoteForm> {
                 ),
               );
             },
-            child: const Text('Encrypt Secret'),
+            child: const Text('Make the secret secret'),
           ),
+        ),
+        SizedBox(height: 40),
+        TextField(
+          decoration: InputDecoration(
+            prefixIcon: InkWell(
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Copied to clipboard'),
+                  ),
+                );
+              },
+              child: const Icon(Icons.copy),
+            ),
+            border: OutlineInputBorder(),
+            hintText: secretUrl,
+          ),
+          obscureText: true,
+          readOnly: true,
+          enableInteractiveSelection: true,
+
         ),
       ],
     );

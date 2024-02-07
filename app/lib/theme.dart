@@ -48,9 +48,16 @@ class SecretsTheme {
         primary: Color(0xfffc3742),
         surface: Color(0xff414141),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          // Setting foreground color (text and icon) to white
+          foregroundColor: MaterialStateProperty.all<Color>(Color(0xffffffff)),
+        ),
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         selectedItemColor: Color(0xfffc3742),
         unselectedItemColor: Color(0xffffffff),
+        backgroundColor: Color(0xff414141),
       ),
     );
   }

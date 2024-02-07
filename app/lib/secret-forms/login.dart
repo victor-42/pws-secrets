@@ -28,7 +28,7 @@ class _LoginFormState extends State<LoginForm> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(labelText: 'Username'),
+                decoration: InputDecoration(labelText: 'Username', border: OutlineInputBorder()),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your username';
@@ -37,8 +37,9 @@ class _LoginFormState extends State<LoginForm> {
                 },
                 onSaved: (value) => _username = value!,
               ),
+              SizedBox(height: 20),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(labelText: 'Password', border: OutlineInputBorder()),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -49,9 +50,13 @@ class _LoginFormState extends State<LoginForm> {
                 onSaved: (value) => _password = value!,
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submit,
-                child: Text('Submit'),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: _submit,
+                  child: Text('Submit'),
+                ),
               ),
             ],
           ),
