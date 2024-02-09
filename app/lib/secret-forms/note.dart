@@ -94,8 +94,14 @@ class _NoteFormState extends State<NoteForm> {
         ),
         SizedBox(height: 40),
         TextField(
+          controller: TextEditingController(text: secretUrl),
+          keyboardType: TextInputType.url,
           decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(20),
             prefixIcon: InkWell(
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -103,13 +109,13 @@ class _NoteFormState extends State<NoteForm> {
                   ),
                 );
               },
-              child: const Icon(Icons.copy),
+              child: Icon(Icons.copy),
             ),
             border: OutlineInputBorder(),
             hintText: secretUrl,
           ),
-          obscureText: true,
           readOnly: true,
+          selectionControls: MaterialTextSelectionControls(),
           enableInteractiveSelection: true,
 
         ),

@@ -1,4 +1,14 @@
+import 'dart:async';
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+
+const rotationText = 'The key-rotation allows you to rotate the key used by the server for encrypting your messages. \n'
+    'It is only possible once every 72 hours, since unopened secrets still need to be encryptable. \n'
+    'For obvious reasons, you cannot set a specific encryption key, but a seed function will come in the future.';
+
+
+
 
 class LastSecretsScreen extends StatefulWidget {
   const LastSecretsScreen({Key? key}) : super(key: key);
@@ -8,6 +18,25 @@ class LastSecretsScreen extends StatefulWidget {
 }
 
 class LastSecretsScreenState extends State<LastSecretsScreen> {
+  int _currentTimerTime = -10;
+  Timer? _timer;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _currentTimerTime = _currentTimerTime + 1;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -52,11 +81,42 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
             const Divider(),
             const SizedBox(height: 20),
             // Key Rotation
-            Text('Key Rotation', style: Theme.of(context).textTheme.bodyMedium),
+            Text('Key Rotation', style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 10),
-            Text(
-                'This is the key-rotation, it allowes you to rotate the key used by the server in the next key rotation. '
-                'It makes it impossible for older secrets to be encrypted by deleting the key used. '),
+            Text(rotationText, style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: 20),
+            Container(
+              height: 50,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.timer),
+                      SizedBox(width: 10),
+                      Text('${_currentTimerTime <= 0 ? '-' : '+'} '
+                          '${_currentTimerTime.abs()~/86400}:'
+                          '${_currentTimerTime.abs()~/3600%24}:'
+                          '${_currentTimerTime.abs()~/60%60}:'
+                          '${_currentTimerTime.abs()%60}'),
+                    ],
+                  ),
+                  ElevatedButton(
+                    onPressed: _currentTimerTime > 0 ? () {} : null,
+                    child: const Text('Request Rotation'),
+
+                  )
+                ],
+              ),
+              ),
+
           ],
         ),
       ),

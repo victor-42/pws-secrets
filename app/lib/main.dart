@@ -54,7 +54,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   ThemeMode _themeMode = ThemeMode.system;
   int _selectedIndex = 1;
-  final screens = [const LastSecretsScreen(), const SecretScreen(), const AboutScreen()];
 
   @override
   void initState() {
@@ -96,7 +95,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        body: screens[_selectedIndex],
+        body: IndexedStack(
+          children: [
+            const LastSecretsScreen(),
+            const SecretScreen(),
+            const AboutScreen(),
+          ],
+          index: _selectedIndex,
+        ),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
             highlightColor: Colors.transparent,
