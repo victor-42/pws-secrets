@@ -22,55 +22,60 @@ class SecretScreenState extends State<SecretScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        SizedBox(height: 24),
-        // Radio Selection
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            RadioCardButton(
-              title: 'Note',
-              iconWidget: const Icon(Icons.lock),
-              active: _mode == 0,
-              onClicked: () {
-                setState(() {
-                  _mode = 0;
-                });
-              },
+            SizedBox(height: 24),
+            // Radio Selection
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RadioCardButton(
+                  title: 'Note',
+                  iconWidget: const Icon(Icons.lock),
+                  active: _mode == 0,
+                  onClicked: () {
+                    setState(() {
+                      _mode = 0;
+                    });
+                  },
+                ),
+                RadioCardButton(
+                  title: 'Login',
+                  iconWidget: const Icon(Icons.note),
+                  active: _mode == 1,
+                  onClicked: () {
+                    setState(() {
+                      _mode = 1;
+                    });
+                  },
+                ),
+                RadioCardButton(
+                  title: 'Image',
+                  iconWidget: const Icon(Icons.image),
+                  active: _mode == 2,
+                  onClicked: () {
+                    setState(() {
+                      _mode = 2;
+                    });
+                  },
+                ),
+              ],
             ),
-            RadioCardButton(
-              title: 'Login',
-              iconWidget: const Icon(Icons.note),
-              active: _mode == 1,
-              onClicked: () {
-                setState(() {
-                  _mode = 1;
-                });
-              },
-            ),
-            RadioCardButton(
-              title: 'Image',
-              iconWidget: const Icon(Icons.image),
-              active: _mode == 2,
-              onClicked: () {
-                setState(() {
-                  _mode = 2;
-                });
-              },
-            ),
+
+            SizedBox(height: 24),
+            // Form
+            Container(
+                constraints: BoxConstraints(
+                  maxWidth: 600,
+                ),
+                child: _forms[_mode]),
           ],
         ),
-
-        SizedBox(height: 24),
-        // Form
-        Container(
-            constraints: BoxConstraints(
-              maxWidth: 600,
-            ),
-            child: _forms[_mode]),
-      ],
+      ),
     );
   }
 }

@@ -40,6 +40,7 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
+        padding: const EdgeInsets.all(20),
         constraints: BoxConstraints(
           maxWidth: 600,
         ),
