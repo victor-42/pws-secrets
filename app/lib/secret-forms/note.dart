@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 const List<String> placeholderTexts = [
@@ -61,7 +63,9 @@ class NoteForm extends StatefulWidget {
 }
 
 class _NoteFormState extends State<NoteForm> {
-
+  String _placeholderText =
+      placeholderTexts[Random().nextInt(placeholderTexts.length)];
+  bool _optionsExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,26 +76,67 @@ class _NoteFormState extends State<NoteForm> {
         TextField(
           decoration: InputDecoration(
             border: OutlineInputBorder(),
-            hintText: randomPlaceholderText(),
+            hintText: _placeholderText,
           ),
           maxLines: 10,
         ),
         SizedBox(height: 20),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton(
-
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Note saved'),
+        Row(
+          children: [
+            Expanded(
+              flex: 7,
+              child: SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Note saved'),
+                      ),
+                    );
+                  },
+                  child: const Text('Make the secret secret'),
                 ),
-              );
-            },
-            child: const Text('Make the secret secret'),
-          ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              flex: 1,
+              child: SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _optionsExpanded = !_optionsExpanded;
+                    });
+                  },
+                  child: const Icon(Icons.settings),
+                ),
+              ),
+            ),
+          ],
         ),
+        AnimatedContainer(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(5.0),
+                  bottomLeft: Radius.circular(5.0)),
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            clipBehavior: Clip.hardEdge,
+            height: _optionsExpanded ? 213 : 0,
+            child:
+            Column(
+              children: [
+
+              ],
+            ),
+            ),
         SizedBox(height: 40),
         TextField(
           controller: TextEditingController(text: secretUrl),
@@ -101,7 +146,6 @@ class _NoteFormState extends State<NoteForm> {
             prefixIcon: InkWell(
               focusColor: Colors.transparent,
               hoverColor: Colors.transparent,
-
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -117,14 +161,8 @@ class _NoteFormState extends State<NoteForm> {
           readOnly: true,
           selectionControls: MaterialTextSelectionControls(),
           enableInteractiveSelection: true,
-
         ),
       ],
     );
-  }
-
-  randomPlaceholderText() {
-    return placeholderTexts[
-        DateTime.now().millisecond % placeholderTexts.length];
   }
 }

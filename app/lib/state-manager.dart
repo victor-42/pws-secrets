@@ -19,9 +19,9 @@ class StateManager with ChangeNotifier {
 class SecretArchive {
   final String uuid;
   final String type;
-  final String expiration;
-  final String createdAt;
-  final String openedAt;
+  final DateTime expiration;
+  final DateTime createdAt;
+  final DateTime? openedAt;
 
   SecretArchive({
     required this.uuid,

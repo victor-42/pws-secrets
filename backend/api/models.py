@@ -1,5 +1,6 @@
 import os
 from django.conf import settings
+from django.core import validators
 
 from django.core.files.storage import FileSystemStorage
 from django.db import models
@@ -25,6 +26,8 @@ class SecretImage(models.Model):
 class Secret(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
     type = models.CharField(max_length=1, null=False, blank=False, default='n')
+    view_time = models.IntegerField(null=True, blank=True, default=None, help_text='in seconds',
+                                    validators=[validators.MinValueValidator(0), validators.MaxValueValidator(300)])
     expiration = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     opened_at = models.DateTimeField(null=True, blank=True, default=None)

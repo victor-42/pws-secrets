@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:html';
 
+import 'package:app/state-manager.dart';
+import 'package:app/widgets/secret_archive_listtile.dart';
 import 'package:flutter/material.dart';
 
 const rotationText =
@@ -19,6 +21,21 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
   int _currentTimerTime = -10;
   Timer? _timer;
   bool _isRotating = false;
+  final List<SecretArchive> _demoArchives = [
+    SecretArchive(
+        uuid: '612da264-6d63-4a74-859d-d9e082d9bd3a',
+        type: 'n',
+        expiration: DateTime.parse('2022-09-27T16:02:08.070557'),
+        createdAt: DateTime.parse('2023-10-12T16:02:08.070557'),
+        openedAt: DateTime.parse('2023-11-19T16:02:08.070557')),
+    SecretArchive(
+        uuid: '121aa264-6d63-4a74-859d-d9e082d9bd3a',
+        type: 'n',
+        createdAt: DateTime.parse('2023-10-12T16:02:08.070557'),
+        openedAt: DateTime.parse('2023-11-19T16:02:08.070557'),
+        expiration: DateTime.parse('2023-11-12T16:02:08.070557')
+    ),
+  ];
 
   @override
   void dispose() {
@@ -58,27 +75,18 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
               'Last Secrets',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const Divider(),
             // Last Secrets List
             Flexible(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: 5,
+                itemCount: _demoArchives.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text('Secret $index'),
-                    subtitle: Text('Description of Secret $index'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      // Navigate to Secret Screen
-                    },
-                  );
+                  return SArchiveTile(secretArchive: _demoArchives[index]);
                 },
               ),
             ),
 
             const SizedBox(height: 20),
-            const Divider(),
             const SizedBox(height: 20),
             // Key Rotation
             Text('Key Rotation',

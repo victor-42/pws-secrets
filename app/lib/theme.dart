@@ -32,6 +32,11 @@ class SecretsTheme {
         backgroundColor: Color(0xffffffff),
         foregroundColor: Color(0xff000000),
       ),
+      colorScheme: const ColorScheme.light(
+        primary: Color(0xfffc3742),
+        surface: Color(0xffffffff),
+        secondary: Color(0xff000000),
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Color(0xffffffff),
         selectedItemColor: Color(0xfffc3742),
@@ -47,6 +52,7 @@ class SecretsTheme {
       colorScheme: const ColorScheme.dark(
         primary: Color(0xfffc3742),
         surface: Color(0xff414141),
+        secondary:Color(0xff414141),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
