@@ -53,6 +53,7 @@ class SecretsTheme {
         primary: Color(0xfffc3742),
         surface: Color(0xff414141),
         secondary:Color(0xff414141),
+        background: Color(0xff303030),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -68,3 +69,7 @@ class SecretsTheme {
     );
   }
 }
+
+int breakpointSmall = 600;
+int breakpointMedium = 900;
+int breakpointLarge = 1200;

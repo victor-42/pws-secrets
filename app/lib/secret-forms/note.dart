@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:app/widgets/secret_setting_radiobutton.dart';
 import 'package:flutter/material.dart';
 
 const List<String> placeholderTexts = [
@@ -65,7 +66,6 @@ class NoteForm extends StatefulWidget {
 class _NoteFormState extends State<NoteForm> {
   String _placeholderText =
       placeholderTexts[Random().nextInt(placeholderTexts.length)];
-  bool _optionsExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,13 @@ class _NoteFormState extends State<NoteForm> {
     secretUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     return Column(
       children: [
-        TextField(
+        TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter a secret';
+            }
+            return null;
+          },
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             hintText: _placeholderText,
@@ -81,87 +87,7 @@ class _NoteFormState extends State<NoteForm> {
           maxLines: 10,
         ),
         SizedBox(height: 20),
-        Row(
-          children: [
-            Expanded(
-              flex: 7,
-              child: SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Note saved'),
-                      ),
-                    );
-                  },
-                  child: const Text('Make the secret secret'),
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 1,
-              child: SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _optionsExpanded = !_optionsExpanded;
-                    });
-                  },
-                  child: const Icon(Icons.settings),
-                ),
-              ),
-            ),
-          ],
-        ),
-        AnimatedContainer(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(5.0),
-                  bottomLeft: Radius.circular(5.0)),
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            duration: Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-            clipBehavior: Clip.hardEdge,
-            height: _optionsExpanded ? 213 : 0,
-            child:
-            Column(
-              children: [
 
-              ],
-            ),
-            ),
-        SizedBox(height: 40),
-        TextField(
-          controller: TextEditingController(text: secretUrl),
-          keyboardType: TextInputType.url,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.all(20),
-            prefixIcon: InkWell(
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Copied to clipboard'),
-                  ),
-                );
-              },
-              child: Icon(Icons.copy),
-            ),
-            border: OutlineInputBorder(),
-            hintText: secretUrl,
-          ),
-          readOnly: true,
-          selectionControls: MaterialTextSelectionControls(),
-          enableInteractiveSelection: true,
-        ),
       ],
     );
   }

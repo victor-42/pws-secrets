@@ -6,8 +6,8 @@ import 'package:app/widgets/secret_archive_listtile.dart';
 import 'package:flutter/material.dart';
 
 const rotationText =
-    'The key-rotation allows you to rotate the key used by the server for encrypting your messages. \n'
-    'It is only possible once every 72 hours, since unopened secrets still need to be encryptable. \n'
+    'The key-rotation allows you to rotate the key used by the server for encrypting your messages. '
+    'It is only possible once every 72 hours, since unopened secrets still need to be encryptable. '
     'For obvious reasons, you cannot set a specific encryption key, but a seed function will come in the future.';
 
 class LastSecretsScreen extends StatefulWidget {
@@ -27,10 +27,10 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
         type: 'n',
         expiration: DateTime.parse('2022-09-27T16:02:08.070557'),
         createdAt: DateTime.parse('2023-10-12T16:02:08.070557'),
-        openedAt: DateTime.parse('2023-11-19T16:02:08.070557')),
+        openedAt: null),
     SecretArchive(
         uuid: '121aa264-6d63-4a74-859d-d9e082d9bd3a',
-        type: 'n',
+        type: 'i',
         createdAt: DateTime.parse('2023-10-12T16:02:08.070557'),
         openedAt: DateTime.parse('2023-11-19T16:02:08.070557'),
         expiration: DateTime.parse('2023-11-12T16:02:08.070557')
@@ -63,18 +63,14 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
         ),
         child: Column(
           children: [
-            SizedBox(height: 20),
             // Welcome Title
-            Text(
-              'Welcome to pws_secrets',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
             SizedBox(height: 20),
             // Last Secrets
             Text(
               'Last Secrets',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
+            const SizedBox(height: 15),
             // Last Secrets List
             Flexible(
               child: ListView.builder(
@@ -91,9 +87,9 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
             // Key Rotation
             Text('Key Rotation',
                 style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
             Text(rotationText, style: Theme.of(context).textTheme.bodyMedium),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Container(
               height: 50,
               decoration: BoxDecoration(

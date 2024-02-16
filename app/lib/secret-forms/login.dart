@@ -53,159 +53,148 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                    labelText: 'Username', border: OutlineInputBorder()),
-                validator: (value) {
-                  return null;
-                },
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(
+                  labelText: 'Username', border: OutlineInputBorder()),
+              validator: (value) {
+                return null;
+              },
 
-                onSaved: (value) => _username = value!,
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.restart_alt),
-                    onPressed: () {
-                      setState(() {
-                        _generatorVisible = !_generatorVisible;
-                        if (_generatorVisible) _generatePassword();
-                      });
-                    },
-                  ),
+              onSaved: (value) => _username = value!,
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.restart_alt),
+                  onPressed: () {
+                    setState(() {
+                      _generatorVisible = !_generatorVisible;
+                      if (_generatorVisible) _generatePassword();
+                    });
+                  },
                 ),
-                obscureText: false,
-                controller: TextEditingController(text: _password),
-                validator: (value) {
-                  return null;
-                },
-                onSaved: (value) => _password = value!,
               ),
-              // Password Generating Form with preview, length slider, digits and spechial character toggles. Should be box under input
+              obscureText: false,
+              controller: TextEditingController(text: _password),
+              validator: (value) {
+                return null;
+              },
+              onSaved: (value) => _password = value!,
+            ),
+            // Password Generating Form with preview, length slider, digits and spechial character toggles. Should be box under input
 
 
-              AnimatedContainer(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(5.0),
-                      bottomLeft: Radius.circular(5.0)),
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-                duration: Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                clipBehavior: Clip.hardEdge,
-                height: _generatorVisible ? 213 : 0,
-                child: Column(
-                  children: [
-                    Row(
+            AnimatedContainer(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(5.0),
+                    bottomLeft: Radius.circular(5.0)),
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              duration: Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              clipBehavior: Clip.hardEdge,
+              height: _generatorVisible ? 213 : 0,
+              child: Column(
+                children: [
+                  Row(
 
-                      children: [
-                        for (var i = 0; i < 12; i++)
-                          Expanded(
-                            child: Container(
-                              height: 5,
-                              width: double.infinity,
-                              // Get i-d color from green to red with 12 steps
-                              color: _securityLevel <= i ? Colors.grey : _securityColors[11-i]
-                            ),
-                          ),
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Text('Length: $_generatorLength'),
-                          Slider(
-                            value: _generatorLength.toDouble(),
-                            min: 8,
-                            max: 64,
-                            divisions: 14,
-                            label: '$_generatorLength characters',
-                            onChanged: (double value) {
-                              setState(() {
-                                _generatorLength = value.toInt();
-                                _generatePassword();
-                              });
-                            },
-                          ),
-                          // Digits and Special Characters Toggles
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text('Digits'),
-                              Switch(
-                                value: _digits,
-                                activeColor: Theme.of(context).colorScheme.primary,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    _digits = value;
-                                    _generatePassword();
-                                  });
-                                },
-                              ),
-                              Text('Special Characters'),
-                              Switch(
-                                value: _specialCharacters,
-                                activeColor: Theme.of(context).colorScheme.primary,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    _specialCharacters = value;
-                                    _generatePassword();
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 30,),
-                          SizedBox(
+                    children: [
+                      for (var i = 0; i < 12; i++)
+                        Expanded(
+                          child: Container(
+                            height: 5,
                             width: double.infinity,
-                            // Copy to clipboard button
-                            child: ElevatedButton(
-
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5.0),
-                                          side: BorderSide(color: Theme.of(context).colorScheme.primary)
-                                      )
-                                  )
-                              ),
-                              onPressed: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Copied to clipboard'),
-                                  ),
-                                );
+                            // Get i-d color from green to red with 12 steps
+                            color: _securityLevel <= i ? Colors.grey : _securityColors[11-i]
+                          ),
+                        ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        Text('Length: $_generatorLength'),
+                        Slider(
+                          value: _generatorLength.toDouble(),
+                          min: 8,
+                          max: 64,
+                          divisions: 14,
+                          label: '$_generatorLength characters',
+                          onChanged: (double value) {
+                            setState(() {
+                              _generatorLength = value.toInt();
+                              _generatePassword();
+                            });
+                          },
+                        ),
+                        // Digits and Special Characters Toggles
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('Digits'),
+                            Switch(
+                              value: _digits,
+                              activeColor: Theme.of(context).colorScheme.primary,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _digits = value;
+                                  _generatePassword();
+                                });
                               },
-                              child: Text('Copy to clipboard'),
                             ),
-                          )
-                        ],
-                      )
+                            Text('Special Characters'),
+                            Switch(
+                              value: _specialCharacters,
+                              activeColor: Theme.of(context).colorScheme.primary,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _specialCharacters = value;
+                                  _generatePassword();
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 30,),
+                        SizedBox(
+                          width: double.infinity,
+                          // Copy to clipboard button
+                          child: ElevatedButton(
+
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        side: BorderSide(color: Theme.of(context).colorScheme.primary)
+                                    )
+                                )
+                            ),
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Copied to clipboard'),
+                                ),
+                              );
+                            },
+                            child: Text('Copy to clipboard'),
+                          ),
+                        )
+                      ],
                     )
-                  ],
-                ),
+                  )
+                ],
               ),
-              SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _submit,
-                  child: Text('Submit'),
-                ),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 20),
+          ],
         ));
   }
 
