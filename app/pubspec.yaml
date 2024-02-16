@@ -16,6 +16,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.2.2
   image_picker: ^1.0.7
+  provider: ^6.1.1
+  get_it: ^7.6.7
 
 dev_dependencies:
   flutter_test:
