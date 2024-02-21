@@ -49,7 +49,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y nginx gunicorn cron
+RUN apt-get update && apt-get install -y nginx gunicorn cron supervisor
 
 # Install the required packages using pip
 COPY backend/requirements.txt /app/
@@ -58,12 +58,14 @@ RUN pip install gunicorn
 
 # Set up the nginx server and flutter web
 COPY --from=build-env /app/app/build/web /app/build/flutter_web
-COPY --chown=nginx:nginx ./build/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --chown=nginx:nginx ./secrets_build/nginx.conf /etc/nginx/conf.d/default.conf
 RUN rm /etc/nginx/sites-enabled/default
+
+COPY ./secrets_build/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY . .
 
-COPY build/cleanup_cron /etc/cron.d/cleanup_cron
+COPY secrets_build/cleanup_cron /etc/cron.d/cleanup_cron
 RUN chmod 0644 /etc/cron.d/cleanup_cron
 RUN crontab /etc/cron.d/cleanup_cron
 
@@ -84,7 +86,4 @@ EXPOSE 80
 RUN python manage.py migrate --noinput
 RUN python manage.py collectstatic --noinput
 
-RUN chmod +x /app/build/entrypoint.sh
-
-# Run the entrypoint
-ENTRYPOINT ["/app/build/entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
