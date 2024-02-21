@@ -1,1 +1,0 @@
-0 0 * * * python /app/backend/manage.py clear_data --noinput
