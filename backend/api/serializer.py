@@ -17,6 +17,7 @@ class BaseSecretSerializer(serializers.Serializer):
     expiration_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=True)
     type = serializers.ChoiceField(choices=type_choices, required=True)
     uuid = serializers.UUIDField(required=True)
+    view_time = serializers.IntegerField(required=False, allow_null=True)
 
     def validate_uuid(self, value):
         value = str(value)
@@ -28,6 +29,13 @@ class BaseSecretSerializer(serializers.Serializer):
             raise serializers.ValidationError('Invalid UUID')
         return value
 
+    def validate_view_time(self, value):
+        if value is None:
+            return value
+        if value < 0:
+            raise serializers.ValidationError('View time must be greater than 0')
+        return value % 301
+
     def validate_expiration(self, value):
         if value is None:
             return value
@@ -36,10 +44,12 @@ class BaseSecretSerializer(serializers.Serializer):
         return value
 
     def save(self):
+
         secret = Secret.objects.create(
             uuid=self.validated_data['uuid'],
             type=self.validated_data['type'],
-            expiration=self.validated_data['expiration_date']
+            expiration=self.validated_data['expiration_date'],
+            view_time=self.validated_data.get('view_time', None)
         )
         return secret
 

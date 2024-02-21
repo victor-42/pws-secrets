@@ -37,11 +37,11 @@ class KeyManager(object):
     def rotated(self):
         expiration = self.__keys.get('old_expiration', None)
         if expiration is None:
-            return False
+            return None
 
         self.clean_keys()
         expiration = self.__keys.get('old_expiration', None)
-        return expiration is not None
+        return expiration
 
     def save_keys(self):
         self.fernet = Fernet(self.__keys['current'])
@@ -99,7 +99,6 @@ class KeyManager(object):
         expiration = self.__keys.get('old_expiration', None)
         if expiration is not None and datetime.fromisoformat(expiration) < datetime.utcnow():
             self.__keys['old'] = None
-            self.__keys['old_expiration'] = None
 
         self.__keys = {
             'current': self.__keys['current'],

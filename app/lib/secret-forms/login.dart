@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:app/state-manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // 12 color steps from green to red
 const List<Color> _securityColors = [
@@ -19,7 +21,11 @@ const List<Color> _securityColors = [
 ];
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+  const LoginForm({Key? key, required this.onChanged, required this.onSaved})
+      : super(key: key);
+
+  final Function(PasswordSecret) onChanged;
+  final Function() onSaved;
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -27,14 +33,13 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  String _username = '';
-  String _password = '';
   bool _generatorVisible = false;
   int _generatorLength = 16;
   int _securityLevel = 7; // 0 - 12
   bool _digits = true;
   bool _specialCharacters = false;
-
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
@@ -43,10 +48,19 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
+  void _onTextChanged() {
+    widget.onChanged(PasswordSecret(
+      username: _usernameController.text,
+      password: _passwordController.text,
+    ));
+  }
+
   @override
   void initState() {
     super.initState();
     if (_generatorVisible) _generatePassword();
+    _usernameController.addListener(_onTextChanged);
+    _passwordController.addListener(_onTextChanged);
   }
 
   @override
@@ -61,8 +75,7 @@ class _LoginFormState extends State<LoginForm> {
               validator: (value) {
                 return null;
               },
-
-              onSaved: (value) => _username = value!,
+              controller: _usernameController,
             ),
             SizedBox(height: 20),
             TextFormField(
@@ -80,14 +93,12 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
               obscureText: false,
-              controller: TextEditingController(text: _password),
               validator: (value) {
                 return null;
               },
-              onSaved: (value) => _password = value!,
+              controller: _passwordController,
             ),
             // Password Generating Form with preview, length slider, digits and spechial character toggles. Should be box under input
-
 
             AnimatedContainer(
               decoration: BoxDecoration(
@@ -103,93 +114,100 @@ class _LoginFormState extends State<LoginForm> {
               child: Column(
                 children: [
                   Row(
-
                     children: [
                       for (var i = 0; i < 12; i++)
                         Expanded(
                           child: Container(
-                            height: 5,
-                            width: double.infinity,
-                            // Get i-d color from green to red with 12 steps
-                            color: _securityLevel <= i ? Colors.grey : _securityColors[11-i]
-                          ),
+                              height: 5,
+                              width: double.infinity,
+                              // Get i-d color from green to red with 12 steps
+                              color: _securityLevel <= i
+                                  ? Colors.grey
+                                  : _securityColors[11 - i]),
                         ),
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Text('Length: $_generatorLength'),
-                        Slider(
-                          value: _generatorLength.toDouble(),
-                          min: 8,
-                          max: 64,
-                          divisions: 14,
-                          label: '$_generatorLength characters',
-                          onChanged: (double value) {
-                            setState(() {
-                              _generatorLength = value.toInt();
-                              _generatePassword();
-                            });
-                          },
-                        ),
-                        // Digits and Special Characters Toggles
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text('Digits'),
-                            Switch(
-                              value: _digits,
-                              activeColor: Theme.of(context).colorScheme.primary,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _digits = value;
-                                  _generatePassword();
-                                });
-                              },
-                            ),
-                            Text('Special Characters'),
-                            Switch(
-                              value: _specialCharacters,
-                              activeColor: Theme.of(context).colorScheme.primary,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _specialCharacters = value;
-                                  _generatePassword();
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 30,),
-                        SizedBox(
-                          width: double.infinity,
-                          // Copy to clipboard button
-                          child: ElevatedButton(
-
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        side: BorderSide(color: Theme.of(context).colorScheme.primary)
-                                    )
-                                )
-                            ),
-                            onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Copied to clipboard'),
-                                ),
-                              );
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          Text('Length: $_generatorLength'),
+                          Slider(
+                            value: _generatorLength.toDouble(),
+                            min: 8,
+                            max: 64,
+                            divisions: 14,
+                            label: '$_generatorLength characters',
+                            onChanged: (double value) {
+                              setState(() {
+                                _generatorLength = value.toInt();
+                                _generatePassword();
+                              });
                             },
-                            child: Text('Copy to clipboard'),
                           ),
-                        )
-                      ],
-                    )
-                  )
+                          // Digits and Special Characters Toggles
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text('Digits'),
+                              Switch(
+                                value: _digits,
+                                activeColor:
+                                Theme.of(context).colorScheme.primary,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _digits = value;
+                                    _generatePassword();
+                                  });
+                                },
+                              ),
+                              Text('Special Characters'),
+                              Switch(
+                                value: _specialCharacters,
+                                activeColor:
+                                Theme.of(context).colorScheme.primary,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _specialCharacters = value;
+                                    _generatePassword();
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            // Copy to clipboard button
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.surface),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(5.0),
+                                          side: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary)))),
+                              onPressed: () {
+                                Clipboard.setData(new ClipboardData(
+                                    text: _passwordController.text));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Copied to clipboard'),
+                                  ),
+                                );
+                              },
+                              child: Text('Copy to clipboard'),
+                            ),
+                          )
+                        ],
+                      ))
                 ],
               ),
             ),
@@ -212,8 +230,9 @@ class _LoginFormState extends State<LoginForm> {
     for (var i = 0; i < _generatorLength; i++) {
       password += characters[rng.nextInt(characters.length)];
     }
-    _password = password;
-    _securityLevel = (_password.length ~/ 3) + (_digits ? 2 : 0) + (_specialCharacters ? 3 : 0);
-
+    _passwordController.text = password;
+    _securityLevel = (_passwordController.text.length ~/ 3) +
+        (_digits ? 2 : 0) +
+        (_specialCharacters ? 3 : 0);
   }
 }

@@ -2,7 +2,7 @@ from cryptography.fernet import InvalidToken
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import ParseError
+from rest_framework.exceptions import ParseError, ValidationError
 
 from .keys import KeyManager, AlreadyRotatedError
 from .serializer import LogInSecretSerializer, NoteSecretSerializer, ImageSecretSerializer, SecretSerializer, \
@@ -64,7 +64,7 @@ class SecretsView(APIView):
 class KeyRotateView(APIView):
     def get(self, request):
         # Returns status of key rotation
-        return Response(status=200, data={'rotated': key_manager.rotated})
+        return Response(status=200, data={'rotated_at': key_manager.rotated})
 
     def post(self, request):
         """
@@ -92,12 +92,15 @@ class SecretView(APIView):
         """
         typ = request.data.get('type')
         if typ not in serializer_map:
-            raise ParseError('Invalid type')
+            Response(status=400, data={'detail': 'Invalid Secret Type'})
 
-        serializer = serializer_map[typ](data=request.data)
-        serializer.is_valid(raise_exception=True)
-        to_encrypt, secret_obj = serializer.save()
-        cryptic = key_manager.encrypt(to_encrypt, secret_obj)
+        try:
+            serializer = serializer_map[typ](data=request.data)
+            serializer.is_valid(raise_exception=True)
+            to_encrypt, secret_obj = serializer.save()
+            cryptic = key_manager.encrypt(to_encrypt, secret_obj)
+        except Exception as e:
+            return Response(status=400, data={'detail': 'Error'})
 
         url = request.build_absolute_uri('/secret/{}'.format(cryptic.decode('ascii')))
         return Response(status=201, data={'url': url})
@@ -123,4 +126,8 @@ class SecretView(APIView):
         if serializer is None:
             return self.invalid()
 
-        return Response(serializer.data, status=200)
+        repr = {}
+        repr['secret'] = serializer.data
+        repr['view_time'] = secret.view_time
+        repr['type'] = secret.type
+        return Response(repr, status=200)

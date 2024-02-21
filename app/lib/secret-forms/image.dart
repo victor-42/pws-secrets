@@ -22,42 +22,40 @@ class _ImageFormState extends State<ImageForm> {
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Text(start_info_text),
-              SizedBox(height: 20),
-              _image == null ?
-              SizedBox(
-                width: 300,
-                height: 300,
-                child: Card(
-                  child: IconButton(
+        child: Column(
+          children: [
+            Text(start_info_text),
+            SizedBox(height: 20),
+            _image == null ?
+            SizedBox(
+              width: double.infinity,
+              height: 300,
+              child: Card(
+                child: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: _onAddImage,),
-                ),
-              ) : Card(
+              ),
+            ) : Card(
                 clipBehavior: Clip.antiAlias,
                 child: Stack(
-                  children: [
-                    Image.file(_image!, width: 300, height: 300,),
-                    Positioned(
-                      right: 5,
-                        top: 5,
-                        child: InkWell(
-                          child: Icon(Icons.remove_circle, size: 20, color: Colors.red,),
-                          onTap: () {
-                            setState(() {
-                              _image = null;
-                            });
-                          },
-                        ))
-                  ]
+                    children: [
+                      Image.file(_image!, width: 300, height: 300,),
+                      Positioned(
+                          right: 5,
+                          top: 5,
+                          child: InkWell(
+                            child: Icon(Icons.remove_circle, size: 20, color: Colors.red,),
+                            onTap: () {
+                              setState(() {
+                                _image = null;
+                              });
+                            },
+                          ))
+                    ]
                 )
-              )
-            ],
-          ),
+            ),
+            SizedBox(height: 20),
+          ],
         ));
   }
 

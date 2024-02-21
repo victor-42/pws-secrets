@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:app/state-manager.dart';
 import 'package:app/widgets/secret_setting_radiobutton.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +58,10 @@ const List<String> placeholderTexts = [
 ];
 
 class NoteForm extends StatefulWidget {
-  const NoteForm({Key? key}) : super(key: key);
+  const NoteForm({Key? key, required this.onChanged, required this.onSaved}) : super(key: key);
+
+  final Function(NoteSecret) onChanged;
+  final Function() onSaved;
 
   @override
   _NoteFormState createState() => _NoteFormState();
@@ -65,12 +69,10 @@ class NoteForm extends StatefulWidget {
 
 class _NoteFormState extends State<NoteForm> {
   String _placeholderText =
-      placeholderTexts[Random().nextInt(placeholderTexts.length)];
+  placeholderTexts[Random().nextInt(placeholderTexts.length)];
 
   @override
   Widget build(BuildContext context) {
-    var secretUrl;
-    secretUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     return Column(
       children: [
         TextFormField(
@@ -78,7 +80,16 @@ class _NoteFormState extends State<NoteForm> {
             if (value == null || value.isEmpty) {
               return 'Please enter a secret';
             }
+            if (value.length > 1750) {
+              return 'Secret is too long (max 1750 characters)';
+            }
             return null;
+          },
+          onFieldSubmitted: (value) {
+            widget.onSaved();
+          },
+          onChanged: (value) {
+            widget.onChanged(NoteSecret(note: value));
           },
           decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -87,7 +98,6 @@ class _NoteFormState extends State<NoteForm> {
           maxLines: 10,
         ),
         SizedBox(height: 20),
-
       ],
     );
   }

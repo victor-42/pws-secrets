@@ -28,7 +28,7 @@ SEPARATOR_REPLACEMENT = '//!//)//#'
 ID_LOG_FILE = BASE_DIR + '/id_store.json'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DJANGO_DEBUG = os.environ.get('DJANGO_DEBUG', False)
+DJANGO_DEBUG = False
 
 ALLOWED_HOSTS = ['secrets.pws-agency.com', 'localhost', '127.0.0.1', os.environ.get('DJANGO_ALLOWED_HOSTS',
                                                                                     'pws-secrets.com')]
@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api.middleware.AllowedOriginMiddleware'
 ]
 
 ROOT_URLCONF = 'configuration.urls'
@@ -98,7 +99,7 @@ REST_FRAMEWORK = {
 
 KEYFILE_PATH = os.path.join(SECRETS_FOLDER_PATH, 'keys.private')
 
-MAX_EXPIRATION_MINUTES = 60 * 24 * 1
+MAX_EXPIRATION_MINUTES = 60 * 24 * 3 + 1
 
 DATABASES = {
     'default': {

@@ -72,13 +72,14 @@ class _MyHomePageState extends State<MyHomePage> {
     var brightness =
         SchedulerBinding.instance.platformDispatcher.platformBrightness;
     _themeMode =
-        brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
+    brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           actions: [
             IconButton(
               icon: _themeMode == ThemeMode.light
@@ -104,7 +105,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: IndexedStack(
           children: [
-            const LastSecretsScreen(),
+            LastSecretsScreen(onToNewSecrets: () {
+              setState(() {
+                _selectedIndex = 1;
+              });
+            },),
             const SecretScreen(),
             const AboutScreen(),
           ],
@@ -132,12 +137,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
               currentIndex: _selectedIndex,
               onTap: (int index) => {
-                    setState(
+                setState(
                       () {
-                        _selectedIndex = index;
-                      },
-                    )
-                  }),
+                    _selectedIndex = index;
+                  },
+                )
+              }),
         ));
   }
 
@@ -145,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext context) => RevealScreen(),
       fullscreenDialog:
-          true, // This makes the page slide up from the bottom and include a close button on iOS.
+      true, // This makes the page slide up from the bottom and include a close button on iOS.
     ));
   }
 }

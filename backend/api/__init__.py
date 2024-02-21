@@ -10,6 +10,6 @@ def extract_uuid(input_string):
 
     # Extract and return the UUID if found
     if match:
-        return match.group(0)
+        return match
     else:
         return None

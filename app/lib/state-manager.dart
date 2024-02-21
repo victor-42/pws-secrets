@@ -1,11 +1,58 @@
+import 'dart:convert';
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 class StateManager {
   SharedPreferences? _prefs;
 
+  //String apiUrl = Uri.base.origin + '/api/';
+  String apiUrl = 'http://localhost:8000/api/';
+  List<String> _archivedUuidList = [];
+  DateTime? oldExpiration;
+  List<SecretArchive>? oldArchives;
+
   Future<void> initPrefs() async {
     _prefs = await SharedPreferences.getInstance();
+    loadOldUuidList();
+  }
+
+  Future<void> reloadHomeInformation() async {
+    oldArchives = await getSecretArchives();
+    oldExpiration = await getOldExpiration();
+  }
+
+  Future<bool> rotateKey() async {
+    return http.post(
+      Uri.parse('${apiUrl}key-rotation/'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    ).then((response) {
+      if (response.statusCode != 200) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+  }
+
+  Future<Map<String, dynamic>?> retrieveSecret(String encrypted) async {
+    return http.get(
+      Uri.parse('${apiUrl}sc/$encrypted/'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    ).then((response) {
+      if (response.statusCode != 200) {
+        return null;
+      } else {
+        return jsonDecode(response.body);
+      }
+    });
   }
 
   Future<void> saveSecretPreferences(SecretPreferences val) async {
@@ -28,12 +75,145 @@ class StateManager {
     return obj;
   }
 
+  Future<DateTime?> getOldExpiration() async {
+    return http.get(
+      Uri.parse('${apiUrl}key-rotation/'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    ).then((response) {
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load old expiration');
+      } else {
+        var rotated_at = jsonDecode(response.body)['rotated_at'];
+        if (rotated_at == null) return null;
+        return DateTime.parse(rotated_at);
+      }
+    });
+  }
+
+  Future<List<SecretArchive>> getSecretArchives() async {
+    if (_archivedUuidList.isEmpty) return [];
+    return http.put(
+      Uri.parse('${apiUrl}secrets/'),
+      body: json.encode({
+        'ids': _archivedUuidList,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    ).then((response) {
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load secret archives');
+      } else {
+        var archives = jsonDecode(response.body); // List of secret archives
+        List<SecretArchive> objs = [];
+        for (var data in archives) {
+          objs.add(SecretArchive(
+            uuid: data['uuid'],
+            type: data['type'],
+            expiration: DateTime.parse(data['expiration']),
+            createdAt: DateTime.parse(data['created_at']),
+            openedAt: data['opened_at'] != null
+                ? DateTime.parse(data['opened_at'])
+                : null,
+          ));
+        }
+        return objs;
+      }
+    });
+  }
+
+  Future<void> saveOldUuidList() async {
+    await _prefs?.setStringList('ArchivedUuidList', _archivedUuidList);
+  }
+
+  void loadOldUuidList() async {
+    _archivedUuidList = _prefs?.getStringList('ArchivedUuidList') ?? [];
+  }
+
   Future<void> setStringPreference(String key, String value) async {
     await _prefs?.setString(key, value);
   }
 
   Future<String?> getSecret() async {
     return await _prefs?.getString('Secret');
+  }
+
+  Future<String?> createSecret(String type, dynamic secret,
+      SecretPreferences preferences) async {
+    // Generate uuid
+    var uuid = const Uuid().v4();
+    var repr = {
+      'uuid': uuid,
+      'type': type,
+      'expiration_date': DateTime.now()
+          .add(Duration(hours: preferences.expireIn))
+          .toIso8601String(),
+      'view_time': preferences.showFor,
+      ...secret.getRepresentation(),
+    };
+    return http.post(
+      Uri.parse('${apiUrl}not-secret/'),
+      body: jsonEncode(repr),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    ).then((response) {
+      if (response.statusCode != 201) {
+        return null;
+      } else {
+        if (preferences.saveMeta) {
+          _archivedUuidList.add(uuid);
+          saveOldUuidList();
+        }
+        return jsonDecode(response.body)['url'];
+      }
+    });
+  }
+
+  void clearOldArchives() {
+    // Filter the Archives for those that are already opened
+    _archivedUuidList = _archivedUuidList
+        .where((element) =>
+    oldArchives
+        ?.firstWhere((e) => e.uuid == element)
+        .openedAt == null)
+        .toList();
+    oldArchives = oldArchives
+        ?.where((element) => element.openedAt == null)
+        .toList();
+    saveOldUuidList();
+  }
+
+  blockArchive(String uuid) async {
+    return blockArchives([uuid]).then((value) {
+      if (value) {
+        _archivedUuidList.remove(uuid);
+        saveOldUuidList();
+        oldArchives = oldArchives
+            ?.where((element) => element.uuid != uuid)
+            .toList();
+      }
+    });
+  }
+
+  Future<bool> blockArchives(List<String> uuids) async {
+    return http.patch(
+      Uri.parse('${apiUrl}secrets/'),
+      body: jsonEncode({
+        'ids': uuids,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    ).then((response) {
+      if (response.statusCode != 204) {
+        return false;
+      } else {
+        return true;
+      }
+    });
   }
 }
 
@@ -63,4 +243,37 @@ class SecretPreferences {
     required this.expireIn,
     required this.saveMeta,
   }) {}
+}
+
+class NoteSecret {
+  final String type = 'n';
+  final String note;
+
+  NoteSecret({
+    required this.note,
+  });
+
+  getRepresentation() {
+    return {
+      'note': note,
+    };
+  }
+}
+
+class PasswordSecret {
+  final String type = 'p';
+  final String username;
+  final String password;
+
+  PasswordSecret({
+    required this.username,
+    required this.password,
+  });
+
+  getRepresentation() {
+    return {
+      'username': username,
+      'password': password,
+    };
+  }
 }
