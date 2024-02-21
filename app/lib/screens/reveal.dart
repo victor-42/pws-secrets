@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:app/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../locator.dart';
 import '../state-manager.dart';
@@ -134,7 +135,10 @@ class LoginRevealScreenState extends State<LoginRevealScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(onPressed: () {}, icon: Icon(Icons.copy)),
+                  IconButton(onPressed: () {
+                    Clipboard.setData(new ClipboardData(
+                        text: widget.secretObj['username'] ?? ''));
+                  }, icon: Icon(Icons.copy)),
                   Flexible(
                     child: Text(widget.secretObj['username'] ?? '',
                         style: Theme.of(context)
@@ -149,7 +153,10 @@ class LoginRevealScreenState extends State<LoginRevealScreen> {
           SizedBox(height: 20),
           Text('Password', style: Theme.of(context).textTheme.headlineSmall),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.copy)),
+            IconButton(onPressed: () {
+              Clipboard.setData(
+                  new ClipboardData(text: widget.secretObj['password'] ?? ''));
+            }, icon: Icon(Icons.copy)),
             Flexible(
               child: Text(widget.secretObj['password'] ?? '',
                   style: Theme.of(context)
