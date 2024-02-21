@@ -65,6 +65,8 @@ COPY ./secrets_build/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY . .
 
+COPY --from=build-env /app/app/assets/logo /app/build/flutter_web/assets/logo
+
 COPY secrets_build/cleanup_cron /etc/cron.d/cleanup_cron
 RUN chmod 0644 /etc/cron.d/cleanup_cron
 RUN crontab /etc/cron.d/cleanup_cron
