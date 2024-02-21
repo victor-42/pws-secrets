@@ -71,8 +71,6 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
             // Welcome Title
             SizedBox(height: 20),
             // Last Secrets
-            Text(window.location.pathname.toString()),
-            Text(window.location.href.replaceAll(window.location.pathname.toString(), '')),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
