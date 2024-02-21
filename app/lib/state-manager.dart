@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 class StateManager {
   SharedPreferences? _prefs;
   String apiUrl = Uri.base.origin + '/api/';
+
   //String apiUrl = 'http://localhost:8000/api/';
   List<String> _archivedUuidList = [];
   DateTime? oldExpiration;
@@ -139,8 +140,8 @@ class StateManager {
     return await _prefs?.getString('Secret');
   }
 
-  Future<String?> createSecret(String type, dynamic secret,
-      SecretPreferences preferences) async {
+  Future<String?> createSecret(
+      String type, dynamic secret, SecretPreferences preferences) async {
     // Generate uuid
     var uuid = const Uuid().v4();
     var repr = {
@@ -173,15 +174,20 @@ class StateManager {
 
   void clearOldArchives() {
     // Filter the Archives for those that are already opened
+    List<String> uuidsToBeRemoved = _archivedUuidList
+        .where((element) =>
+            oldArchives?.firstWhere((e) => e.uuid == element).openedAt != null)
+        .toList();
+
+    blockArchives(uuidsToBeRemoved);
     _archivedUuidList = _archivedUuidList
         .where((element) =>
-    oldArchives
-        ?.firstWhere((e) => e.uuid == element)
-        .openedAt == null)
+            oldArchives?.firstWhere((e) => e.uuid == element).openedAt == null)
         .toList();
     oldArchives = oldArchives
         ?.where((element) => element.openedAt == null)
         .toList();
+
     saveOldUuidList();
   }
 
@@ -190,9 +196,8 @@ class StateManager {
       if (value) {
         _archivedUuidList.remove(uuid);
         saveOldUuidList();
-        oldArchives = oldArchives
-            ?.where((element) => element.uuid != uuid)
-            .toList();
+        oldArchives =
+            oldArchives?.where((element) => element.uuid != uuid).toList();
       }
     });
   }

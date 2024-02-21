@@ -102,7 +102,8 @@ class SecretView(APIView):
         except Exception as e:
             return Response(status=400, data={'detail': 'Error'})
 
-        url = request.build_absolute_uri('/secret/{}'.format(cryptic.decode('ascii')))
+        port = request.META.get('SERVER_PORT')
+        url = request.build_absolute_uri(f'{port if port not in [80, 443] else ""}/secret/{cryptic.decode("ascii")}')
         return Response(status=201, data={'url': url})
 
     def get(self, request, cryptic):
