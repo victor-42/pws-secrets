@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:js_interop';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -167,7 +167,9 @@ class StateManager {
           _archivedUuidList.add(uuid);
           saveOldUuidList();
         }
-        return jsonDecode(response.body)['url'];
+        String pathname =window.location.pathname.toString();
+        return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname , '')}${pathname == '/' ? '' : '/'}secret/' +
+            jsonDecode(response.body)['enc'];
       }
     });
   }
