@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:app/state-manager.dart';
+import 'package:app/widgets/radio_card_button.dart';
 import 'package:app/widgets/secret_archive_listtile.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,13 @@ const rotationText =
     'The key-rotation allows you to rotate the key used by the server for encrypting your messages. '
     'It is only possible once every 72 hours, since unopened secrets still need to be encryptable. '
     'For obvious reasons, you cannot set a specific encryption key, but a seed function will come in the future.';
+
+const String oneTimeSecretText =
+    'Share confidential data that is accessible only once. An ideal method for transmitting passwords, credit card details, private keys, access data, images or other sensitive information.';
+const String encryptionText =
+    'Your secret is encrypted into the url, which can only be shared by you. Without the full link, neither we nor anyone else can decrypt your secret.';
+const String yourChoiceText =
+    'The application offers you three ways to securely share your secret. Whether you want to securely send a personal note, login details or a picture as a secret, our platform has everything you need.';
 
 class LastSecretsScreen extends StatefulWidget {
   final Function onToNewSecrets;
@@ -23,14 +31,12 @@ class LastSecretsScreen extends StatefulWidget {
 }
 
 class LastSecretsScreenState extends State<LastSecretsScreen> {
-  int _currentTimerTime = -10;
-  Timer? _timer;
+
   bool _isRotating = false;
   final StateManager _stateManager = locator<StateManager>();
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -44,18 +50,6 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
     await _stateManager.initPrefs();
     await _stateManager.reloadHomeInformation();
     // Current Timer time as diff between now and oldExpiration in seconds
-    if (_stateManager.oldExpiration == null) {
-      _currentTimerTime = 1;
-      return;
-    }
-    _currentTimerTime =
-        _stateManager.oldExpiration!.difference(DateTime.now()).inSeconds -
-            (72 + 1) * 3600;
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _currentTimerTime = _currentTimerTime + 1;
-      });
-    });
   }
 
   @override
@@ -69,6 +63,39 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
         child: Column(
           children: [
             // Welcome Title
+
+            const SizedBox(height: 20),
+            const SizedBox(height: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('One-Time Secrets',
+                    style: Theme.of(context).textTheme.headlineSmall),
+                const SizedBox(height: 15),
+                Text(oneTimeSecretText, style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 30),
+                Text('End-to-End Encryption',
+                    style: Theme.of(context).textTheme.headlineSmall),
+                const SizedBox(height: 15),
+                Text(encryptionText, style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 30),
+                Text('Your Choice',
+                    style: Theme.of(context).textTheme.headlineSmall),
+                const SizedBox(height: 15),
+                Text(yourChoiceText, style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    HomeSecretButtons(onClick: () {}, assetPath: 'icons/notepad.png'),
+                    HomeSecretButtons(onClick: () {}, assetPath: 'icons/lock.png'),
+                    HomeSecretButtons(onClick: () {}, assetPath: 'icons/camera.png'),
+                  ],
+                )
+              ],
+            ),
+            SizedBox(height: 50),
+            // Key Rotation
             SizedBox(height: 20),
             // Last Secrets
             Row(
@@ -116,7 +143,7 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                Theme.of(context).colorScheme.background),
+                            Theme.of(context).colorScheme.background),
                         child: Text('Clear Closed')),
                   );
                 })
@@ -158,7 +185,7 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
                   itemCount: _stateManager.oldArchives!.length,
                   itemBuilder: (BuildContext context, int index) {
                     return SArchiveTile(
-                        secretArchive: _stateManager.oldArchives![index],
+                      secretArchive: _stateManager.oldArchives![index],
                       onBlock: (uuid) {
                         _stateManager.blockArchive(uuid);
                         setState(() {});
@@ -169,74 +196,6 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
               );
             }),
 
-            const SizedBox(height: 20),
-            const SizedBox(height: 20),
-            // Key Rotation
-            Text('Key Rotation',
-                style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 15),
-            Text(rotationText, style: Theme.of(context).textTheme.bodyMedium),
-            const SizedBox(height: 10),
-            Container(
-              height: 50,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.timer),
-                      SizedBox(width: 10),
-                      Text('${_currentTimerTime <= 0 ? '-' : '+'} '
-                          '${(_currentTimerTime.abs() ~/ 86400).toString().padLeft(2, '0')}:'
-                          '${(_currentTimerTime.abs() ~/ 3600 % 24).toString().padLeft(2, '0')}:'
-                          '${(_currentTimerTime.abs() ~/ 60 % 60).toString().padLeft(2, '0')}:'
-                          '${(_currentTimerTime.abs() % 60).toString().padLeft(2, '0')}'),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 150,
-                    height: 30,
-                    child: ElevatedButton(
-                      onPressed: _currentTimerTime > 0 && !_isRotating
-                          ? () {
-                              setState(() {
-                                _isRotating = true;
-                              });
-                              _stateManager.rotateKey().then((value) {
-                                if (value) {
-                                  _initState();
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Failed to rotate key. Try again later...'),
-                                    ),
-                                  );
-                                }
-                                setState(() {
-                                  _isRotating = false;
-                                });
-                              });
-                            }
-                          : null,
-                      child: _isRotating
-                          ? SizedBox(
-                              height: 15,
-                              width: 15,
-                              child: const CircularProgressIndicator())
-                          : const Text('Request Rotation'),
-                    ),
-                  )
-                ],
-              ),
-            ),
           ],
         ),
       ),

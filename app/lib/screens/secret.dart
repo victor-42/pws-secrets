@@ -1,5 +1,6 @@
 import 'package:app/state-manager.dart';
 import 'package:app/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -39,16 +40,16 @@ class SecretScreenState extends State<SecretScreen> {
   static const List<List<dynamic>> _settings_showForOptions = [
     ['Off', null],
     ['30s', 30],
-    ['1m', 60],
     ['5m', 300],
+    ['10m', 600],
   ];
 
   static const List<List<dynamic>> _settings_expireInOptions = [
-    ['1h', 1],
     ['12h', 12],
-    ['24h', 24],
-    ['48h', 48],
-    ['72h', 72],
+    ['1d', 24],
+    ['2d', 48],
+    ['4d', 96],
+    ['7d', 168],
   ];
 
   @override
@@ -85,7 +86,6 @@ class SecretScreenState extends State<SecretScreen> {
     if (obj == null) {
       return;
     }
-
 
     setState(() {
       _loading = true;
@@ -130,7 +130,10 @@ class SecretScreenState extends State<SecretScreen> {
               children: [
                 RadioCardButton(
                   title: 'Note',
-                  iconWidget: const Icon(Icons.note),
+                  iconWidget: const Image(
+                    image: AssetImage('icons/notepad.png'),
+                    filterQuality: FilterQuality.high,
+                  ),
                   active: _mode == 0,
                   onClicked: () {
                     setState(() {
@@ -140,7 +143,10 @@ class SecretScreenState extends State<SecretScreen> {
                 ),
                 RadioCardButton(
                   title: 'Login',
-                  iconWidget: const Icon(Icons.lock),
+                  iconWidget: const Image(
+                    image: AssetImage('icons/lock.png'),
+                    filterQuality: FilterQuality.high,
+                  ),
                   active: _mode == 1,
                   onClicked: () {
                     setState(() {
@@ -150,7 +156,10 @@ class SecretScreenState extends State<SecretScreen> {
                 ),
                 RadioCardButton(
                   title: 'Image',
-                  iconWidget: const Icon(Icons.image),
+                  iconWidget: const Image(
+                    image: AssetImage('icons/camera.png'),
+                    filterQuality: FilterQuality.high,
+                  ),
                   active: _mode == 2,
                   onClicked: () {
                     setState(() {
@@ -354,22 +363,19 @@ class SecretScreenState extends State<SecretScreen> {
                               ),
                               Builder(builder: (context) {
                                 List<Widget> childs = [];
-                                for (var option
-                                    in _settings_rememberIdOptions) {
-                                  childs.add(SettingRadioButton(
-                                      title: option[0],
-                                      active: _secretPreferences.saveMeta ==
-                                          option[1],
-                                      onClicked: () {
-                                        setState(() {
-                                          _secretPreferences.saveMeta =
-                                              option[1];
-                                          _stateManager.saveSecretPreferences(
-                                              _secretPreferences);
-                                        });
-                                      }));
-                                  childs.add(SizedBox(width: 10));
-                                }
+
+                                childs.add(CupertinoSwitch(
+                                    activeColor:
+                                        Theme.of(context).colorScheme.primary,
+                                    value: _secretPreferences.saveMeta,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        _secretPreferences.saveMeta = value;
+                                        _stateManager.saveSecretPreferences(
+                                            _secretPreferences);
+                                      });
+                                    }));
+                                childs.add(SizedBox(width: 10));
                                 return Row(children: childs);
                               })
                             ];

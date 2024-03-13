@@ -24,8 +24,6 @@ class _ImageFormState extends State<ImageForm> {
         key: _formKey,
         child: Column(
           children: [
-            Text(start_info_text),
-            SizedBox(height: 20),
             _image == null ?
             SizedBox(
               width: double.infinity,
@@ -39,7 +37,7 @@ class _ImageFormState extends State<ImageForm> {
                 clipBehavior: Clip.antiAlias,
                 child: Stack(
                     children: [
-                      Image.file(_image!, width: 300, height: 300,),
+                      Image.file(_image!, width: 300,),
                       Positioned(
                           right: 5,
                           top: 5,

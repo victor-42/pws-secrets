@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:app/state-manager.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -150,7 +151,7 @@ class _LoginFormState extends State<LoginForm> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text('Digits'),
-                              Switch(
+                              CupertinoSwitch(
                                 value: _digits,
                                 activeColor:
                                 Theme.of(context).colorScheme.primary,
@@ -162,7 +163,7 @@ class _LoginFormState extends State<LoginForm> {
                                 },
                               ),
                               Text('Special Characters'),
-                              Switch(
+                              CupertinoSwitch(
                                 value: _specialCharacters,
                                 activeColor:
                                 Theme.of(context).colorScheme.primary,

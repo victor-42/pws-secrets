@@ -97,9 +97,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
           title: Image.asset(
             _themeMode == ThemeMode.light
-                ? 'logo/pws_black.png'
-                : 'logo/pws_white.png',
+                ? 'logo/secrets_black_small.png'
+                : 'logo/secrets_white_small.png',
             fit: BoxFit.contain,
+            filterQuality: FilterQuality.high,
+            isAntiAlias: true,
             height: 32,
           ),
         ),
@@ -121,13 +123,17 @@ class _MyHomePageState extends State<MyHomePage> {
             hoverColor: Colors.transparent,
           ),
           child: BottomNavigationBar(
-              items: const <BottomNavigationBarItem>[
+              items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.key),
+                  icon: Image.asset(
+                    _themeMode == ThemeMode.light
+                        ? 'icons/pirate.png'
+                        : 'icons/pirate_white.png'
+                  ),
                   label: 'Secret',
                 ),
                 BottomNavigationBarItem(
