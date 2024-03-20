@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/state-manager.dart';
+import 'package:app/widgets/accordion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -51,64 +52,92 @@ class AboutScreenState extends State<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.primary,
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 600,
         ),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
             children: [
-              Icon(Icons.timer),
-              SizedBox(width: 10),
-              Text('${_currentTimerTime <= 0 ? '-' : '+'} '
-                  '${(_currentTimerTime.abs() ~/ 86400).toString().padLeft(2, '0')}:'
-                  '${(_currentTimerTime.abs() ~/ 3600 % 24).toString().padLeft(2, '0')}:'
-                  '${(_currentTimerTime.abs() ~/ 60 % 60).toString().padLeft(2, '0')}:'
-                  '${(_currentTimerTime.abs() % 60).toString().padLeft(2, '0')}'),
+              const SizedBox(height: 30),
+              SecretsAccordion(
+                  title: 'Imprint',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text(
+                            'This is a simple app to manage your secrets.'),
+                      const Text(
+                          'It is a demo app for the Flutter & Dart course.'),
+                      const Text('It is not intended for production use.'),
+                    ],
+                  )),
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.timer),
+                        SizedBox(width: 10),
+                        Text('${_currentTimerTime <= 0 ? '-' : '+'} '
+                            '${(_currentTimerTime.abs() ~/ 86400).toString().padLeft(2, '0')}:'
+                            '${(_currentTimerTime.abs() ~/ 3600 % 24).toString().padLeft(2, '0')}:'
+                            '${(_currentTimerTime.abs() ~/ 60 % 60).toString().padLeft(2, '0')}:'
+                            '${(_currentTimerTime.abs() % 60).toString().padLeft(2, '0')}'),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 150,
+                      height: 30,
+                      child: ElevatedButton(
+                        onPressed: _currentTimerTime > 0 && !_isRotating
+                            ? () {
+                                setState(() {
+                                  _isRotating = true;
+                                });
+                                _stateManager.rotateKey().then((value) {
+                                  if (value) {
+                                    _initState();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Failed to rotate key. Try again later...'),
+                                      ),
+                                    );
+                                  }
+                                  setState(() {
+                                    _isRotating = false;
+                                  });
+                                });
+                              }
+                            : null,
+                        child: _isRotating
+                            ? SizedBox(
+                                height: 15,
+                                width: 15,
+                                child: const CircularProgressIndicator())
+                            : const Text('Request Rotation'),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
-          SizedBox(
-            width: 150,
-            height: 30,
-            child: ElevatedButton(
-              onPressed: _currentTimerTime > 0 && !_isRotating
-                  ? () {
-                setState(() {
-                  _isRotating = true;
-                });
-                _stateManager.rotateKey().then((value) {
-                  if (value) {
-                    _initState();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            'Failed to rotate key. Try again later...'),
-                      ),
-                    );
-                  }
-                  setState(() {
-                    _isRotating = false;
-                  });
-                });
-              }
-                  : null,
-              child: _isRotating
-                  ? SizedBox(
-                  height: 15,
-                  width: 15,
-                  child: const CircularProgressIndicator())
-                  : const Text('Request Rotation'),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

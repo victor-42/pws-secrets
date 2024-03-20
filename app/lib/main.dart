@@ -132,7 +132,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Image.asset(
                     _themeMode == ThemeMode.light
                         ? 'icons/pirate.png'
-                        : 'icons/pirate_white.png'
+                        : 'icons/pirate_white.png',
+                    color: _selectedIndex == 1 ? Theme.of(context).primaryColor : null,
+                    height: 24,
                   ),
                   label: 'Secret',
                 ),
