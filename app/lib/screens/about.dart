@@ -7,6 +7,40 @@ import 'package:flutter/material.dart';
 
 import '../locator.dart';
 
+class LinkedTextRowWidget extends StatelessWidget {
+  final String headline;
+  final String linkText;
+  final bool usePrimaryColor;
+
+  const LinkedTextRowWidget({super.key, required this.headline, required this.linkText, required this.usePrimaryColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          headline,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        InkWell(
+          child: Text(linkText,
+            style: usePrimaryColor? Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              decoration: TextDecoration.underline,
+            ): Theme.of(context).textTheme.bodyLarge!.copyWith(
+              decoration: TextDecoration.underline,
+            )
+          ),
+          onTap: () {
+            // Link to phone number
+
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class AboutScreen extends StatefulWidget {
   const AboutScreen({Key? key}) : super(key: key);
 
@@ -68,13 +102,19 @@ class AboutScreenState extends State<AboutScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text(
-                            'This is a simple app to manage your secrets.'),
-                      const Text(
-                          'It is a demo app for the Flutter & Dart course.'),
-                      const Text('It is not intended for production use.'),
+                      const SizedBox(height: 10),
+                      Text(
+                        'pws_agency\nProf.-Messerschmitt-Str. 1a\n86159 Augsburg\nGermany\n\nPresented by: Pascal Roth',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const SizedBox(height: 10),
+                      LinkedTextRowWidget(headline: 'Phone: ', linkText: '+49 821 58910720', usePrimaryColor: true),
+                      LinkedTextRowWidget(headline: 'Mail: ', linkText: 'info@pws-agency.com', usePrimaryColor: false),
+                      LinkedTextRowWidget(headline: 'Web: ', linkText: 'www.pws-agency.com', usePrimaryColor: false,),
                     ],
                   )),
+              SizedBox(height: 30),
+
               Container(
                 height: 50,
                 decoration: BoxDecoration(

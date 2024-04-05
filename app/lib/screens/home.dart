@@ -168,6 +168,7 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
                   ],
                 ),
                 SizedBox(height: 50),
+
                 // Key Rotation
                 SizedBox(height: 20),
                 // Last Secrets
