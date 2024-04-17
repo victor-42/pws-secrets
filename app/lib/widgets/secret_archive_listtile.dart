@@ -44,7 +44,7 @@ class SArchiveTileState extends State<SArchiveTile> {
                     isAntiAlias: true,
                     height: 25,
                   );
-                case 'l':
+                case 'p':
                   return Image.asset(
                     'icons/lock.png',
                     filterQuality: FilterQuality.high,
@@ -60,7 +60,7 @@ class SArchiveTileState extends State<SArchiveTile> {
                   );
                 default:
                   return Image.asset(
-                    'icons/notepad.png',
+                    'icons/camera.png',
                     filterQuality: FilterQuality.high,
                     isAntiAlias: true,
                     height: 25,
