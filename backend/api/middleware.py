@@ -5,8 +5,8 @@ class AllowedOriginMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        # response["Access-Control-Allow-Origin"] = '*'
-        # response["Access-Control-Allow-Headers"] = '*'
-        # response["Access-Control-Allow-Methods"] = '*'
-        # response["Referrer-Policy"] = 'strict-origin-when-cross-origin'
+        response["Access-Control-Allow-Origin"] = '*'
+        response["Access-Control-Allow-Headers"] = '*'
+        response["Access-Control-Allow-Methods"] = '*'
+        response["Referrer-Policy"] = 'strict-origin-when-cross-origin'
         return response

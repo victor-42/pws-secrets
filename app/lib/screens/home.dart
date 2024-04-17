@@ -42,17 +42,17 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(25),
+      child: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PinnedMessage(),
             WelcomeTexts(),
             LastSecretsWidget(onToNewSecrets: widget.onToNewSecrets),
           ],
         ),
-      )
+      ),
     );
   }
 }
@@ -61,9 +61,7 @@ class WelcomeTexts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(
-        maxWidth: 600,
-      ),
+      constraints: BoxConstraints(maxWidth: 600),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const SizedBox(height: 30),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -97,58 +95,54 @@ class PinnedMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(
-        maxWidth: 700,
-      ),
-      child: SizedBox(
-        width: double.infinity,
-        child: Card(
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Positioned(
-                  top: -20,
-                  left: -7,
-                  child: Transform.rotate(
-                      angle: -0.3,
-                      child: Image.asset(
-                        'icons/pin.png',
-                        height: 40,
-                        width: 40,
-                      ))),
-              Positioned(
-                  top: -20,
-                  right: -7,
-                  child: Transform.rotate(
-                      angle: 0.3,
-                      child: Image.asset(
-                        'icons/pin.png',
-                        height: 40,
-                        width: 40,
-                      ))),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Share a Secret',
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      '...with a link that operates just once before self-destructing',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
+      width: double.infinity,
+      constraints: BoxConstraints(maxWidth: 700),
+      child: Card(
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+                top: -20,
+                left: -7,
+                child: Transform.rotate(
+                    angle: -0.3,
+                    child: Image.asset(
+                      'icons/pin.png',
+                      height: 40,
+                      width: 40,
+                    ))),
+            Positioned(
+                top: -20,
+                right: -7,
+                child: Transform.rotate(
+                    angle: 0.3,
+                    child: Image.asset(
+                      'icons/pin.png',
+                      height: 40,
+                      width: 40,
+                    ))),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Share a Secret',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    '...with a link that operates just once before self-destructing',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
               ),
-              const SizedBox(height: 30),
-            ],
-          ),
+            ),
+            const SizedBox(height: 30),
+          ],
         ),
       ),
     );
@@ -192,70 +186,20 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        WelcomeTexts(),
         SizedBox(height: 40),
-        Text('Last Secrets',
-            style: Theme.of(context).textTheme.headlineSmall),
-        const SizedBox(height: 15),
-        Text(lastSecretText, style: Theme.of(context).textTheme.bodyMedium),
-        const SizedBox(height: 40),
-        SizedBox(height: 50),
-
-        // Key Rotation
-        SizedBox(height: 20),
-        // Last Secrets
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Builder(builder: (context) {
-              if (_stateManager.oldArchives == null ||
-                  _stateManager.oldArchives!.length == 0) {
-                return SizedBox(
-                  width: 120,
-                );
-              }
-              return SizedBox(
-                width: 120,
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    onPressed: () {
-                      _stateManager.reloadHomeInformation();
-                      setState(() {});
-                    },
-                    hoverColor: Colors.transparent,
-                    icon: Icon(Icons.refresh),
-                  ),
-                ),
-              );
-            }),
-            Text(
-              'Last Secrets',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            Builder(builder: (context) {
-              if (_stateManager.oldArchives == null ||
-                  _stateManager.oldArchives!.length == 0) {
-                return SizedBox(
-                  width: 120,
-                );
-              }
-              return SizedBox(
-                width: 120,
-                child: ElevatedButton(
-                    onPressed: () {
-                      _stateManager.clearOldArchives();
-                      setState(() {});
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                        Theme.of(context).colorScheme.background),
-                    child: Text('Clear Closed')),
-              );
-            })
-          ],
+        Container(
+          constraints: BoxConstraints(maxWidth: 600),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Last Secrets',
+                  style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: 15),
+              Text(lastSecretText, style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 30),
         // Print URL without path
         // Last Secrets List
         Builder(builder: (context) {
@@ -266,9 +210,35 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
                 child: const CircularProgressIndicator());
           }
           if (_stateManager.oldArchives!.length == 0) {
-            return Card();
+            return Card(
+              child: Container(
+                constraints: BoxConstraints(maxWidth: 600, minWidth: 500),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black.withOpacity(0.1)),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                child: Row(
+                  children: [
+                  Image.asset(
+                  'icons/no-entry.png',
+                  filterQuality: FilterQuality.high,
+                  isAntiAlias: true,
+                  height: 25,
+                ),
+                    SizedBox(width: 30,),
+                    Text('no one has saved the meta information yet, please reload',
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.5),
+                        )),
+                  ],
+                ),
+              )
+            );
           }
-          return Flexible(
+          return Container(
+            height: 100 * _stateManager.oldArchives!.length.toDouble(),
+            constraints: BoxConstraints(maxWidth: 700),
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: _stateManager.oldArchives!.length,
@@ -284,6 +254,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
             ),
           );
         }),
+        const SizedBox(height: 30),
         ElevatedButton.icon(
             icon: Icon(
               Icons.refresh,
@@ -296,33 +267,43 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
             label: Text('RELOAD')),
 
         const SizedBox(height: 40),
-        Align(
-            alignment: Alignment.topLeft,
-            child: Text('Links',
-                style: Theme.of(context).textTheme.headlineSmall)),
+        Container(
+          constraints: BoxConstraints(maxWidth: 600),
+          child: Align(
+              alignment: Alignment.topLeft,
+              child: Text('Links',
+                  style: Theme.of(context).textTheme.headlineSmall)),
+        ),
         const SizedBox(height: 15),
-        Flexible(
+        Container(
+          constraints: BoxConstraints(maxWidth: 600),
+          height: 100,
           child: ListView.builder(
               itemCount: links.length,
               itemBuilder: (context, index) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      '\u2022',
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.55,
+                return InkWell(
+                  onTap: () {
+
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        '\u2022',
+                        style: TextStyle(
+                          fontSize: 16,
+                          height: 1.55,
+                        ),
                       ),
-                    ),
-                    Text(links[index][0],
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(
-                          decoration: TextDecoration.underline,
-                        )),
-                  ],
+                      Text(links[index][0],
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
+                            decoration: TextDecoration.underline,
+                          )),
+                    ],
+                  ),
                 );
               }),
         ),

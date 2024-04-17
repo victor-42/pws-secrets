@@ -1,5 +1,6 @@
 import 'package:app/state-manager.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SArchiveTile extends StatefulWidget {
   final SecretArchive secretArchive;
@@ -16,12 +17,13 @@ class SArchiveTileState extends State<SArchiveTile> {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
+        padding: const EdgeInsets.fromLTRB(25, 1, 25, 1),
         height: 50,
         width: double.infinity,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.background,
+              color: Colors.black.withOpacity(0.1),
               spreadRadius: 1,
               blurRadius: 1,
               offset: Offset(0, 1),
@@ -30,93 +32,102 @@ class SArchiveTileState extends State<SArchiveTile> {
           borderRadius: BorderRadius.circular(5),
           color: Theme.of(context).colorScheme.surface,
         ),
-        padding: const EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Builder(builder: (context) {
-                  if (widget.secretArchive.openedAt == null) {
-                    return Icon(Icons.visibility_off_outlined);
-                  } else {
-                    return Icon(Icons.visibility_outlined);
-                  }
-                }),
-                SizedBox(width: 10),
-                Builder(builder: (context) {
-                  switch (widget.secretArchive.type) {
-                    case 'n':
-                      return Icon(Icons.note_outlined);
-                    case 'l':
-                      return Icon(Icons.key_outlined);
-                    case 'i':
-                      return Icon(Icons.image_outlined);
-                    default:
-                      return Icon(Icons.key_outlined);
-                  }
-                }),
-                SizedBox(width: 10),
-                Builder(builder: (context) {
-                  var startOfId = widget.secretArchive.uuid.substring(0, 4);
-                  var endOfId = this
-                      .widget.secretArchive
-                      .uuid
-                      .substring(widget.secretArchive.uuid.length - 4);
-                  return Tooltip(
-                      message: widget.secretArchive.uuid,
-                      child: Text(startOfId + '...' + endOfId));
-                }),
-                SizedBox(
-                  width: 10,
-                ),
-                Builder(builder: (context) {
-                  if (widget.secretArchive.openedAt == null) {
-                    int days = DateTime.now()
-                        .difference(widget.secretArchive.createdAt)
-                        .inDays;
-                    int hours = DateTime.now()
-                            .difference(widget.secretArchive.createdAt)
-                            .inHours %
-                        24;
-                    return Tooltip(
-                        message: 'Created At: ${widget.secretArchive.createdAt}',
-                        child: Text(
-                            'Created At +${days.toString().padLeft(2, '0')}D ${hours.toString().padLeft(2, '0')}H'));
-                  } else {
-                    int days = DateTime.now()
-                        .difference(widget.secretArchive.openedAt!)
-                        .inDays;
-                    int hours = DateTime.now()
-                            .difference(widget.secretArchive.openedAt!)
-                            .inHours %
-                        24;
-                    return Tooltip(
-                        message: 'Opened At: ${widget.secretArchive.openedAt}',
-                        child: Text(
-                            'Opened At +${days.toString().padLeft(2, '0')}D ${hours.toString().padLeft(2, '0')}H'));
-                  }
-                }),
-              ],
-            ),
-            Builder(
-              builder: (context) {
-                if (widget.secretArchive.openedAt != null) {
-                  return SizedBox(width: 50, height: 50);
-                }
-                return SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: OutlinedButton(
-                        onPressed: () {
-                            widget.onBlock(widget.secretArchive.uuid);
-                        },
-                        child: Icon(
-                          Icons.block,
-                          size: 20,
-                        )));
+            Builder(builder: (context) {
+              switch (widget.secretArchive.type) {
+                case 'n':
+                  return Image.asset(
+                    'icons/notepad.png',
+                    filterQuality: FilterQuality.high,
+                    isAntiAlias: true,
+                    height: 25,
+                  );
+                case 'l':
+                  return Image.asset(
+                    'icons/lock.png',
+                    filterQuality: FilterQuality.high,
+                    isAntiAlias: true,
+                    height: 25,
+                  );
+                case 'i':
+                  return Image.asset(
+                    'icons/camera.png',
+                    filterQuality: FilterQuality.high,
+                    isAntiAlias: true,
+                    height: 25,
+                  );
+                default:
+                  return Image.asset(
+                    'icons/notepad.png',
+                    filterQuality: FilterQuality.high,
+                    isAntiAlias: true,
+                    height: 25,
+                  );
               }
+            }),
+            Text(
+              'ID',
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .color!
+                        .withOpacity(0.5),
+                  ),
             ),
+            Builder(builder: (context) {
+              var startOfId = widget.secretArchive.uuid.substring(0, 12);
+              var endOfId = this
+                  .widget
+                  .secretArchive
+                  .uuid
+                  .substring(widget.secretArchive.uuid.length - 2);
+              return Tooltip(
+                  message: widget.secretArchive.uuid,
+                  child: Text(startOfId + '...' + endOfId));
+            }),
+            Text(
+              'created',
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .color!
+                        .withOpacity(0.5),
+                  ),
+            ),
+            Builder(builder: (context) {
+              return Text(DateFormat('dd.MM.yyyy')
+                  .format(widget.secretArchive.createdAt));
+            }),
+            Text(
+              'valid',
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .color!
+                        .withOpacity(0.5),
+                  ),
+            ),
+            Builder(builder: (context) {
+              if (widget.secretArchive.openedAt == null) {
+                return Image.asset(
+                  'icons/check-mark.png',
+                  filterQuality: FilterQuality.high,
+                  isAntiAlias: true,
+                  height: 25,
+                );
+              }
+              return Image.asset(
+                'icons/cross-mark.png',
+                filterQuality: FilterQuality.high,
+                isAntiAlias: true,
+                height: 25,
+              );
+            }),
           ],
         ),
       ),
