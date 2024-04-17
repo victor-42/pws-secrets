@@ -53,7 +53,7 @@ class AboutScreen extends StatefulWidget {
 }
 
 class AboutScreenState extends State<AboutScreen> {
-  int _currentTimerTime = -10;
+  int _currentTimerTime = 1;
   Timer? _timer;
   bool _isRotating = false;
   final StateManager _stateManager = locator<StateManager>();
