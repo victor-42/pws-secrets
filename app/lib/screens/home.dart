@@ -48,7 +48,7 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
         child: Column(
           children: [
             PinnedMessage(),
-            WelcomeTexts(),
+            WelcomeTexts(onToNewSecrets: widget.onToNewSecrets),
             LastSecretsWidget(onToNewSecrets: widget.onToNewSecrets),
           ],
         ),
@@ -58,6 +58,10 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
 }
 
 class WelcomeTexts extends StatelessWidget {
+  final Function onToNewSecrets;
+
+  const WelcomeTexts({Key? key, required this.onToNewSecrets}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -80,9 +84,15 @@ class WelcomeTexts extends StatelessWidget {
           Text(yourChoiceText, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            HomeSecretButtons(onClick: () {}, assetPath: 'icons/notepad.png'),
-            HomeSecretButtons(onClick: () {}, assetPath: 'icons/lock.png'),
-            HomeSecretButtons(onClick: () {}, assetPath: 'icons/camera.png'),
+            HomeSecretButtons(onClick: () {
+              onToNewSecrets();
+            }, assetPath: 'icons/notepad.png'),
+            HomeSecretButtons(onClick: () {
+              onToNewSecrets();
+            }, assetPath: 'icons/lock.png'),
+            HomeSecretButtons(onClick: () {
+              onToNewSecrets();
+            }, assetPath: 'icons/camera.png'),
           ])
         ]),
       ]),
@@ -103,7 +113,7 @@ class PinnedMessage extends StatelessWidget {
           children: [
             Positioned(
                 top: -20,
-                left: -7,
+                left: 15,
                 child: Transform.rotate(
                     angle: -0.3,
                     child: Image.asset(
@@ -113,7 +123,7 @@ class PinnedMessage extends StatelessWidget {
                     ))),
             Positioned(
                 top: -20,
-                right: -7,
+                right: 15,
                 child: Transform.rotate(
                     angle: 0.3,
                     child: Image.asset(
@@ -122,21 +132,34 @@ class PinnedMessage extends StatelessWidget {
                       width: 40,
                     ))),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(60),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Share a Secret',
-                    style: Theme.of(context).textTheme.headlineMedium,
+                  Row(
+                    children: [
+                      Text(
+                        'Share a Secret',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      SizedBox(width: 10),
+                      Image.asset(
+                        'icons/chain.png',
+                        filterQuality: FilterQuality.high,
+                        isAntiAlias: false,
+                        height: 35,
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   Text(
                     '...with a link that operates just once before self-destructing',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      color: Theme.of(context).textTheme.headlineMedium!.color!.withOpacity(0.5),
+                    ),
                   ),
                 ],
               ),
@@ -237,7 +260,6 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
             );
           }
           return Container(
-            height: 100 * _stateManager.oldArchives!.length.toDouble(),
             constraints: BoxConstraints(maxWidth: 700),
             child: ListView.builder(
               shrinkWrap: true,

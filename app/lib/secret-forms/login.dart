@@ -200,11 +200,13 @@ class _LoginFormState extends State<LoginForm> {
                                     text: _passwordController.text));
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Copied to clipboard'),
+                                    content: Text('Copied to clipboard',
+                                    ),
                                   ),
                                 );
                               },
-                              child: Text('Copy to clipboard'),
+                              child: Text('Copy to clipboard',
+                              style: Theme.of(context).textTheme.bodyMedium,),
                             ),
                           )
                         ],

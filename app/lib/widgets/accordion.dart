@@ -65,7 +65,7 @@ class _SecretsAccordionState extends State<SecretsAccordion> {
                         const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                     child: Align(
                         alignment: Alignment.topLeft,
-                        child: Container(child: widget.child))),
+                        child: Container(child: SelectionArea(child: widget.child)))),
                 crossFadeState: _isExpanded
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
