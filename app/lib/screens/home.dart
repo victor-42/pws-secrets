@@ -39,7 +39,6 @@ class LastSecretsScreen extends StatefulWidget {
 }
 
 class LastSecretsScreenState extends State<LastSecretsScreen> {
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -60,7 +59,8 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
 class WelcomeTexts extends StatelessWidget {
   final Function onToNewSecrets;
 
-  const WelcomeTexts({Key? key, required this.onToNewSecrets}) : super(key: key);
+  const WelcomeTexts({Key? key, required this.onToNewSecrets})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,8 @@ class WelcomeTexts extends StatelessWidget {
           Text('One-Time Secrets',
               style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 15),
-          Text(oneTimeSecretText, style: Theme.of(context).textTheme.bodyMedium),
+          Text(oneTimeSecretText,
+              style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 30),
           Text('End-to-End Encryption',
               style: Theme.of(context).textTheme.headlineSmall),
@@ -84,22 +85,27 @@ class WelcomeTexts extends StatelessWidget {
           Text(yourChoiceText, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            HomeSecretButtons(onClick: () {
-              onToNewSecrets();
-            }, assetPath: 'icons/notepad.png'),
-            HomeSecretButtons(onClick: () {
-              onToNewSecrets();
-            }, assetPath: 'icons/lock.png'),
-            HomeSecretButtons(onClick: () {
-              onToNewSecrets();
-            }, assetPath: 'icons/camera.png'),
+            HomeSecretButtons(
+                onClick: () {
+                  onToNewSecrets();
+                },
+                assetPath: 'icons/notepad.png'),
+            HomeSecretButtons(
+                onClick: () {
+                  onToNewSecrets();
+                },
+                assetPath: 'icons/lock.png'),
+            HomeSecretButtons(
+                onClick: () {
+                  onToNewSecrets();
+                },
+                assetPath: 'icons/camera.png'),
           ])
         ]),
       ]),
     );
   }
 }
-
 
 class PinnedMessage extends StatelessWidget {
   @override
@@ -155,11 +161,36 @@ class PinnedMessage extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    '...with a link that operates just once before self-destructing',
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: Theme.of(context).textTheme.headlineMedium!.color!.withOpacity(0.5),
-                    ),
+                  RichText(
+                    text: TextSpan(
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .color!
+                                  .withOpacity(0.5),
+                            ),
+                        children: [
+                          TextSpan(
+                            text: '... with a link that operates \n',
+                          ),
+                          TextSpan(
+                              text: 'just once',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Theme.of(context)
+                                      .colorScheme
+                                      .primary,
+                                  color:
+                                      Theme.of(context).colorScheme.primary)),
+                          TextSpan(
+                            text: ' before self-destructing',
+                          ),
+                        ]),
                   ),
                 ],
               ),
@@ -169,14 +200,11 @@ class PinnedMessage extends StatelessWidget {
         ),
       ),
     );
-
   }
 }
 
-
 class LastSecretsWidget extends StatefulWidget {
   final Function onToNewSecrets;
-
 
   const LastSecretsWidget({Key? key, required this.onToNewSecrets})
       : super(key: key);
@@ -205,6 +233,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
     await _stateManager.reloadHomeInformation();
     // Current Timer time as diff between now and oldExpiration in seconds
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -218,7 +247,8 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
               Text('Last Secrets',
                   style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 15),
-              Text(lastSecretText, style: Theme.of(context).textTheme.bodyMedium),
+              Text(lastSecretText,
+                  style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),
         ),
@@ -234,30 +264,36 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
           }
           if (_stateManager.oldArchives!.length == 0) {
             return Card(
-              child: Container(
-                constraints: BoxConstraints(maxWidth: 600, minWidth: 500),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black.withOpacity(0.1)),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                child: Row(
-                  children: [
+                child: Container(
+              constraints: BoxConstraints(maxWidth: 600, minWidth: 500),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black.withOpacity(0.1)),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              child: Row(
+                children: [
                   Image.asset(
-                  'icons/no-entry.png',
-                  filterQuality: FilterQuality.high,
-                  isAntiAlias: true,
-                  height: 25,
-                ),
-                    SizedBox(width: 30,),
-                    Text('no one has saved the meta information yet, please reload',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.5),
-                        )),
-                  ],
-                ),
-              )
-            );
+                    'icons/no-entry.png',
+                    filterQuality: FilterQuality.high,
+                    isAntiAlias: true,
+                    height: 25,
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Text(
+                      'no one has saved the meta information yet, please reload',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .color!
+                                .withOpacity(0.5),
+                          )),
+                ],
+              ),
+            ));
           }
           return Container(
             constraints: BoxConstraints(maxWidth: 700),
@@ -304,9 +340,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
               itemCount: links.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: () {
-
-                  },
+                  onTap: () {},
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -318,12 +352,10 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
                         ),
                       ),
                       Text(links[index][0],
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                            decoration: TextDecoration.underline,
-                          )),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    decoration: TextDecoration.underline,
+                                  )),
                     ],
                   ),
                 );
@@ -332,5 +364,4 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
       ],
     );
   }
-
 }

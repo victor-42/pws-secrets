@@ -29,7 +29,16 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Chivo
+      fonts:
+          - asset: assets/fonts/chivo.ttf
+          - asset: assets/fonts/chivo-italic.ttf
+    - family: SpaceGrotesk
+      fonts:
+          - asset: assets/fonts/space-grotesk.ttf
 
 assets:
   - assets/logo/
   - assets/icons/
+  - assets/fonts/

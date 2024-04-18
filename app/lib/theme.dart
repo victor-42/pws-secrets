@@ -26,6 +26,9 @@ MaterialColor createMaterialColor(Color color) {
 class SecretsTheme {
   static ThemeData get lightTheme {
     return ThemeData(
+      textTheme: ThemeData.light().textTheme.apply(
+            fontFamily: 'SpaceGrotesk',
+          ),
       useMaterial3: false,
       primarySwatch: createMaterialColor(primary_color),
       appBarTheme: const AppBarTheme(
@@ -47,6 +50,9 @@ class SecretsTheme {
 
   static ThemeData get darkTheme {
     return ThemeData.dark(useMaterial3: false).copyWith(
+      textTheme: ThemeData.dark().textTheme.apply(
+            fontFamily: 'Chivo',
+          ),
       primaryColor: const Color(0xfffc3742),
       focusColor: const Color(0xfffc3742),
       colorScheme: const ColorScheme.dark(
