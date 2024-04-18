@@ -30,8 +30,9 @@ const List<dynamic> links = [
 
 class LastSecretsScreen extends StatefulWidget {
   final Function onToNewSecrets;
+  final Function onToAbout;
 
-  const LastSecretsScreen({Key? key, required this.onToNewSecrets})
+  const LastSecretsScreen({Key? key, required this.onToNewSecrets, required this.onToAbout})
       : super(key: key);
 
   @override
@@ -48,7 +49,7 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
           children: [
             PinnedMessage(),
             WelcomeTexts(onToNewSecrets: widget.onToNewSecrets),
-            LastSecretsWidget(onToNewSecrets: widget.onToNewSecrets),
+            LastSecretsWidget(onToNewSecrets: widget.onToNewSecrets,onToAbout: widget.onToAbout,),
           ],
         ),
       ),
@@ -205,8 +206,9 @@ class PinnedMessage extends StatelessWidget {
 
 class LastSecretsWidget extends StatefulWidget {
   final Function onToNewSecrets;
+  final Function onToAbout;
 
-  const LastSecretsWidget({Key? key, required this.onToNewSecrets})
+  const LastSecretsWidget({Key? key, required this.onToNewSecrets, required this.onToAbout})
       : super(key: key);
 
   @override
@@ -340,7 +342,9 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
               itemCount: links.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    widget.onToAbout();
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

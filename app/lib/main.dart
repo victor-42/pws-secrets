@@ -111,6 +111,11 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 _selectedIndex = 1;
               });
+            },
+            onToAbout: () {
+              setState(() {
+                _selectedIndex = 2;
+              });
             },),
             const SecretScreen(),
             const AboutScreen(),
