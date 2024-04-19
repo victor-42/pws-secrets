@@ -39,28 +39,28 @@ class SArchiveTileState extends State<SArchiveTile> {
               switch (widget.secretArchive.type) {
                 case 'n':
                   return Image.asset(
-                    'icons/notepad.png',
+                    'assets/secret-icons/notepad.png',
                     filterQuality: FilterQuality.high,
                     isAntiAlias: true,
                     height: 25,
                   );
                 case 'p':
                   return Image.asset(
-                    'icons/lock.png',
+                    'assets/secret-icons/lock.png',
                     filterQuality: FilterQuality.high,
                     isAntiAlias: true,
                     height: 25,
                   );
                 case 'i':
                   return Image.asset(
-                    'icons/camera.png',
+                    'assets/secret-icons/camera.png',
                     filterQuality: FilterQuality.high,
                     isAntiAlias: true,
                     height: 25,
                   );
                 default:
                   return Image.asset(
-                    'icons/camera.png',
+                    'assets/secret-icons/camera.png',
                     filterQuality: FilterQuality.high,
                     isAntiAlias: true,
                     height: 25,
@@ -115,14 +115,14 @@ class SArchiveTileState extends State<SArchiveTile> {
             Builder(builder: (context) {
               if (widget.secretArchive.openedAt == null) {
                 return Image.asset(
-                  'icons/check-mark.png',
+                  'assets/secret-icons/check-mark.png',
                   filterQuality: FilterQuality.high,
                   isAntiAlias: true,
                   height: 25,
                 );
               }
               return Image.asset(
-                'icons/cross-mark.png',
+                'assets/secret-icons/cross-mark.png',
                 filterQuality: FilterQuality.high,
                 isAntiAlias: true,
                 height: 25,

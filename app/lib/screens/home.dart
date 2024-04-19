@@ -90,17 +90,17 @@ class WelcomeTexts extends StatelessWidget {
                 onClick: () {
                   onToNewSecrets();
                 },
-                assetPath: 'icons/notepad.png'),
+                assetPath: 'assets/secret-icons/notepad.png'),
             HomeSecretButtons(
                 onClick: () {
                   onToNewSecrets();
                 },
-                assetPath: 'icons/lock.png'),
+                assetPath: 'assets/secret-icons/lock.png'),
             HomeSecretButtons(
                 onClick: () {
                   onToNewSecrets();
                 },
-                assetPath: 'icons/camera.png'),
+                assetPath: 'assets/secret-icons/camera.png'),
           ])
         ]),
       ]),
@@ -124,7 +124,7 @@ class PinnedMessage extends StatelessWidget {
                 child: Transform.rotate(
                     angle: -0.3,
                     child: Image.asset(
-                      'icons/pin.png',
+                      'assets/secret-icons/pin.png',
                       height: 40,
                       width: 40,
                     ))),
@@ -134,7 +134,7 @@ class PinnedMessage extends StatelessWidget {
                 child: Transform.rotate(
                     angle: 0.3,
                     child: Image.asset(
-                      'icons/pin.png',
+                      'assets/secret-icons/pin.png',
                       height: 40,
                       width: 40,
                     ))),
@@ -152,7 +152,7 @@ class PinnedMessage extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       Image.asset(
-                        'icons/chain.png',
+                        'assets/secret-icons/chain.png',
                         filterQuality: FilterQuality.high,
                         isAntiAlias: false,
                         height: 35,
@@ -276,7 +276,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
               child: Row(
                 children: [
                   Image.asset(
-                    'icons/no-entry.png',
+                    'assets/secret-icons/no-entry.png',
                     filterQuality: FilterQuality.high,
                     isAntiAlias: true,
                     height: 25,

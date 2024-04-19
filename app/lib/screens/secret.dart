@@ -131,7 +131,7 @@ class SecretScreenState extends State<SecretScreen> {
                 RadioCardButton(
                   title: 'Note',
                   iconWidget: const Image(
-                    image: AssetImage('icons/notepad.png'),
+                    image: AssetImage('assets/secret-icons/notepad.png'),
                     filterQuality: FilterQuality.high,
                   ),
                   active: _mode == 0,
@@ -144,7 +144,7 @@ class SecretScreenState extends State<SecretScreen> {
                 RadioCardButton(
                   title: 'Login',
                   iconWidget: const Image(
-                    image: AssetImage('icons/lock.png'),
+                    image: AssetImage('assets/secret-icons/lock.png'),
                     filterQuality: FilterQuality.high,
                   ),
                   active: _mode == 1,
@@ -157,7 +157,7 @@ class SecretScreenState extends State<SecretScreen> {
                 RadioCardButton(
                   title: 'Image',
                   iconWidget: const Image(
-                    image: AssetImage('icons/camera.png'),
+                    image: AssetImage('assets/secret-icons/camera.png'),
                     filterQuality: FilterQuality.high,
                   ),
                   active: _mode == 2,

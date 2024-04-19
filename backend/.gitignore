@@ -15,4 +15,7 @@ media/images/
 
 # Angular files
 static/ang/*
+
+
 not_secret/keys.private
+not_secret/unsecreted.db

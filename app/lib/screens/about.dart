@@ -153,7 +153,7 @@ class AboutScreenState extends State<AboutScreen> {
                                 child: Row(
                                   children: [
                                     Image.asset(
-                                      'icons/key.png',
+                                      'assets/secret-icons/key.png',
                                       height: 20,
                                       width: 20,
                                     ),
