@@ -47,6 +47,7 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
       child: Center(
         child: Column(
           children: [
+            SizedBox(height: 50),
             PinnedMessage(),
             WelcomeTexts(onToNewSecrets: widget.onToNewSecrets),
             LastSecretsWidget(onToNewSecrets: widget.onToNewSecrets,onToAbout: widget.onToAbout,),
@@ -68,23 +69,25 @@ class WelcomeTexts extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(maxWidth: 600),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const SizedBox(height: 30),
+        const SizedBox(height: 50),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text('One-Time Secrets',
               style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 15),
           Text(oneTimeSecretText,
-              style: Theme.of(context).textTheme.bodyMedium),
-          const SizedBox(height: 30),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.w100,
+              )),
+          const SizedBox(height: 50),
           Text('End-to-End Encryption',
               style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 15),
           Text(encryptionText, style: Theme.of(context).textTheme.bodyMedium),
-          const SizedBox(height: 30),
+          const SizedBox(height: 50),
           Text('Your Choice', style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 15),
           Text(yourChoiceText, style: Theme.of(context).textTheme.bodyMedium),
-          const SizedBox(height: 40),
+          const SizedBox(height: 50),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             HomeSecretButtons(
                 onClick: () {
@@ -181,7 +184,7 @@ class PinnedMessage extends StatelessWidget {
                           TextSpan(
                               text: 'just once',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w200,
                                   decoration: TextDecoration.underline,
                                   decorationColor: Theme.of(context)
                                       .colorScheme

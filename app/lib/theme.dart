@@ -26,8 +26,12 @@ MaterialColor createMaterialColor(Color color) {
 class SecretsTheme {
   static ThemeData get lightTheme {
     return ThemeData(
-      textTheme: ThemeData.light().textTheme.apply(
-            fontFamily: 'SpaceGrotesk',
+      textTheme: ThemeData.light().textTheme.copyWith(
+        headlineMedium: ThemeData.light().textTheme.headlineMedium!.copyWith(
+          fontWeight: FontWeight.w300,
+        ),
+      ).apply(
+            fontFamily: 'Chivo',
           ),
       useMaterial3: false,
       primarySwatch: createMaterialColor(primary_color),
@@ -50,9 +54,13 @@ class SecretsTheme {
 
   static ThemeData get darkTheme {
     return ThemeData.dark(useMaterial3: false).copyWith(
-      textTheme: ThemeData.dark().textTheme.apply(
-            fontFamily: 'Chivo',
-          ),
+      textTheme: ThemeData.dark().textTheme.copyWith(
+        headlineMedium: ThemeData.dark().textTheme.headlineMedium!.copyWith(
+          fontWeight: FontWeight.w100,
+        ),
+      ).apply(
+        fontFamily: 'ChivoDivo',
+      ),
       primaryColor: const Color(0xfffc3742),
       focusColor: const Color(0xfffc3742),
       colorScheme: const ColorScheme.dark(

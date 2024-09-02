@@ -283,3 +283,18 @@ class PasswordSecret {
     };
   }
 }
+
+class ImageSecret {
+  final String type = 'i';
+  final String image;
+
+  ImageSecret({
+    required this.image,
+  });
+
+  getRepresentation() {
+    return {
+      'image': image,
+    };
+  }
+}

@@ -223,6 +223,24 @@ class AboutScreenState extends State<AboutScreen> {
                         )
                       ],
                     )),
+                SizedBox(height: 20,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Version 1.0.1',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .color!
+                            .withOpacity(0.5),
+                      ),
+                    ),
+                    Text('made with ❤️',
+                        style: Theme.of(context).textTheme.bodyLarge),
+                  ],
+                )
               ],
             ),
           ),

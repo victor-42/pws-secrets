@@ -30,10 +30,10 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   fonts:
-    - family: Chivo
+    - family: ChivoDivo
       fonts:
-          - asset: assets/fonts/chivo.ttf
-          - asset: assets/fonts/chivo-italic.ttf
+          - asset: assets/fonts/Chivo-VariableFont_wght.ttf
+            weight: 100
     - family: SpaceGrotesk
       fonts:
           - asset: assets/fonts/space-grotesk.ttf

@@ -23,6 +23,8 @@ class _ImageFormState extends State<ImageForm> {
     return Form(
         key: _formKey,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _image == null ?
             SizedBox(
@@ -33,24 +35,27 @@ class _ImageFormState extends State<ImageForm> {
                   icon: Icon(Icons.add),
                   onPressed: _onAddImage,),
               ),
-            ) : Card(
-                clipBehavior: Clip.antiAlias,
-                child: Stack(
-                    children: [
-                      Image.file(_image!, width: 300,),
-                      Positioned(
-                          right: 5,
-                          top: 5,
-                          child: InkWell(
-                            child: Icon(Icons.remove_circle, size: 20, color: Colors.red,),
-                            onTap: () {
-                              setState(() {
-                                _image = null;
-                              });
-                            },
-                          ))
-                    ]
-                )
+            ) : SizedBox(
+              width: double.infinity,
+              child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Stack(
+                      children: [
+                        Image.network(_image!.path,),
+                        Positioned(
+                            right: 5,
+                            top: 5,
+                            child: InkWell(
+                              child: Icon(Icons.delete, size: 20, color: Colors.red,),
+                              onTap: () {
+                                setState(() {
+                                  _image = null;
+                                });
+                              },
+                            ))
+                      ]
+                  )
+              ),
             ),
             SizedBox(height: 20),
           ],
