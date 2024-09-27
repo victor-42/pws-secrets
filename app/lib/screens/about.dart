@@ -53,7 +53,7 @@ class LinkedTextRowWidget extends StatelessWidget {
               return;
             }
             await launchUrl(
-              Uri.parse('https://$linkText'),
+              linkText.contains('https://') ?Uri.parse(linkText) : Uri.parse('https://$linkText'),
             );
           },
         ),
@@ -145,7 +145,7 @@ class AboutScreenState extends State<AboutScreen> {
                         const SizedBox(height: 10),
                         const LinkedTextRowWidget(
                           headline: 'GitHub: ',
-                          linkText: 'https://github.com/pws-agency/pws-secrets',
+                          linkText: 'https://github.com/victor-42/pws-secrets',
                           usePrimaryColor: false,
                         )
                       ],
