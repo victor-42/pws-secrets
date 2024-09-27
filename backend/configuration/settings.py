@@ -28,11 +28,28 @@ SEPARATOR_REPLACEMENT = '//!//)//#'
 ID_LOG_FILE = BASE_DIR + '/id_store.json'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DJANGO_DEBUG = False
+DJANGO_DEBUG = True
+TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['secrets.pws-agency.com', 'localhost', '127.0.0.1', os.environ.get('DJANGO_ALLOWED_HOSTS',
                                                                                     'pws-secrets.com')]
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 # Application definition
 
 MESSAGE_TAGS = {

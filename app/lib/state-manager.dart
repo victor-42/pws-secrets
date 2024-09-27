@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:html';
 import 'dart:math';
+import 'dart:html';
+import 'dart:typed_data';
+import 'package:http_parser/http_parser.dart';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class StateManager {
   SharedPreferences? _prefs;
+
   //String apiUrl = Uri.base.origin + '/api/';
 
   String apiUrl = 'http://localhost:8000/api/';
@@ -158,11 +162,14 @@ class StateManager {
           _archivedUuidList.add(uuid);
           saveOldUuidList();
         }
-        String pathname =window.location.pathname.toString();
-        return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname , '')}${pathname == '/' ? '' : '/'}secret/' +
-            jsonDecode(response.stream.toString())['enc'];
+        debugPrint(response.body);
+
+        String pathname = window.location.pathname.toString();
+        return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname, '')}${pathname == '/' ? '' : '/'}secret/' +
+            jsonDecode(response.body)['enc'];
       }
     }
+
     Map<String, String> repr = {
       'uuid': uuid,
       'type': type,
@@ -171,16 +178,27 @@ class StateManager {
           .toIso8601String(),
       'view_time': preferences.showFor.toString()
     };
+    debugPrint('Secret representation: $repr');
+
     if (type == 'i') {
       var req = http.MultipartRequest(
         'POST',
         Uri.parse('${apiUrl}not-secret/'),
       );
+      debugPrint('Secret is an image');
       req.fields.addAll(repr);
-      req.files.add(http.MultipartFile.fromString('image', secret.image));
-
-      return req.send().then(callb);
-      }
+      req.fields.addAll((secret as ImageSecret).getRepresentation());
+      debugPrint(secret.imageFileName);
+      req.files.add(
+        http.MultipartFile.fromBytes(
+          'image',
+          (secret as ImageSecret).imageBytes,
+          filename: (secret as ImageSecret).imageFileName,
+          contentType: MediaType('image', secret.imageFileName.split('.').last),
+        )
+      );
+      return http.Response.fromStream(await req.send()).then(callb);
+    }
     repr.addAll(secret.getRepresentation());
     return http.post(
       Uri.parse('${apiUrl}not-secret/'),
@@ -188,7 +206,21 @@ class StateManager {
       headers: {
         'Content-Type': 'application/json',
       },
-    ).then(callb);
+    ).then((response) {
+      if (response.statusCode != 201) {
+        return null;
+      } else {
+        if (preferences.saveMeta) {
+          _archivedUuidList.add(uuid);
+          saveOldUuidList();
+        }
+        debugPrint(response.body);
+
+        String pathname = window.location.pathname.toString();
+        return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname, '')}${pathname == '/' ? '' : '/'}secret/' +
+            jsonDecode(response.body)['enc'];
+      }
+    });
   }
 
   void clearOldArchives() {
@@ -203,9 +235,8 @@ class StateManager {
         .where((element) =>
             oldArchives?.firstWhere((e) => e.uuid == element).openedAt == null)
         .toList();
-    oldArchives = oldArchives
-        ?.where((element) => element.openedAt == null)
-        .toList();
+    oldArchives =
+        oldArchives?.where((element) => element.openedAt == null).toList();
 
     saveOldUuidList();
   }
@@ -303,16 +334,18 @@ class PasswordSecret {
 
 class ImageSecret {
   final String type = 'i';
-  final String image;
-  final String? note;
+  final String imageFileName;
+  final Uint8List imageBytes;
+  final String note;
 
   ImageSecret({
-    required this.image, this.note,
+    required this.imageFileName,
+    required this.imageBytes,
+    required this.note,
   });
 
   getRepresentation() {
     return {
-      'image': image,
       'note': note,
     };
   }

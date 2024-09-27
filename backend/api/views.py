@@ -94,13 +94,12 @@ class SecretView(APIView):
         if typ not in serializer_map:
             Response(status=400, data={'detail': 'Invalid Secret Type'})
 
-        try:
-            serializer = serializer_map[typ](data=request.data)
-            serializer.is_valid(raise_exception=True)
-            to_encrypt, secret_obj = serializer.save()
-            cryptic = key_manager.encrypt(to_encrypt, secret_obj)
-        except Exception as e:
-            return Response(status=400, data={'detail': 'Error'})
+        serializer = serializer_map[typ](data=request.data)
+        serializer.is_valid(raise_exception=True)
+        to_encrypt, secret_obj = serializer.save()
+        cryptic = key_manager.encrypt(to_encrypt, secret_obj)
+
+        #    return Response(status=400, data={'detail': 'Error'})
 
         return Response(status=201, data={'enc': cryptic.decode('ascii')})
 

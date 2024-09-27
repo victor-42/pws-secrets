@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app/state-manager.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,7 +20,7 @@ class ImageForm extends StatefulWidget {
 class _ImageFormState extends State<ImageForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _noteController = TextEditingController();
-  File? _image;
+  dynamic _image;
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +73,12 @@ class _ImageFormState extends State<ImageForm> {
                 hintText: 'Note',
                 border: OutlineInputBorder(),
               ),
-              onChanged: (value) {
+              onChanged: (value)  async {
                 if (_image != null) {
-                  widget
-                      .onChanged(ImageSecret(image: _image!.path, note: value));
+                  widget.onChanged(
+                      ImageSecret(imageFileName: _image!.name,
+                          imageBytes: await _image!.readAsBytes(),
+                          note: value));
                 }
               },
               onFieldSubmitted: (value) {
@@ -96,9 +96,13 @@ class _ImageFormState extends State<ImageForm> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+      ImageSecret secret = ImageSecret(
+          imageFileName: pickedFile.name,
+          imageBytes: await pickedFile.readAsBytes(),
+          note: _noteController.text ?? '');
       setState(() {
-        widget.onChanged(ImageSecret(image: pickedFile.path, note: _noteController.text));
-        _image = File(pickedFile.path);
+        widget.onChanged(secret);
+        _image = pickedFile;
       });
     }
   }

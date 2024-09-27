@@ -1,4 +1,4 @@
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from rest_framework import serializers
 from django.conf import settings
 from uuid import uuid4
@@ -17,7 +17,7 @@ class BaseSecretSerializer(serializers.Serializer):
     expiration_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=True)
     type = serializers.ChoiceField(choices=type_choices, required=True)
     uuid = serializers.UUIDField(required=True)
-    view_time = serializers.IntegerField(required=False, allow_null=True)
+    view_time = serializers.CharField(required=False, allow_null=True)
 
     def validate_uuid(self, value):
         value = str(value)
@@ -30,8 +30,11 @@ class BaseSecretSerializer(serializers.Serializer):
         return value
 
     def validate_view_time(self, value):
-        if value is None:
-            return value
+        if value in [None, '', 'null']:
+            return None
+        if isinstance(value, str):
+            value = int(value)
+
         if value < 0:
             raise serializers.ValidationError('View time must be greater than 0')
         return value % 301
@@ -100,7 +103,7 @@ class NoteSecretSerializer(NoteSecretSerializerMixin, BaseSecretSerializer):
     pass
 
 
-class ImageSecretSerializerMixin(serializers.ModelSerializer):
+class ImageSecretSerializerMixin(BaseSecretSerializer):
     note = serializers.CharField(max_length=15000, allow_blank=True, allow_null=True)
     image = serializers.ImageField(required=True, allow_null=False, allow_empty_file=False)
 
@@ -132,10 +135,10 @@ class ImageSecretSerializerMixin(serializers.ModelSerializer):
 
         SecretImage.objects.create(
             uuid=uuid,
-            image=ContentFile(encrypted_image, name=encrypted_name),
+            image=ContentFile(encrypted_image, name=str(encrypted_name, 'ascii')),
             note=encrypted_note
         )
-        return (str(self.instance.uuid) + str(key, 'utf-8')), secret
+        return (str(uuid) + str(key, 'utf-8')), secret
 
     @staticmethod
     def from_encryption_string(encryption_string):

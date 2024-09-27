@@ -85,7 +85,7 @@ class SecretScreenState extends State<SecretScreen> {
         }
       case 2:
         obj = _imageSecret;
-        if (obj == null || obj.image.isEmpty) {
+        if (obj == null || obj.imageFileName.isEmpty) {
           return;
         }
     }

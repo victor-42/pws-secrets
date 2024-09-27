@@ -11,8 +11,7 @@ fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'images'))
 
 class SecretImage(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, blank=False, unique=True, primary_key=True)
-    image = models.ImageField(blank=False, null=False,
-                              storage=fs)
+    image = models.FileField(blank=False, null=False)
     note = models.CharField(max_length=20000, null=False, blank=False, default='')
 
     def delete(self, *args, **kwargs):
