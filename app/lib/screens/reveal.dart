@@ -103,6 +103,8 @@ class RevealScreenState extends State<RevealScreen> {
           child = NoteRevealScreen(secretObj: _secretObj ?? {});
         } else if (_secretType == 'p') {
           child = LoginRevealScreen(secretObj: _secretObj ?? {});
+        } else if (_secretType == 'i') {
+          child = ImageRevealScreen(secretObj: _secretObj ?? {});
         }
         return Center(child: child);
       }),
@@ -118,6 +120,31 @@ class LoginRevealScreen extends StatefulWidget {
 
   @override
   State<LoginRevealScreen> createState() => LoginRevealScreenState();
+}
+
+class ImageRevealScreen extends StatefulWidget {
+  final Map<String, String> secretObj;
+
+  const ImageRevealScreen({Key? key, required this.secretObj}) : super(key: key);
+
+  @override
+  State<ImageRevealScreen> createState() => ImageRevealScreenState();
+}
+
+class ImageRevealScreenState extends State<ImageRevealScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.memory(base64Decode(widget.secretObj['image'] ?? ''),
+            width: 300, height: 300),
+        SizedBox(height: 20),
+        Text(widget.secretObj['note'] ?? '',
+            style: Theme.of(context).textTheme.headlineLarge),
+      ],
+    );
+  }
 }
 
 class LoginRevealScreenState extends State<LoginRevealScreen> {

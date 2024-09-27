@@ -151,9 +151,6 @@ class StateManager {
     // Generate uuid
     var uuid = const Uuid().v4();
 
-    debugPrint('Creating secret with uuid: $uuid');
-    debugPrint('Secret type: $type');
-
     callb(response) {
       if (response.statusCode != 201) {
         return null;
@@ -178,7 +175,6 @@ class StateManager {
           .toIso8601String(),
       'view_time': preferences.showFor.toString()
     };
-    debugPrint('Secret representation: $repr');
 
     if (type == 'i') {
       var req = http.MultipartRequest(
@@ -206,21 +202,7 @@ class StateManager {
       headers: {
         'Content-Type': 'application/json',
       },
-    ).then((response) {
-      if (response.statusCode != 201) {
-        return null;
-      } else {
-        if (preferences.saveMeta) {
-          _archivedUuidList.add(uuid);
-          saveOldUuidList();
-        }
-        debugPrint(response.body);
-
-        String pathname = window.location.pathname.toString();
-        return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname, '')}${pathname == '/' ? '' : '/'}secret/' +
-            jsonDecode(response.body)['enc'];
-      }
-    });
+    ).then(callb);
   }
 
   void clearOldArchives() {

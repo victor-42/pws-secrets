@@ -135,15 +135,15 @@ class ImageSecretSerializerMixin(BaseSecretSerializer):
 
         SecretImage.objects.create(
             uuid=uuid,
-            image=ContentFile(encrypted_image, name=str(encrypted_name, 'ascii')),
+            image=ContentFile(encrypted_image, name=str(encrypted_name, 'utf-8')),
             note=encrypted_note
         )
         return (str(uuid) + str(key, 'utf-8')), secret
 
     @staticmethod
     def from_encryption_string(encryption_string):
-        image_uuid = extract_uuid(encryption_string)
-        image_decryption_key = encryption_string.replace(image_uuid, '').decode('utf-8')
+        image_uuid = str(extract_uuid(encryption_string).group(0))
+        image_decryption_key = encryption_string.replace(image_uuid, '')
         if image_uuid is None or image_decryption_key is None:
             return None
         image = SecretImage.objects.filter(uuid=image_uuid).first()
@@ -151,9 +151,11 @@ class ImageSecretSerializerMixin(BaseSecretSerializer):
             return None
 
         try:
-            image_decrypted = ImageSecretSerializerMixin.decrypt(image.file.read(), image_decryption_key)
-            image_name_decrypted = ImageSecretSerializerMixin.decrypt(image.file.name.encode(), image_decryption_key)
+            image_decrypted = ImageSecretSerializerMixin.decrypt(image.image.file.read(), image_decryption_key)
             note_decrypted = ImageSecretSerializerMixin.decrypt(image.note, image_decryption_key)
+            print('note decrypted')
+            image_name_decrypted = ImageSecretSerializerMixin.decrypt(
+                image.image.name.encode('utf-8'), image_decryption_key)
         except InvalidToken:
             return None
 
