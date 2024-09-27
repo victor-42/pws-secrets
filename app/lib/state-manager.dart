@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:html';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,9 +10,9 @@ import 'package:uuid/uuid.dart';
 
 class StateManager {
   SharedPreferences? _prefs;
-  String apiUrl = Uri.base.origin + '/api/';
+  //String apiUrl = Uri.base.origin + '/api/';
 
-  //String apiUrl = 'http://localhost:8000/api/';
+  String apiUrl = 'http://localhost:8000/api/';
   List<String> _archivedUuidList = [];
   DateTime? oldExpiration;
   List<SecretArchive>? oldArchives;
@@ -144,22 +146,11 @@ class StateManager {
       String type, dynamic secret, SecretPreferences preferences) async {
     // Generate uuid
     var uuid = const Uuid().v4();
-    var repr = {
-      'uuid': uuid,
-      'type': type,
-      'expiration_date': DateTime.now()
-          .add(Duration(hours: preferences.expireIn))
-          .toIso8601String(),
-      'view_time': preferences.showFor,
-      ...secret.getRepresentation(),
-    };
-    return http.post(
-      Uri.parse('${apiUrl}not-secret/'),
-      body: jsonEncode(repr),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    ).then((response) {
+
+    debugPrint('Creating secret with uuid: $uuid');
+    debugPrint('Secret type: $type');
+
+    callb(response) {
       if (response.statusCode != 201) {
         return null;
       } else {
@@ -169,9 +160,35 @@ class StateManager {
         }
         String pathname =window.location.pathname.toString();
         return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname , '')}${pathname == '/' ? '' : '/'}secret/' +
-            jsonDecode(response.body)['enc'];
+            jsonDecode(response.stream.toString())['enc'];
       }
-    });
+    }
+    Map<String, String> repr = {
+      'uuid': uuid,
+      'type': type,
+      'expiration_date': DateTime.now()
+          .add(Duration(hours: preferences.expireIn))
+          .toIso8601String(),
+      'view_time': preferences.showFor.toString()
+    };
+    if (type == 'i') {
+      var req = http.MultipartRequest(
+        'POST',
+        Uri.parse('${apiUrl}not-secret/'),
+      );
+      req.fields.addAll(repr);
+      req.files.add(http.MultipartFile.fromString('image', secret.image));
+
+      return req.send().then(callb);
+      }
+    repr.addAll(secret.getRepresentation());
+    return http.post(
+      Uri.parse('${apiUrl}not-secret/'),
+      body: jsonEncode(repr),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    ).then(callb);
   }
 
   void clearOldArchives() {
@@ -287,14 +304,16 @@ class PasswordSecret {
 class ImageSecret {
   final String type = 'i';
   final String image;
+  final String? note;
 
   ImageSecret({
-    required this.image,
+    required this.image, this.note,
   });
 
   getRepresentation() {
     return {
       'image': image,
+      'note': note,
     };
   }
 }

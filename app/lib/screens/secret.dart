@@ -21,6 +21,7 @@ class SecretScreen extends StatefulWidget {
 class SecretScreenState extends State<SecretScreen> {
   NoteSecret? _noteSecret;
   PasswordSecret? _passwordSecret;
+  ImageSecret? _imageSecret;
 
   int _mode = 0;
   bool _optionsExpanded = false;
@@ -82,6 +83,11 @@ class SecretScreenState extends State<SecretScreen> {
         if (obj == null || (obj.password.isEmpty && obj.username.isEmpty)) {
           return;
         }
+      case 2:
+        obj = _imageSecret;
+        if (obj == null || obj.image.isEmpty) {
+          return;
+        }
     }
     if (obj == null) {
       return;
@@ -91,7 +97,7 @@ class SecretScreenState extends State<SecretScreen> {
       _loading = true;
     });
     _stateManager
-        .createSecret(_mode == 0 ? 'n' : 'p', obj, _secretPreferences)
+        .createSecret(_mode == 0 ? 'n' : _mode == 1 ? 'p' : 'i', obj, _secretPreferences)
         .then((url) {
       if (url == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -205,7 +211,17 @@ class SecretScreenState extends State<SecretScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: _mode == 2 ? null : 1, child: ImageForm()),
+                  SizedBox(height: _mode == 2 ? null : 1,
+                      child: ImageForm(
+                        onChanged: (imageSecret) {
+                          setState(() {
+                            _imageSecret = imageSecret;
+                           });
+                        },
+                        onSaved: () {
+                          _onSubmit();
+                        },
+                      )),
                 ],
               ),
             ),
