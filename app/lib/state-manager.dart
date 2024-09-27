@@ -162,7 +162,7 @@ class StateManager {
         debugPrint(response.body);
 
         String pathname = window.location.pathname.toString();
-        return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname, '')}${pathname == '/' ? '' : '/'}secret/' +
+        return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname, '')}${pathname == '/' ? '' : '/'}secret/'.replaceAll('/#', '/') +
             jsonDecode(response.body)['enc'];
       }
     }

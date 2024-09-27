@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:app/state-manager.dart';
 import 'package:app/widgets/accordion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../locator.dart';
 
@@ -36,8 +38,23 @@ class LinkedTextRowWidget extends StatelessWidget {
                   : Theme.of(context).textTheme.bodyLarge!.copyWith(
                         decoration: TextDecoration.underline,
                       )),
-          onTap: () {
-            // Link to phone number
+          onTap: ()  async {
+            // Open link
+            if (linkText.contains('+49')) {
+              await launchUrl(
+                Uri.parse('tel:$linkText'),
+              );
+              return;
+            }
+            if (linkText.contains('@')) {
+              await launchUrl(
+                Uri.parse('mailto:$linkText'),
+              );
+              return;
+            }
+            await launchUrl(
+              Uri.parse('https://$linkText'),
+            );
           },
         ),
       ],
@@ -79,7 +96,7 @@ class AboutScreenState extends State<AboutScreen> {
       return;
     }
     _currentTimerTime =
-        _stateManager.oldExpiration!.difference(DateTime.now()).inSeconds -
+        -_stateManager.oldExpiration!.difference(DateTime.now()).inSeconds -
             (72 + 1) * 3600;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {

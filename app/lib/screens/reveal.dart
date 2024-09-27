@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:convert';
+import 'dart:html';
 
 import 'package:app/theme.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +125,8 @@ class LoginRevealScreen extends StatefulWidget {
 class ImageRevealScreen extends StatefulWidget {
   final Map<String, String> secretObj;
 
-  const ImageRevealScreen({Key? key, required this.secretObj}) : super(key: key);
+  const ImageRevealScreen({Key? key, required this.secretObj})
+      : super(key: key);
 
   @override
   State<ImageRevealScreen> createState() => ImageRevealScreenState();
@@ -137,8 +138,15 @@ class ImageRevealScreenState extends State<ImageRevealScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.memory(base64Decode(widget.secretObj['image'] ?? ''),
-            width: 300, height: 300),
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 800),
+          child: Image.memory(
+            base64Decode(
+              widget.secretObj['image'] ?? '',
+            ),
+            gaplessPlayback: true,
+          ),
+        ),
         SizedBox(height: 20),
         Text(widget.secretObj['note'] ?? '',
             style: Theme.of(context).textTheme.headlineLarge),
@@ -162,10 +170,12 @@ class LoginRevealScreenState extends State<LoginRevealScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(onPressed: () {
-                    Clipboard.setData(new ClipboardData(
-                        text: widget.secretObj['username'] ?? ''));
-                  }, icon: Icon(Icons.copy)),
+                  IconButton(
+                      onPressed: () {
+                        Clipboard.setData(new ClipboardData(
+                            text: widget.secretObj['username'] ?? ''));
+                      },
+                      icon: Icon(Icons.copy)),
                   Flexible(
                     child: Text(widget.secretObj['username'] ?? '',
                         style: Theme.of(context)
@@ -180,10 +190,12 @@ class LoginRevealScreenState extends State<LoginRevealScreen> {
           SizedBox(height: 20),
           Text('Password', style: Theme.of(context).textTheme.headlineSmall),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(onPressed: () {
-              Clipboard.setData(
-                  new ClipboardData(text: widget.secretObj['password'] ?? ''));
-            }, icon: Icon(Icons.copy)),
+            IconButton(
+                onPressed: () {
+                  Clipboard.setData(new ClipboardData(
+                      text: widget.secretObj['password'] ?? ''));
+                },
+                icon: Icon(Icons.copy)),
             Flexible(
               child: Text(widget.secretObj['password'] ?? '',
                   style: Theme.of(context)
@@ -220,15 +232,20 @@ class InvalidScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(Icons.error_outline),
         SizedBox(height: 10),
-        Text('Invalid Secret', style: Theme.of(context).textTheme.headlineSmall),
-        SizedBox(height: 30,),
-        ElevatedButton(onPressed: () {
-          Navigator.of(context).pop();
-        }, child: Text('Go Back'))
+        Text('Invalid Secret',
+            style: Theme.of(context).textTheme.headlineSmall),
+        SizedBox(
+          height: 30,
+        ),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Go Back'))
       ],
     ));
   }

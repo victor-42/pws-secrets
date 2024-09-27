@@ -1,3 +1,5 @@
+import base64
+
 from cryptography.fernet import InvalidToken
 from rest_framework import serializers
 from rest_framework.response import Response
@@ -99,7 +101,7 @@ class SecretView(APIView):
         to_encrypt, secret_obj = serializer.save()
         cryptic = key_manager.encrypt(to_encrypt, secret_obj)
 
-        #    return Response(status=400, data={'detail': 'Error'})
+        # return Response(status=400, data={'detail': 'Error'})
 
         return Response(status=201, data={'enc': cryptic.decode('ascii')})
 
@@ -128,4 +130,6 @@ class SecretView(APIView):
         repr['secret'] = serializer.data
         repr['view_time'] = secret.view_time
         repr['type'] = secret.type
+        if secret.type == 'i':
+            repr['secret']['image'] = base64.b64encode(serializer.initial_data['image'].file.read()).decode('ascii')
         return Response(repr, status=200)

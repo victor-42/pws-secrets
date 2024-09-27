@@ -103,7 +103,7 @@ class NoteSecretSerializer(NoteSecretSerializerMixin, BaseSecretSerializer):
     pass
 
 
-class ImageSecretSerializerMixin(BaseSecretSerializer):
+class ImageSecretSerializerMixin(serializers.Serializer):
     note = serializers.CharField(max_length=15000, allow_blank=True, allow_null=True)
     image = serializers.ImageField(required=True, allow_null=False, allow_empty_file=False)
 
@@ -131,12 +131,13 @@ class ImageSecretSerializerMixin(BaseSecretSerializer):
 
         plain_image = self.validated_data['image'].file.read()
         encrypted_image = self.encrypt(plain_image, key)
-        encrypted_name = self.encrypt(self.validated_data['image'].name.encode('utf-8'), key)
+        encrypted_name = str(self.encrypt(self.validated_data['image'].name.encode('utf-8'), key), 'utf-8')
 
         SecretImage.objects.create(
             uuid=uuid,
-            image=ContentFile(encrypted_image, name=str(encrypted_name, 'utf-8')),
-            note=encrypted_note
+            image=ContentFile(encrypted_image, name=str(uuid)),
+            note=encrypted_note,
+            filename=encrypted_name
         )
         return (str(uuid) + str(key, 'utf-8')), secret
 
@@ -153,16 +154,17 @@ class ImageSecretSerializerMixin(BaseSecretSerializer):
         try:
             image_decrypted = ImageSecretSerializerMixin.decrypt(image.image.file.read(), image_decryption_key)
             note_decrypted = ImageSecretSerializerMixin.decrypt(image.note, image_decryption_key)
-            print('note decrypted')
             image_name_decrypted = ImageSecretSerializerMixin.decrypt(
-                image.image.name.encode('utf-8'), image_decryption_key)
+                image.filename, image_decryption_key)
         except InvalidToken:
             return None
 
         serializer = ImageSecretSerializerMixin(data={'image': ContentFile(image_decrypted,
-                                                                           name=image_name_decrypted),
-                                                      'note': note_decrypted})
-        return serializer
+                                                                           name=str(image_name_decrypted, 'utf-8')),
+                                                      'note': str(note_decrypted, 'utf-8')})
+        if serializer.is_valid(raise_exception=False):
+            return serializer
+        return None
 
     class Meta:
         model = SecretImage
