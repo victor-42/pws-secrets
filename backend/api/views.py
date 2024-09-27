@@ -101,8 +101,6 @@ class SecretView(APIView):
         to_encrypt, secret_obj = serializer.save()
         cryptic = key_manager.encrypt(to_encrypt, secret_obj)
 
-        # return Response(status=400, data={'detail': 'Error'})
-
         return Response(status=201, data={'enc': cryptic.decode('ascii')})
 
     def get(self, request, cryptic):

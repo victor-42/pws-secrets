@@ -14,9 +14,9 @@ import 'package:uuid/uuid.dart';
 class StateManager {
   SharedPreferences? _prefs;
 
-  //String apiUrl = Uri.base.origin + '/api/';
+  String apiUrl = '${Uri.base.origin}/api/';
 
-  String apiUrl = 'http://localhost:8000/api/';
+  //String apiUrl = 'http://localhost:8000/api/';
   List<String> _archivedUuidList = [];
   DateTime? oldExpiration;
   List<SecretArchive>? oldArchives;
@@ -159,7 +159,6 @@ class StateManager {
           _archivedUuidList.add(uuid);
           saveOldUuidList();
         }
-        debugPrint(response.body);
 
         String pathname = window.location.pathname.toString();
         return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname, '')}${pathname == '/' ? '' : '/'}secret/'.replaceAll('/#', '/') +
@@ -181,10 +180,8 @@ class StateManager {
         'POST',
         Uri.parse('${apiUrl}not-secret/'),
       );
-      debugPrint('Secret is an image');
       req.fields.addAll(repr);
       req.fields.addAll((secret as ImageSecret).getRepresentation());
-      debugPrint(secret.imageFileName);
       req.files.add(
         http.MultipartFile.fromBytes(
           'image',
