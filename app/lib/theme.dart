@@ -31,7 +31,7 @@ class SecretsTheme {
           fontWeight: FontWeight.w300,
         ),
       ).apply(
-            fontFamily: 'Chivo',
+            fontFamily: 'ChivoDivo',
           ),
       useMaterial3: false,
       primarySwatch: createMaterialColor(primary_color),

@@ -84,7 +84,10 @@ class _LoginFormState extends State<LoginForm> {
                 labelText: 'Password',
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.restart_alt),
+                  icon: Image.asset(
+                    'assets/secret-icons/refresh.png',
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   onPressed: () {
                     setState(() {
                       _generatorVisible = !_generatorVisible;

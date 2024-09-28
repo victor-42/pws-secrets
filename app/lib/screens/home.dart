@@ -176,13 +176,15 @@ class PinnedMessage extends StatelessWidget {
                                   .headlineMedium!
                                   .color!
                                   .withOpacity(0.5),
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w100,
                             ),
                         children: [
                           TextSpan(
-                            text: '... with a link that operates \n',
+                            text: '... with a link that operates ',
                           ),
                           TextSpan(
-                              text: 'just once',
+                              text: 'just once \n',
                               style: TextStyle(
                                   fontWeight: FontWeight.w200,
                                   decoration: TextDecoration.underline,

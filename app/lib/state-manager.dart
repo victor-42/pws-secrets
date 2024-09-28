@@ -72,7 +72,7 @@ class StateManager {
     var expireIn = _prefs?.getInt('ExpireIn');
     var saveMeta = _prefs?.getBool('SaveMeta');
     expireIn ??= 24;
-    saveMeta ??= true;
+    saveMeta ??= false;
     SecretPreferences obj = SecretPreferences(
       showFor: showFor,
       expireIn: expireIn,

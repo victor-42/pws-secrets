@@ -254,8 +254,20 @@ class AboutScreenState extends State<AboutScreen> {
                             .withOpacity(0.5),
                       ),
                     ),
-                    Text('made with ❤️',
-                        style: Theme.of(context).textTheme.bodyLarge),
+                    Row(
+                      children: [
+                        Text('made with ',
+                            style: Theme.of(context).textTheme.bodyLarge),
+                        Image.asset(
+                          // If dark, use different image
+                          Theme.of(context).brightness == Brightness.dark
+                              ? 'assets/secret-icons/heart-red.png'
+                              : 'assets/secret-icons/heart.png',
+                          height: 20,
+                          width: 20,
+                        ),
+                      ],
+                    ),
                   ],
                 )
               ],

@@ -379,7 +379,7 @@ class SecretScreenState extends State<SecretScreen> {
                               ),
                               Builder(builder: (context) {
                                 List<Widget> childs = [];
-
+                                debugPrint(_secretPreferences.saveMeta.toString());
                                 childs.add(CupertinoSwitch(
                                     activeColor:
                                         Theme.of(context).colorScheme.primary,
