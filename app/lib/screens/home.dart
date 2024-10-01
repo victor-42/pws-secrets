@@ -23,9 +23,10 @@ const String lastSecretText =
     'By enabling the \'Meta-Information\' option when creating a URL, you can save the additional details associated with your secret. Once activated, these meta-information will be displayed here.';
 
 const List<dynamic> links = [
-  ['Imprint', 'Link 1'],
-  ['FAQ Page', 'Link 2'],
-  ['Privacy Policy', 'Link 3'],
+  ['Imprint', 0],
+  ['FAQ Page', 1],
+  ['Privacy Policy', 2],
+  ['Key Rotation', 4]
 ];
 
 class LastSecretsScreen extends StatefulWidget {
@@ -51,6 +52,8 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
             PinnedMessage(),
             WelcomeTexts(onToNewSecrets: widget.onToNewSecrets),
             LastSecretsWidget(onToNewSecrets: widget.onToNewSecrets,onToAbout: widget.onToAbout,),
+            const SizedBox(height: 30),
+            Text('\u00a9 2024 pws_agency', style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w100, color: Colors.grey.withOpacity(0.5))),
           ],
         ),
       ),
@@ -91,17 +94,17 @@ class WelcomeTexts extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             HomeSecretButtons(
                 onClick: () {
-                  onToNewSecrets();
+                  onToNewSecrets(0);
                 },
                 assetPath: 'assets/secret-icons/notepad.png'),
             HomeSecretButtons(
                 onClick: () {
-                  onToNewSecrets();
+                  onToNewSecrets(1);
                 },
                 assetPath: 'assets/secret-icons/lock.png'),
             HomeSecretButtons(
                 onClick: () {
-                  onToNewSecrets();
+                  onToNewSecrets(2);
                 },
                 assetPath: 'assets/secret-icons/camera.png'),
           ])
@@ -169,11 +172,11 @@ class PinnedMessage extends StatelessWidget {
                     text: TextSpan(
                         style: Theme.of(context)
                             .textTheme
-                            .headlineMedium!
+                            .headlineSmall!
                             .copyWith(
                               color: Theme.of(context)
                                   .textTheme
-                                  .headlineMedium!
+                                  .headlineSmall!
                                   .color!
                                   .withOpacity(0.5),
                           fontFamily: 'Roboto',
@@ -223,6 +226,7 @@ class LastSecretsWidget extends StatefulWidget {
 class LastSecretsWidgetState extends State<LastSecretsWidget> {
   bool _isRotating = false;
   final StateManager _stateManager = locator<StateManager>();
+  List<bool> _linkHovering = [false, false, false, false];
 
   @override
   void dispose() {
@@ -347,8 +351,14 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
               itemCount: links.length,
               itemBuilder: (context, index) {
                 return InkWell(
+                  onHover: (value) {
+                    setState(() {
+                      _linkHovering[index] = value;
+                    });
+                  },
+                  hoverColor: Colors.transparent,
                   onTap: () {
-                    widget.onToAbout();
+                    widget.onToAbout(links[index][1]);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -364,6 +374,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     decoration: TextDecoration.underline,
+                                color: _linkHovering[index] ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodyMedium!.color,
                                   )),
                     ],
                   ),

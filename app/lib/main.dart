@@ -46,20 +46,24 @@ class MyAppState extends State<MyApp> {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage(
-      {super.key, required this.title, required this.onThemeToggle});
 
+class MyHomePage extends StatefulWidget {
   final String title;
   final Function(bool) onThemeToggle;
+
+  const MyHomePage(
+      {super.key, required this.title, required this.onThemeToggle});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final GlobalKey<SecretScreenState> _secretScreenKey = GlobalKey<SecretScreenState>();
+  final GlobalKey<AboutScreenState> _aboutScreenKey = GlobalKey<AboutScreenState>();
   ThemeMode _themeMode = ThemeMode.system;
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
+  int? _aboutAccordionIndex;
 
   @override
   void initState() {
@@ -106,21 +110,30 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         body: IndexedStack(
+          index: _selectedIndex,
           children: [
-            LastSecretsScreen(onToNewSecrets: () {
+            LastSecretsScreen(
+              onToNewSecrets: (int? mode) {
+              if (mode != null) {
+                _secretScreenKey.currentState?.changeMode(mode);
+              }
               setState(() {
                 _selectedIndex = 1;
               });
             },
-            onToAbout: () {
+            onToAbout: (int accordionIndex) {
               setState(() {
+                _aboutScreenKey.currentState?.setAccordionIndex(accordionIndex);
                 _selectedIndex = 2;
               });
             },),
-            const SecretScreen(),
-            const AboutScreen(),
+            SecretScreen(
+              key: _secretScreenKey,
+            ),
+            AboutScreen(
+              key: _aboutScreenKey,
+            ),
           ],
-          index: _selectedIndex,
         ),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
@@ -129,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           child: BottomNavigationBar(
               items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   label: 'Home',
                 ),
@@ -143,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   label: 'Secret',
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.info),
                   label: 'About',
                 ),

@@ -21,7 +21,7 @@ class _SettingRadioButtonState extends State<SettingRadioButton> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 40,
-      width: 60,
+      width: 65,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: widget.active ?

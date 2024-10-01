@@ -3,26 +3,35 @@ import 'package:flutter/material.dart';
 class SecretsAccordion extends StatefulWidget {
   final String title;
   final Widget child;
-  final bool initiallyExpanded;
 
   SecretsAccordion({
+    Key? key,
     required this.title,
     required this.child,
-    this.initiallyExpanded = false,
-  });
+  }): super(key: key);
 
   @override
-  _SecretsAccordionState createState() => _SecretsAccordionState();
+  SecretsAccordionState createState() => SecretsAccordionState();
 }
 
-class _SecretsAccordionState extends State<SecretsAccordion> {
-  late bool _isExpanded;
+class SecretsAccordionState extends State<SecretsAccordion> {
+  late bool _isExpanded = false;
 
   @override
   void initState() {
-    _isExpanded = widget.initiallyExpanded;
-
     super.initState();
+  }
+
+  void toggleExpanded() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+    });
+  }
+
+  void setExpanded(bool expanded) {
+    setState(() {
+      _isExpanded = expanded;
+    });
   }
 
   @override

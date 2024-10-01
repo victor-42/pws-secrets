@@ -1,69 +1,98 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:app/state-manager.dart';
 import 'package:app/widgets/accordion.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../locator.dart';
 
-class LinkedTextRowWidget extends StatelessWidget {
+class LinkedTextRowWidget extends StatefulWidget {
   final String headline;
   final String linkText;
   final bool usePrimaryColor;
 
   const LinkedTextRowWidget(
-      {super.key,
+      {Key? key,
       required this.headline,
       required this.linkText,
-      required this.usePrimaryColor});
+      required this.usePrimaryColor})
+      : super(key: key);
+
+  @override
+  State<LinkedTextRowWidget> createState() => LinkedTextRowWidgetState();
+}
+
+class LinkedTextRowWidgetState extends State<LinkedTextRowWidget> {
+  bool _isHovering = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          headline,
-          style: Theme.of(context).textTheme.bodyLarge,
+        Expanded(
+          flex: 2,
+          child: Text(
+            widget.headline,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
         ),
-        InkWell(
-          child: Text(linkText,
-              style: usePrimaryColor
-                  ? Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        decoration: TextDecoration.underline,
-                      )
-                  : Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        decoration: TextDecoration.underline,
-                      )),
-          onTap: ()  async {
-            // Open link
-            if (linkText.contains('+49')) {
+        Expanded(
+          flex: 8,
+          child: InkWell(
+            hoverColor: Colors.transparent,
+            onHover: (value) {
+              setState(() {
+                _isHovering = value;
+              });
+            },
+            child: Text(widget.linkText,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: _isHovering
+                      ? Theme.of(context).primaryColor
+                      : widget.usePrimaryColor
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).textTheme.bodyLarge!.color,
+                  decoration: TextDecoration.underline,
+                )),
+            onTap: () async {
+              // Open link
+              if (widget.linkText.contains('+49')) {
+                await launchUrl(
+                  Uri.parse('tel:${widget.linkText}'),
+                );
+                return;
+              }
+              if (widget.linkText.contains('@')) {
+                await launchUrl(
+                  Uri.parse('mailto:${widget.linkText}'),
+                );
+                return;
+              }
               await launchUrl(
-                Uri.parse('tel:$linkText'),
+                widget.linkText.contains('https://')
+                    ? Uri.parse(widget.linkText)
+                    : Uri.parse('https://${widget.linkText}'),
               );
-              return;
-            }
-            if (linkText.contains('@')) {
-              await launchUrl(
-                Uri.parse('mailto:$linkText'),
-              );
-              return;
-            }
-            await launchUrl(
-              linkText.contains('https://') ?Uri.parse(linkText) : Uri.parse('https://$linkText'),
-            );
-          },
+            },
+          ),
         ),
+
       ],
     );
   }
 }
 
 class AboutScreen extends StatefulWidget {
-  const AboutScreen({Key? key}) : super(key: key);
+
+  const AboutScreen({Key? key})
+      : super(key: key);
 
   @override
   State<AboutScreen> createState() => AboutScreenState();
@@ -74,6 +103,13 @@ class AboutScreenState extends State<AboutScreen> {
   Timer? _timer;
   bool _isRotating = false;
   final StateManager _stateManager = locator<StateManager>();
+  final List<GlobalKey<SecretsAccordionState>> _accordKeys = [
+    GlobalKey<SecretsAccordionState>(),
+    GlobalKey<SecretsAccordionState>(),
+    GlobalKey<SecretsAccordionState>(),
+    GlobalKey<SecretsAccordionState>(),
+    GlobalKey<SecretsAccordionState>()
+  ];
 
   @override
   void dispose() {
@@ -105,12 +141,21 @@ class AboutScreenState extends State<AboutScreen> {
     });
   }
 
+  setAccordionIndex(int index) {
+    _accordKeys[index].currentState?.setExpanded(true);
+    for (var i = 0; i < _accordKeys.length; i++) {
+      if (i != index) {
+        _accordKeys[i].currentState?.setExpanded(false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(
+          constraints: const BoxConstraints(
             maxWidth: 600,
           ),
           child: Padding(
@@ -118,11 +163,20 @@ class AboutScreenState extends State<AboutScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 15),
-                const ImprintAccordion(),
-                const SizedBox(height: 15),
-                const FaqAccordion(),
+                SecretsAccordion(
+                  key: _accordKeys[0],
+                  title: 'Imprint',
+                  child: const ImprintAccordion(),
+                ),
                 const SizedBox(height: 15),
                 SecretsAccordion(
+                  key: _accordKeys[1],
+                  title: 'FAQ',
+                  child: const FaqAccordion(),
+                ),
+                const SizedBox(height: 15),
+                SecretsAccordion(
+                    key: _accordKeys[2],
                     title: 'Privacy Policy',
                     child: Column(
                       children: [
@@ -134,6 +188,7 @@ class AboutScreenState extends State<AboutScreen> {
                     )),
                 const SizedBox(height: 15),
                 SecretsAccordion(
+                    key: _accordKeys[3],
                     title: 'Open Source',
                     child: Column(
                       children: [
@@ -153,12 +208,14 @@ class AboutScreenState extends State<AboutScreen> {
                 const SizedBox(height: 15),
                 SecretsAccordion(
                     title: 'Key Rotation',
+                    key: _accordKeys[4],
                     child: Column(
                       children: [
                         const SizedBox(height: 20),
                         Text(
-                            'The key-rotation allows you to rotate the key used by the server for encypting your messages. It is only possible once every 7 days, since unopened secrets still need to be encryptable.',
-                        style: Theme.of(context).textTheme.bodyMedium,),
+                          'The key-rotation allows you to rotate the key used by the server for encypting your messages. It is only possible once every 7 days, since unopened secrets still need to be encryptable.',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,13 +231,15 @@ class AboutScreenState extends State<AboutScreen> {
                                       height: 20,
                                       width: 20,
                                     ),
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     Text(
                                       _currentTimerTime <= 0
                                           ? 'Rotation blocked for'
                                           : 'Not rotated since',
-                                      style:
-                                          Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
                                             color: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge!
@@ -189,70 +248,73 @@ class AboutScreenState extends State<AboutScreen> {
                                           ),
                                     ),
                                     const SizedBox(width: 10),
-                                    Text('${_currentTimerTime <= 0 ? '-' : '+'} '
-                                        '${(_currentTimerTime.abs() ~/ 86400).toString().padLeft(2, '0')}d '
-                                        '${(_currentTimerTime.abs() ~/ 3600 % 24).toString().padLeft(2, '0')}h '
-                                        '${(_currentTimerTime.abs() ~/ 60 % 60).toString().padLeft(2, '0')}m '
-                                        '${(_currentTimerTime.abs() % 60).toString().padLeft(2, '0')}s',
-                                        style: Theme.of(context).textTheme.bodyLarge,
+                                    Text(
+                                      '${_currentTimerTime <= 0 ? '-' : '+'} '
+                                      '${(_currentTimerTime.abs() ~/ 86400).toString().padLeft(2, '0')}d '
+                                      '${(_currentTimerTime.abs() ~/ 3600 % 24).toString().padLeft(2, '0')}h '
+                                      '${(_currentTimerTime.abs() ~/ 60 % 60).toString().padLeft(2, '0')}m '
+                                      '${(_currentTimerTime.abs() % 60).toString().padLeft(2, '0')}s',
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
                                     ),
                                   ],
                                 ),
                               ),
                             ),
                             ElevatedButton.icon(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.refresh,
                                 size: 18,
                               ),
                               onPressed: _currentTimerTime > 0 && !_isRotating
                                   ? () {
-                                setState(() {
-                                  _isRotating = true;
-                                });
-                                _stateManager.rotateKey().then((value) {
-                                  if (value) {
-                                    _initState();
-                                  } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            'Failed to rotate key. Try again later...'),
-                                      ),
-                                    );
-                                  }
-                                  setState(() {
-                                    _isRotating = false;
-                                  });
-                                });
-                              }
+                                      setState(() {
+                                        _isRotating = true;
+                                      });
+                                      _stateManager.rotateKey().then((value) {
+                                        if (value) {
+                                          _initState();
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Failed to rotate key. Try again later...'),
+                                            ),
+                                          );
+                                        }
+                                        setState(() {
+                                          _isRotating = false;
+                                        });
+                                      });
+                                    }
                                   : null,
                               label: _isRotating
-                                  ? SizedBox(
-                                  height: 15,
-                                  width: 15,
-                                  child: const CircularProgressIndicator())
+                                  ? const SizedBox(
+                                      height: 15,
+                                      width: 15,
+                                      child: CircularProgressIndicator())
                                   : const Text('Request Rotation'),
                             ),
-
                           ],
                         )
                       ],
                     )),
-                SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Version 1.0.1',
+                      'Version 1.9',
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .color!
-                            .withOpacity(0.5),
-                      ),
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .color!
+                                .withOpacity(0.5),
+                          ),
                     ),
                     Row(
                       children: [
@@ -284,33 +346,31 @@ class ImprintAccordion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SecretsAccordion(
-        title: 'Imprint',
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            Text(
-              'pws_agency\nProf.-Messerschmitt-Str. 1a\n86159 Augsburg\nGermany\n\nPresented by: Pascal Roth',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 10),
-            LinkedTextRowWidget(
-                headline: 'Phone: ',
-                linkText: '+49 821 58910720',
-                usePrimaryColor: true),
-            LinkedTextRowWidget(
-                headline: 'Mail: ',
-                linkText: 'info@pws-agency.com',
-                usePrimaryColor: false),
-            LinkedTextRowWidget(
-              headline: 'Web: ',
-              linkText: 'www.pws-agency.com',
-              usePrimaryColor: false,
-            ),
-          ],
-        ));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 10),
+        Text(
+          'pws_agency\nProf.-Messerschmitt-Str. 1a\n86159 Augsburg\nGermany\n\nRepresented by: Pascal Roth',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const SizedBox(height: 10),
+        const LinkedTextRowWidget(
+            headline: 'Phone: ',
+            linkText: '+49 821 58910720',
+            usePrimaryColor: false),
+        const LinkedTextRowWidget(
+            headline: 'Mail: ',
+            linkText: 'info@pws-agency.com',
+            usePrimaryColor: false),
+        const LinkedTextRowWidget(
+          headline: 'Web: ',
+          linkText: 'https://pws-agency.com',
+          usePrimaryColor: false,
+        ),
+      ],
+    );
   }
 }
 
@@ -350,46 +410,43 @@ class FaqAccordion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SecretsAccordion(
-      title: 'FAQ',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Frequently Asked Questions',
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .color!
-                        .withOpacity(0.5),
-                  )),
-          SizedBox(height: 10),
-          ListView.builder(
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  Text(
-                    '${(index + 1).toString()}. ${faqList[index][0]}',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    faqList[index][1],
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ],
-              );
-            },
-            itemCount: faqList.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Frequently Asked Questions',
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .color!
+                      .withOpacity(0.5),
+                )),
+        SizedBox(height: 10),
+        ListView.builder(
+          itemBuilder: (context, index) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  '${(index + 1).toString()}. ${faqList[index][0]}',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  faqList[index][1],
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            );
+          },
+          itemCount: faqList.length,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+        ),
+      ],
     );
   }
 }

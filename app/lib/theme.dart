@@ -55,8 +55,16 @@ class SecretsTheme {
   static ThemeData get darkTheme {
     return ThemeData.dark(useMaterial3: false).copyWith(
       textTheme: ThemeData.dark().textTheme.copyWith(
+        headlineLarge: ThemeData.dark().textTheme.headlineLarge!.copyWith(
+          fontSize: 40,
+        ),
         headlineMedium: ThemeData.dark().textTheme.headlineMedium!.copyWith(
           fontWeight: FontWeight.w100,
+          fontSize: 40,
+        ),
+        headlineSmall: ThemeData.dark().textTheme.headlineSmall!.copyWith(
+          fontSize: 32,
+          fontWeight: FontWeight.w700,
         ),
       ).apply(
         fontFamily: 'ChivoDivo',

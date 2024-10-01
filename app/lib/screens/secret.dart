@@ -12,7 +12,7 @@ import '../widgets/radio_card_button.dart';
 import '../widgets/secret_setting_radiobutton.dart';
 
 class SecretScreen extends StatefulWidget {
-  const SecretScreen({Key? key}) : super(key: key);
+  const SecretScreen({Key? key, }) : super(key: key);
 
   @override
   State<SecretScreen> createState() => SecretScreenState();
@@ -46,7 +46,6 @@ class SecretScreenState extends State<SecretScreen> {
   ];
 
   static const List<List<dynamic>> _settings_expireInOptions = [
-    ['12h', 12],
     ['1d', 24],
     ['2d', 48],
     ['4d', 96],
@@ -57,6 +56,12 @@ class SecretScreenState extends State<SecretScreen> {
   void initState() {
     super.initState();
     _initState();
+  }
+
+  void changeMode(int mode) {
+    setState(() {
+      _mode = mode;
+    });
   }
 
   onDispose() {
@@ -298,7 +303,7 @@ class SecretScreenState extends State<SecretScreen> {
                               Row(
                                 children: [
                                   Icon(Icons.timer),
-                                  Text(' Epires in:'),
+                                  Text(' Secret expires in'),
                                 ],
                               ),
                               Builder(builder: (context) {
@@ -336,7 +341,7 @@ class SecretScreenState extends State<SecretScreen> {
                               Row(
                                 children: [
                                   Icon(Icons.visibility_outlined),
-                                  Text(' Show secret for:'),
+                                  Text(' Show secret for'),
                                 ],
                               ),
                               Builder(builder: (context) {
@@ -372,14 +377,14 @@ class SecretScreenState extends State<SecretScreen> {
                           Builder(builder: (context) {
                             List<Widget> childs = [
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Icon(Icons.save_outlined),
-                                  Text(' Remember Meta-Information:'),
+                                  Text(' Secret expires in'),
                                 ],
                               ),
                               Builder(builder: (context) {
                                 List<Widget> childs = [];
-                                debugPrint(_secretPreferences.saveMeta.toString());
                                 childs.add(CupertinoSwitch(
                                     activeColor:
                                         Theme.of(context).colorScheme.primary,
