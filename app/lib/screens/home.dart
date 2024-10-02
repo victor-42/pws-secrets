@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:app/state-manager.dart';
+import 'package:app/theme.dart';
 import 'package:app/widgets/radio_card_button.dart';
 import 'package:app/widgets/secret_archive_listtile.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +26,8 @@ const String lastSecretText =
 const List<dynamic> links = [
   ['Imprint', 0],
   ['FAQ Page', 1],
+  ['Key Rotation', 4],
   ['Privacy Policy', 2],
-  ['Key Rotation', 4]
 ];
 
 class LastSecretsScreen extends StatefulWidget {
@@ -52,8 +53,9 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
             PinnedMessage(),
             WelcomeTexts(onToNewSecrets: widget.onToNewSecrets),
             LastSecretsWidget(onToNewSecrets: widget.onToNewSecrets,onToAbout: widget.onToAbout,),
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             Text('\u00a9 2024 pws_agency', style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w100, color: Colors.grey.withOpacity(0.5))),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -75,19 +77,19 @@ class WelcomeTexts extends StatelessWidget {
         const SizedBox(height: 50),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text('One-Time Secrets',
-              style: Theme.of(context).textTheme.headlineSmall),
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
           const SizedBox(height: 15),
-          Text(oneTimeSecretText,
+          Text(     oneTimeSecretText,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontWeight: FontWeight.w100,
               )),
           const SizedBox(height: 50),
           Text('End-to-End Encryption',
-              style: Theme.of(context).textTheme.headlineSmall),
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
           const SizedBox(height: 15),
           Text(encryptionText, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 50),
-          Text('Your Choice', style: Theme.of(context).textTheme.headlineSmall),
+          Text('Your Choice', style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
           const SizedBox(height: 15),
           Text(yourChoiceText, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 50),
@@ -107,7 +109,8 @@ class WelcomeTexts extends StatelessWidget {
                   onToNewSecrets(2);
                 },
                 assetPath: 'assets/secret-icons/camera.png'),
-          ])
+          ]),
+          const SizedBox(height: 30),
         ]),
       ]),
     );
@@ -153,8 +156,15 @@ class PinnedMessage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'Share a Secret',
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        'Share a secret ',
+                        style: TextStyle(
+                            fontSize: 40,
+                            fontFamily: 'SpaceGrotesk',
+                            fontWeight: FontWeight.w700,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black
+                        ),
                       ),
                       SizedBox(width: 10),
                       Image.asset(
@@ -170,26 +180,19 @@ class PinnedMessage extends StatelessWidget {
                   ),
                   RichText(
                     text: TextSpan(
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall!
-                            .copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall!
-                                  .color!
-                                  .withOpacity(0.5),
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w100,
-                            ),
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'SpaceGrotesk',
+                            color: Theme.of(context).textTheme.bodyMedium!.color,
+                            fontWeight: FontWeight.w600
+                        ),
                         children: [
                           TextSpan(
-                            text: '... with a link that operates ',
+                            text: '...with a link that operates ',
                           ),
                           TextSpan(
                               text: 'just once \n',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w200,
                                   decoration: TextDecoration.underline,
                                   decorationColor: Theme.of(context)
                                       .colorScheme
@@ -197,7 +200,7 @@ class PinnedMessage extends StatelessWidget {
                                   color:
                                       Theme.of(context).colorScheme.primary)),
                           TextSpan(
-                            text: ' before self-destructing',
+                            text: 'before self-destructing',
                           ),
                         ]),
                   ),
@@ -242,11 +245,14 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
   void _initState() async {
     await _stateManager.initPrefs();
     await _stateManager.reloadHomeInformation();
+    setState(() {
+    });
     // Current Timer time as diff between now and oldExpiration in seconds
   }
 
   @override
   Widget build(BuildContext context) {
+    bool _mobile = MediaQuery.of(context).size.width < breakpointSmall;
     return Column(
       children: [
         SizedBox(height: 40),
@@ -256,7 +262,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Last Secrets',
-                  style: Theme.of(context).textTheme.headlineSmall),
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
               const SizedBox(height: 15),
               Text(lastSecretText,
                   style: Theme.of(context).textTheme.bodyMedium),
@@ -276,7 +282,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
           if (_stateManager.oldArchives!.length == 0) {
             return Card(
                 child: Container(
-              constraints: BoxConstraints(maxWidth: 600, minWidth: 500),
+              constraints: BoxConstraints(maxWidth: 700, minWidth: 500),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black.withOpacity(0.1)),
                 borderRadius: BorderRadius.circular(5),
@@ -291,7 +297,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
                     height: 25,
                   ),
                   SizedBox(
-                    width: 30,
+                    width: _mobile?20:100,
                   ),
                   Text(
                       'no one has saved the meta information yet, please reload',
@@ -333,7 +339,11 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
               _stateManager.reloadHomeInformation();
               setState(() {});
             },
-            label: Text('RELOAD')),
+            label: Text('RELOAD',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w100,
+            ),)),
 
         const SizedBox(height: 40),
         Container(
@@ -341,8 +351,8 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
           child: Align(
               alignment: Alignment.topLeft,
               child: Text('Links',
-                  style: Theme.of(context).textTheme.headlineSmall)),
-        ),
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
+        ),),
         const SizedBox(height: 15),
         Container(
           constraints: BoxConstraints(maxWidth: 600),
@@ -356,6 +366,8 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
                       _linkHovering[index] = value;
                     });
                   },
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   onTap: () {
                     widget.onToAbout(links[index][1]);
@@ -370,6 +382,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
                           height: 1.55,
                         ),
                       ),
+                      SizedBox(width: 10),
                       Text(links[index][0],
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(

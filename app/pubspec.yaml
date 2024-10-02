@@ -34,7 +34,6 @@ flutter:
     - family: ChivoDivo
       fonts:
           - asset: assets/fonts/Chivo-VariableFont_wght.ttf
-            weight: 100
     - family: SpaceGrotesk
       fonts:
           - asset: assets/fonts/space-grotesk.ttf

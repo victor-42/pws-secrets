@@ -72,7 +72,11 @@ class _LoginFormState extends State<LoginForm> {
           children: <Widget>[
             TextFormField(
               decoration: InputDecoration(
-                  labelText: 'Username', border: OutlineInputBorder()),
+                  labelText: 'Username',
+                  labelStyle: TextStyle(
+                    color: Color(0xffb3b3b3).withOpacity(0.7),
+                  ),
+                  border: OutlineInputBorder()),
               validator: (value) {
                 return null;
               },
@@ -82,7 +86,13 @@ class _LoginFormState extends State<LoginForm> {
             TextFormField(
               decoration: InputDecoration(
                 labelText: 'Password',
+                labelStyle: TextStyle(
+                  color: Color(0xffb3b3b3).withOpacity(0.7),
+                ),
                 border: OutlineInputBorder(),
+                suffixIconConstraints: BoxConstraints(
+                  minWidth: 60,
+                ),
                 suffixIcon: IconButton(
                   icon: Image.asset(
                     'assets/secret-icons/refresh.png',

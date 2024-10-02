@@ -36,6 +36,7 @@ class RadioCardButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: primary_color,
+          width: 3.0,
         ),
         borderRadius: BorderRadius.circular(5.0),
       ),
@@ -78,17 +79,22 @@ class HomeSecretButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 90,
+      height: 100,
       child: InkWell(
         focusColor: Colors.transparent,
-        hoverColor: Colors.transparent,
+        customBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          side: BorderSide(
+            color: primary_color,
+          ),
+        ),
+        hoverColor: primary_color,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () => onClick(),
         child: Card(
-          child:
-          Container(
-            padding: const EdgeInsets.all(23),
+          child: Container(
+            padding: const EdgeInsets.all(26),
 
               child: Image.asset(
                 assetPath,

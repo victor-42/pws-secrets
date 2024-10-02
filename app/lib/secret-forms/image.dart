@@ -70,7 +70,12 @@ class _ImageFormState extends State<ImageForm> {
             TextFormField(
               controller: _noteController,
               decoration: InputDecoration(
-                hintText: 'Note',
+                hintText: 'Write down a note...',
+                hintStyle: TextStyle(
+
+                  color: Color(0xffB3B3B3).withOpacity(0.7),
+
+                ),
                 border: OutlineInputBorder(),
               ),
               onChanged: (value)  async {

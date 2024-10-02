@@ -47,6 +47,8 @@ class LinkedTextRowWidgetState extends State<LinkedTextRowWidget> {
           flex: 8,
           child: InkWell(
             hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             onHover: (value) {
               setState(() {
                 _isHovering = value;
@@ -54,13 +56,13 @@ class LinkedTextRowWidgetState extends State<LinkedTextRowWidget> {
             },
             child: Text(widget.linkText,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: _isHovering
-                      ? Theme.of(context).primaryColor
-                      : widget.usePrimaryColor
-                      ? Theme.of(context).primaryColor
-                      : Theme.of(context).textTheme.bodyLarge!.color,
-                  decoration: TextDecoration.underline,
-                )),
+                      color: _isHovering
+                          ? Theme.of(context).primaryColor
+                          : widget.usePrimaryColor
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).textTheme.bodyLarge!.color,
+                      decoration: TextDecoration.underline,
+                    )),
             onTap: () async {
               // Open link
               if (widget.linkText.contains('+49')) {
@@ -83,16 +85,13 @@ class LinkedTextRowWidgetState extends State<LinkedTextRowWidget> {
             },
           ),
         ),
-
       ],
     );
   }
 }
 
 class AboutScreen extends StatefulWidget {
-
-  const AboutScreen({Key? key})
-      : super(key: key);
+  const AboutScreen({Key? key}) : super(key: key);
 
   @override
   State<AboutScreen> createState() => AboutScreenState();
@@ -179,10 +178,58 @@ class AboutScreenState extends State<AboutScreen> {
                     key: _accordKeys[2],
                     title: 'Privacy Policy',
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const SizedBox(height: 10),
                         Text(
-                          'We are committed to protecting your privacy. We will only use the information that we collect about you lawfully (in accordance with the Data Protection Act 1998 and the General Data Protection Regulation).',
+                            'We take privacy very seriously, as the main purpose of the website is to preserve it. This policy describes the measures taken by pws_secrets to protect the privacy of its users.',
+                            style: Theme.of(context).textTheme.bodyLarge),
+                        const SizedBox(height: 10),
+                        Text(
+                          '1. Description of the service',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'pws_secrets is a free web-based service that allows users to create encrypted messages that they can exchange over the Internet as unique HTTPS URLs'
+                          '(hereinafter referred to as links), which by default expire after initial access through any web browser.\n\n'
+                          'Since pws_secrets does not provide any means of transmitting the link, the responsibility for sending the link lies with the users of pws_secrets.\n\n'
+                          'Depending on the communication channel you choose (e.g. e-mail, fax, SMS, telephone, instant messaging, social media) there may be a certain risk that'
+                          'third parties may intercept your communication, gain knowledge of the link provided and thus be able to read your secrets.',
                           style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '2. How the secrets and their contents are processed',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'The link is generated in the user\'s browser and is never sent as such to pws_secrets. The link is therefore only in the hands of the sender (and later'
+                            'possibly the recipient). Therefore there is no way to restore a secret if a user loses the link. \n\n'
+                          'Since only the link binds the decryption key to the contents of the secret and <i>pws_secrets</i> does not own the link, at no time is a message in a readable'
+                            'format held by <i>pws_secrets</i>. This ensures that nobody (not even the administrators of <i>pws_secrets</i>) can read a note.\n\n'
+                              'Once a created URL has been retrieved, there is absolutely no way to restore it.\n\n'
+                          'The <i>pws_secrets</i> system administrator team will do as much as possible to protect the website from unauthorized access, modification or destruction. But'
+                         ' even if someone or something manages to gain access to the web server, they cannot read the secrets, because their content is encrypted and cannot be'
+                        'decrypted without the links that <i>pws_secrets</i> never has.'
+                          ,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '3. Collection and processing of personal data',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     )),
@@ -214,7 +261,7 @@ class AboutScreenState extends State<AboutScreen> {
                         const SizedBox(height: 20),
                         Text(
                           'The key-rotation allows you to rotate the key used by the server for encypting your messages. It is only possible once every 7 days, since unopened secrets still need to be encryptable.',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(height: 20),
                         Row(
@@ -231,7 +278,7 @@ class AboutScreenState extends State<AboutScreen> {
                                       height: 20,
                                       width: 20,
                                     ),
-                                    const SizedBox(width: 10),
+                                    const SizedBox(width: 20),
                                     Text(
                                       _currentTimerTime <= 0
                                           ? 'Rotation blocked for'
@@ -240,12 +287,12 @@ class AboutScreenState extends State<AboutScreen> {
                                           .textTheme
                                           .bodyMedium!
                                           .copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge!
-                                                .color!
-                                                .withOpacity(0.5),
-                                          ),
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .color!
+                                                  .withOpacity(0.5),
+                                              fontSize: 14),
                                     ),
                                     const SizedBox(width: 10),
                                     Text(
@@ -294,7 +341,7 @@ class AboutScreenState extends State<AboutScreen> {
                                       height: 15,
                                       width: 15,
                                       child: CircularProgressIndicator())
-                                  : const Text('Request Rotation'),
+                                  : const Text('Rotate Key'),
                             ),
                           ],
                         )
@@ -307,7 +354,7 @@ class AboutScreenState extends State<AboutScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Version 1.9',
+                      'Version 2.0',
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Theme.of(context)
                                 .textTheme

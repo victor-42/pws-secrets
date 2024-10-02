@@ -12,7 +12,9 @@ import '../widgets/radio_card_button.dart';
 import '../widgets/secret_setting_radiobutton.dart';
 
 class SecretScreen extends StatefulWidget {
-  const SecretScreen({Key? key, }) : super(key: key);
+  const SecretScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SecretScreen> createState() => SecretScreenState();
@@ -102,7 +104,14 @@ class SecretScreenState extends State<SecretScreen> {
       _loading = true;
     });
     _stateManager
-        .createSecret(_mode == 0 ? 'n' : _mode == 1 ? 'p' : 'i', obj, _secretPreferences)
+        .createSecret(
+            _mode == 0
+                ? 'n'
+                : _mode == 1
+                    ? 'p'
+                    : 'i',
+            obj,
+            _secretPreferences)
         .then((url) {
       if (url == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -152,6 +161,7 @@ class SecretScreenState extends State<SecretScreen> {
                     });
                   },
                 ),
+                const SizedBox(width: 20),
                 RadioCardButton(
                   title: 'Login',
                   iconWidget: const Image(
@@ -165,6 +175,7 @@ class SecretScreenState extends State<SecretScreen> {
                     });
                   },
                 ),
+                const SizedBox(width: 20),
                 RadioCardButton(
                   title: 'Image',
                   iconWidget: const Image(
@@ -216,12 +227,13 @@ class SecretScreenState extends State<SecretScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: _mode == 2 ? null : 1,
+                  SizedBox(
+                      height: _mode == 2 ? null : 1,
                       child: ImageForm(
                         onChanged: (imageSecret) {
                           setState(() {
                             _imageSecret = imageSecret;
-                           });
+                          });
                         },
                         onSaved: () {
                           _onSubmit();
@@ -285,7 +297,6 @@ class SecretScreenState extends State<SecretScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         color: Theme.of(context).colorScheme.surface,
-                        border: Border.all(),
                       ),
                       duration: Duration(milliseconds: 500),
                       curve: Curves.easeInOut,
@@ -303,7 +314,7 @@ class SecretScreenState extends State<SecretScreen> {
                               Row(
                                 children: [
                                   Icon(Icons.timer),
-                                  Text(' Secret expires in'),
+                                  Text('    Secret expires in'),
                                 ],
                               ),
                               Builder(builder: (context) {
@@ -341,7 +352,7 @@ class SecretScreenState extends State<SecretScreen> {
                               Row(
                                 children: [
                                   Icon(Icons.visibility_outlined),
-                                  Text(' Show secret for'),
+                                  Text('     Show secret for'),
                                 ],
                               ),
                               Builder(builder: (context) {
@@ -377,10 +388,9 @@ class SecretScreenState extends State<SecretScreen> {
                           Builder(builder: (context) {
                             List<Widget> childs = [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Icon(Icons.save_outlined),
-                                  Text(' Secret expires in'),
+                                  Text('     Meta-Information'),
                                 ],
                               ),
                               Builder(builder: (context) {
@@ -397,7 +407,7 @@ class SecretScreenState extends State<SecretScreen> {
                                       });
                                     }));
                                 childs.add(SizedBox(width: 10));
-                                return Row(children: childs);
+                                return Row(children: childs, mainAxisAlignment: MainAxisAlignment.start,);
                               })
                             ];
                             if (width > breakpointSmall) {
@@ -417,6 +427,11 @@ class SecretScreenState extends State<SecretScreen> {
                       keyboardType: TextInputType.url,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(20),
+                        prefixIconConstraints: BoxConstraints(
+                          minWidth: 50,
+                          minHeight: 45,
+                        ),
+                        prefixIconColor: Color(0xffB3B3B3).withOpacity(0.5),
                         prefixIcon: InkWell(
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
@@ -432,7 +447,12 @@ class SecretScreenState extends State<SecretScreen> {
                           child: Icon(Icons.copy),
                         ),
                         border: OutlineInputBorder(),
-                        hintText: 'https://pws-agency.com',
+                        hintText: 'https://pws-secrets.com/secret/asdfjkl...',
+                        hintStyle: TextStyle(
+                          fontFamily: 'ChivoDivo',
+                          color: Color(0xffB3B3B3).withOpacity(0.7),
+                          fontWeight: FontWeight.w100,
+                        ),
                       ),
                       readOnly: true,
                       selectionControls: MaterialTextSelectionControls(),

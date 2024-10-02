@@ -53,7 +53,11 @@ class SecretsAccordionState extends State<SecretsAccordion> {
                 children: [
                   Text(
                     widget.title,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                      fontSize: 22,
+                      fontFamily: 'SpaceGrotesk',
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                   Transform.rotate(
                     angle: _isExpanded ? 3.14 / 2 : 3.14 / 2 + 3.14,

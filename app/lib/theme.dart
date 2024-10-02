@@ -27,12 +27,27 @@ class SecretsTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       textTheme: ThemeData.light().textTheme.copyWith(
+        headlineLarge: ThemeData.light().textTheme.headlineLarge!.copyWith(
+          fontSize: 40,
+        ),
         headlineMedium: ThemeData.light().textTheme.headlineMedium!.copyWith(
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w100,
+          fontSize: 40,
+        ),
+        headlineSmall: ThemeData.light().textTheme.headlineSmall?.copyWith(
+          fontSize: 28,
+          fontWeight: FontWeight.w400,
+          fontFamily: 'SpaceGrotesk',
+        ),
+        bodyMedium: ThemeData.light().textTheme.bodyMedium!.copyWith(
+          color: Color(0xffababab),
+          fontFamily: 'ChivoDivo',
+          fontWeight: FontWeight.w400,
+          fontSize: 16,
         ),
       ).apply(
-            fontFamily: 'ChivoDivo',
-          ),
+        fontFamily: 'ChivoDivo',
+      ),
       useMaterial3: false,
       primarySwatch: createMaterialColor(primary_color),
       appBarTheme: const AppBarTheme(
@@ -62,15 +77,23 @@ class SecretsTheme {
           fontWeight: FontWeight.w100,
           fontSize: 40,
         ),
-        headlineSmall: ThemeData.dark().textTheme.headlineSmall!.copyWith(
-          fontSize: 32,
-          fontWeight: FontWeight.w700,
+        headlineSmall: ThemeData.dark().textTheme.headlineSmall?.copyWith(
+          fontSize: 28,
+          fontWeight: FontWeight.w400,
+          fontFamily: 'SpaceGrotesk',
+        ),
+        bodyMedium: ThemeData.dark().textTheme.bodyMedium!.copyWith(
+          color: Color(0xffababab),
+          fontFamily: 'ChivoDivo',
+          fontWeight: FontWeight.w400,
+          fontSize: 16,
         ),
       ).apply(
         fontFamily: 'ChivoDivo',
       ),
       primaryColor: const Color(0xfffc3742),
       focusColor: const Color(0xfffc3742),
+      scaffoldBackgroundColor: Color(0xff171717),
       colorScheme: const ColorScheme.dark(
         primary: Color(0xfffc3742),
         surface: Color(0xff414141),

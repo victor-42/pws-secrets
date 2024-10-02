@@ -94,6 +94,11 @@ class _NoteFormState extends State<NoteForm> {
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             hintText: _placeholderText,
+            hintStyle: TextStyle(
+              fontFamily: 'ChivoDivo',
+              color: Color(0xffB3B3B3).withOpacity(0.7),
+              fontWeight: FontWeight.w300,
+            ),
           ),
           maxLines: 10,
         ),
