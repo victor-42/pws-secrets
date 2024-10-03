@@ -195,11 +195,11 @@ class AboutScreenState extends State<AboutScreen> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'pws_secrets is a free web-based service that allows users to create encrypted messages that they can exchange over the Internet as unique HTTPS URLs'
+                          'pws_secrets is a free web-based service that allows users to create encrypted messages that they can exchange over the Internet as unique HTTPS URLs '
                           '(hereinafter referred to as links), which by default expire after initial access through any web browser.\n\n'
                           'Since pws_secrets does not provide any means of transmitting the link, the responsibility for sending the link lies with the users of pws_secrets.\n\n'
-                          'Depending on the communication channel you choose (e.g. e-mail, fax, SMS, telephone, instant messaging, social media) there may be a certain risk that'
-                          'third parties may intercept your communication, gain knowledge of the link provided and thus be able to read your secrets.',
+                          'Depending on the communication channel you choose (e.g. e-mail, fax, SMS, telephone, instant messaging, social media) there may be a certain risk  '
+                          'third parties may intercept your communication, gain knowledge of the link provided and thus be able to read your secrets. ',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(height: 10),
@@ -212,15 +212,14 @@ class AboutScreenState extends State<AboutScreen> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'The link is generated in the user\'s browser and is never sent as such to pws_secrets. The link is therefore only in the hands of the sender (and later'
-                            'possibly the recipient). Therefore there is no way to restore a secret if a user loses the link. \n\n'
-                          'Since only the link binds the decryption key to the contents of the secret and <i>pws_secrets</i> does not own the link, at no time is a message in a readable'
-                            'format held by <i>pws_secrets</i>. This ensures that nobody (not even the administrators of <i>pws_secrets</i>) can read a note.\n\n'
-                              'Once a created URL has been retrieved, there is absolutely no way to restore it.\n\n'
-                          'The <i>pws_secrets</i> system administrator team will do as much as possible to protect the website from unauthorized access, modification or destruction. But'
-                         ' even if someone or something manages to gain access to the web server, they cannot read the secrets, because their content is encrypted and cannot be'
-                        'decrypted without the links that <i>pws_secrets</i> never has.'
-                          ,
+                          'The link is generated in the user\'s browser and is never sent as such to pws_secrets. The link is therefore only in the hands of the sender (and later '
+                          'possibly the recipient). Therefore there is no way to restore a secret if a user loses the link. \n\n'
+                          'Since only the link binds the decryption key to the contents of the secret and pws_secrets does not own the link, at no time is a message in a readable '
+                          'format held by pws_secrets. This ensures that nobody (not even the administrators of pws_secrets) can read a note.\n\n'
+                          'Once a created URL has been retrieved, there is absolutely no way to restore it.\n\n'
+                          'The pws_secrets system administrator team will do as much as possible to protect the website from unauthorized access, modification or destruction. But '
+                          ' even if someone or something manages to gain access to the web server, they cannot read the secrets, because their content is encrypted and cannot be '
+                          'decrypted without the links that pws_secrets never has.',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(height: 10),
@@ -231,6 +230,120 @@ class AboutScreenState extends State<AboutScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'For the purpose of visiting the website, we only collect and process the information and personal data that your internet browser automatically transmitted to us, such as\n\n'
+                          '- date and time of the call of the web page\n'
+                          '- your browser type and version and browser settings\n'
+                          '- name and version of your operating system the website from which you visit our website (referrer URL)\n'
+                          '- your IP address\n'
+                          '- the URL you requested \n \n'
+                          'This information and personal data is required for the purpose of delivering the content of the website correctly, as well as to ensure network and information '
+                          'security and to protect the website from attacks, disruptions and damage. '
+                          'The personal data collected when the website is accessed, in particular the user\'s IP address, is deleted no later than seven days after it was collected, '
+                          'unless an attack or threat by the user has been identified.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '4. Pseudonymised data',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'The creator of a secret can enter personal data into the message or send it via image. Even if these data are encrypted, they can be decrypted again and thus '
+                          'represent pseudonymised (personal) data. In any case, the creator of the note cannot be deduced from the database of pws_secrets, because pws_secrets does not '
+                          'store URLs that have been created.\n\n'
+                          'The decryption of the message data is in the hands of the users (sender and recipient). pws_secrets is not able to decrypt the note and access the data (personal '
+                          'or other) entered by the creator, because pws_secrets never has the decryption key, which is only contained in the link.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '5. Disclaimer',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'When a person clicks on a pws_secrets link, pws_secrets disclaims any responsibility for the content of the note.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '6. Disclosure of data to third parties',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'pws_secrets does not share, sell or use information with others in any way not mentioned in this privacy statement.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '7. Use of cookies',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'pws_secrets does not use cookies (small text files that are stored on your computer by your browser when you visit a website), not even in our own interest, '
+                          ' to improve the use of our website and our service. However, we store information locally on your web browser, this is limited to the preferences used to create a secret and an identifier of the created secrets (however, this function is off by default).',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '8. Children',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'The service is not aimed at children under 16 and is not intended to attract them. Minors must obtain the express consent of their parents or legal guardians'
+                           ' before accessing or using pws_secrets.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '9. Validity of this privacy policy',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Please note that this privacy policy may be changed from time to time. We expect that most changes will be minor. However, we will post any changes to the policy '
+                            'on this page, and if the changes are significant, we will post a more prominent notice, such as a notice on the home page. Each version of this Policy is identified '
+                        'at the top of the page by its effective date.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '10. Contact',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'If you have any questions about this privacy policy or other privacy concerns, please email us at secrets@pws-agency.com '
+                              ' and we will respond to you in less than 5 business days.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        )
                       ],
                     )),
                 const SizedBox(height: 15),
