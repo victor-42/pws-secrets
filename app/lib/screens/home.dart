@@ -77,19 +77,17 @@ class WelcomeTexts extends StatelessWidget {
         const SizedBox(height: 50),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text('One-Time Secrets',
-              style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w700)),
           const SizedBox(height: 15),
           Text(     oneTimeSecretText,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.w100,
-              )),
+              style: Theme.of(context).textTheme.bodyMedium!,),
           const SizedBox(height: 50),
           Text('End-to-End Encryption',
-              style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w700)),
           const SizedBox(height: 15),
           Text(encryptionText, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 50),
-          Text('Your Choice', style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
+          Text('Your Choice', style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w700)),
           const SizedBox(height: 15),
           Text(yourChoiceText, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 50),
@@ -184,7 +182,7 @@ class PinnedMessage extends StatelessWidget {
                             fontSize: 30,
                             fontFamily: 'SpaceGrotesk',
                             color: Theme.of(context).textTheme.bodyMedium!.color,
-                            fontWeight: FontWeight.w600
+                            fontWeight: FontWeight.w500
                         ),
                         children: [
                           TextSpan(
@@ -262,10 +260,10 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Last Secrets',
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w700)),
               const SizedBox(height: 15),
               Text(lastSecretText,
-                  style: Theme.of(context).textTheme.bodyMedium),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w400)),
             ],
           ),
         ),

@@ -56,7 +56,7 @@ class SecretsAccordionState extends State<SecretsAccordion> {
                     style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                       fontSize: 22,
                       fontFamily: 'SpaceGrotesk',
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   Transform.rotate(
