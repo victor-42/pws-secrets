@@ -33,10 +33,59 @@ flutter:
   fonts:
     - family: ChivoDivo
       fonts:
-          - asset: assets/fonts/Chivo-VariableFont_wght.ttf
+          - asset: assets/fonts/chivo/Chivo-Thin.ttf
+            weight: 100
+          - asset: assets/fonts/chivo/Chivo-ThinItalic.ttf
+            weight: 100
+            style: italic
+          - asset: assets/fonts/chivo/Chivo-ExtraLight.ttf
+            weight: 200
+          - asset: assets/fonts/chivo/Chivo-ExtraLightItalic.ttf
+            weight: 200
+            style: italic
+          - asset: assets/fonts/chivo/Chivo-Light.ttf
+            weight: 300
+          - asset: assets/fonts/chivo/Chivo-LightItalic.ttf
+            weight: 300
+            style: italic
+          - asset: assets/fonts/chivo/Chivo-Regular.ttf
+            weight: 400
+          - asset: assets/fonts/chivo/Chivo-Italic.ttf
+            weight: 400
+            style: italic
+          - asset: assets/fonts/chivo/Chivo-Medium.ttf
+            weight: 500
+          - asset: assets/fonts/chivo/Chivo-MediumItalic.ttf
+            weight: 500
+            style: italic
+          - asset: assets/fonts/chivo/Chivo-SemiBold.ttf
+            weight: 600
+          - asset: assets/fonts/chivo/Chivo-SemiBoldItalic.ttf
+            weight: 600
+          - asset: assets/fonts/chivo/Chivo-Bold.ttf
+            weight: 700
+          - asset: assets/fonts/chivo/Chivo-BoldItalic.ttf
+            weight: 700
+          - asset: assets/fonts/chivo/Chivo-ExtraBold.ttf
+            weight: 800
+          - asset: assets/fonts/chivo/Chivo-ExtraBoldItalic.ttf
+            weight: 800
+          - asset: assets/fonts/chivo/Chivo-Black.ttf
+            weight: 900
+          - asset: assets/fonts/chivo/Chivo-BlackItalic.ttf
+            weight: 900
     - family: SpaceGrotesk
       fonts:
-          - asset: assets/fonts/space-grotesk.ttf
+          - asset: assets/fonts/space_grotesk/SpaceGrotesk-Light.ttf
+            weight: 300
+          - asset: assets/fonts/space_grotesk/SpaceGrotesk-Regular.ttf
+            weight: 400
+          - asset: assets/fonts/space_grotesk/SpaceGrotesk-Medium.ttf
+            weight: 500
+          - asset: assets/fonts/space_grotesk/SpaceGrotesk-SemiBold.ttf
+            weight: 600
+          - asset: assets/fonts/space_grotesk/SpaceGrotesk-Bold.ttf
+            weight: 700
 
   assets:
     - assets/logo/
