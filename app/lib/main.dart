@@ -100,9 +100,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
           title: Image.asset(
-            _themeMode == ThemeMode.light
-                ? 'assets/logo/secrets_black_small.png'
-                : 'assets/logo/secrets_white_small.png',
+            Theme.of(context).brightness == Brightness.dark
+                ? 'assets/logo/secrets_white_small.png'
+                : 'assets/logo/secrets_black_small.png',
             fit: BoxFit.contain,
             filterQuality: FilterQuality.high,
             isAntiAlias: true,
@@ -148,9 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Image.asset(
-                    _themeMode == ThemeMode.light
-                        ? 'assets/secret-icons/pirate.png'
-                        : 'assets/secret-icons/pirate_white.png',
+                      Theme.of(context).brightness == Brightness.dark
+                        ? 'assets/secret-icons/pirate_white.png'
+                        : 'assets/secret-icons/pirate.png',
                     color: _selectedIndex == 1 ? Theme.of(context).primaryColor : null,
                     height: 24,
                   ),
