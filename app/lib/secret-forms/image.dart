@@ -72,9 +72,10 @@ class _ImageFormState extends State<ImageForm> {
               decoration: InputDecoration(
                 hintText: 'Write down a note...',
                 hintStyle: TextStyle(
-
-                  color: Color(0xffB3B3B3).withOpacity(0.7),
-
+                  fontWeight: FontWeight.w100,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Color(0xff252525).withOpacity(0.8)
+                      : Color(0xffB3B3B3).withOpacity(0.7),
                 ),
                 border: OutlineInputBorder(),
               ),

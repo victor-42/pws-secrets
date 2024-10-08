@@ -81,6 +81,7 @@ class SecretsTheme {
           fontSize: 28,
           fontWeight: FontWeight.w400,
           fontFamily: 'SpaceGrotesk',
+          color: Color(0xffffffff),
         ),
         bodyMedium: ThemeData.dark().textTheme.bodyMedium!.copyWith(
           color: Color(0xffababab),
@@ -96,8 +97,8 @@ class SecretsTheme {
       scaffoldBackgroundColor: Color(0xff171717),
       colorScheme: const ColorScheme.dark(
         primary: Color(0xfffc3742),
-        surface: Color(0xff414141),
-        secondary:Color(0xff414141),
+        surface: Color(0xff26262B),
+        secondary:Color(0xff26262B),
         background: Color(0xff303030),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -109,8 +110,9 @@ class SecretsTheme {
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         selectedItemColor: Color(0xfffc3742),
         unselectedItemColor: Color(0xffffffff),
-        backgroundColor: Color(0xff414141),
+        backgroundColor: Color(0xff26262B),
       ),
+      cardColor: Color(0xff26262B),
     );
   }
 }

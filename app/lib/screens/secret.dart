@@ -266,7 +266,8 @@ class SecretScreenState extends State<SecretScreen> {
                                         width: 20,
                                         child:
                                             const CircularProgressIndicator())
-                                    : const Text('Make the secret secret')),
+                                    : const Text('Make the secret secret',
+                                style: TextStyle(fontSize: 17),)),
                           ),
                         ),
                         SizedBox(width: 10),
@@ -313,8 +314,8 @@ class SecretScreenState extends State<SecretScreen> {
                             List<Widget> childs = [
                               Row(
                                 children: [
-                                  Icon(Icons.timer),
-                                  Text('    Secret expires in'),
+                                  Icon(Icons.calendar_month),
+                                  Text('     Secret expires in'),
                                 ],
                               ),
                               Builder(builder: (context) {
@@ -351,7 +352,7 @@ class SecretScreenState extends State<SecretScreen> {
                             List<Widget> childs = [
                               Row(
                                 children: [
-                                  Icon(Icons.visibility_outlined),
+                                  Icon(Icons.visibility),
                                   Text('     Show secret for'),
                                 ],
                               ),
@@ -389,7 +390,7 @@ class SecretScreenState extends State<SecretScreen> {
                             List<Widget> childs = [
                               Row(
                                 children: [
-                                  Icon(Icons.save_outlined),
+                                  Icon(Icons.save),
                                   Text('     Meta-Information'),
                                 ],
                               ),
@@ -431,7 +432,10 @@ class SecretScreenState extends State<SecretScreen> {
                           minWidth: 50,
                           minHeight: 45,
                         ),
-                        prefixIconColor: Color(0xffB3B3B3).withOpacity(0.5),
+                        // Different colors on different light / dark themes
+                        prefixIconColor: Theme.of(context).brightness == Brightness.light
+                            ? Color(0xff252525).withOpacity(0.8)
+                            : Color(0xffB3B3B3).withOpacity(0.5),
                         prefixIcon: InkWell(
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
@@ -450,7 +454,10 @@ class SecretScreenState extends State<SecretScreen> {
                         hintText: 'https://pws-secrets.com/secret/asdfjkl...',
                         hintStyle: TextStyle(
                           fontFamily: 'ChivoDivo',
-                          color: Color(0xffB3B3B3).withOpacity(0.7),
+                          // Different colors on different light / dark themes
+                          color: Theme.of(context).brightness == Brightness.light
+                              ? Color(0xff252525).withOpacity(0.8)
+                              : Color(0xffB3B3B3).withOpacity(0.5),
                           fontWeight: FontWeight.w100,
                         ),
                       ),

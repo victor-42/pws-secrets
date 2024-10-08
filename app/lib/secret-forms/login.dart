@@ -74,7 +74,9 @@ class _LoginFormState extends State<LoginForm> {
               decoration: InputDecoration(
                   labelText: 'Username',
                   labelStyle: TextStyle(
-                    color: Color(0xffb3b3b3).withOpacity(0.7),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Color(0xff252525).withOpacity(0.8)
+                        : Color(0xffB3B3B3).withOpacity(0.7),                    fontWeight: FontWeight.w100,
                   ),
                   border: OutlineInputBorder()),
               validator: (value) {
@@ -87,7 +89,9 @@ class _LoginFormState extends State<LoginForm> {
               decoration: InputDecoration(
                 labelText: 'Password',
                 labelStyle: TextStyle(
-                  color: Color(0xffb3b3b3).withOpacity(0.7),
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Color(0xff252525).withOpacity(0.8)
+                      : Color(0xffB3B3B3).withOpacity(0.7),                  fontWeight: FontWeight.w100,
                 ),
                 border: OutlineInputBorder(),
                 suffixIconConstraints: BoxConstraints(

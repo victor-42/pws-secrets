@@ -96,8 +96,10 @@ class _NoteFormState extends State<NoteForm> {
             hintText: _placeholderText,
             hintStyle: TextStyle(
               fontFamily: 'ChivoDivo',
-              color: Color(0xffB3B3B3).withOpacity(0.7),
-              fontWeight: FontWeight.w300,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Color(0xff252525).withOpacity(0.8)
+                  : Color(0xffB3B3B3).withOpacity(0.7),
+              fontWeight: FontWeight.w100,
             ),
           ),
           maxLines: 10,

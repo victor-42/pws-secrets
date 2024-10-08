@@ -6,6 +6,7 @@ import 'package:app/theme.dart';
 import 'package:app/widgets/radio_card_button.dart';
 import 'package:app/widgets/secret_archive_listtile.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../locator.dart';
 
@@ -54,7 +55,23 @@ class LastSecretsScreenState extends State<LastSecretsScreen> {
             WelcomeTexts(onToNewSecrets: widget.onToNewSecrets),
             LastSecretsWidget(onToNewSecrets: widget.onToNewSecrets,onToAbout: widget.onToAbout,),
             const SizedBox(height: 50),
-            Text('\u00a9 2024 pws_agency', style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w100, color: Colors.grey.withOpacity(0.5))),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('\u00a92024', style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w100, color: Colors.grey.withOpacity(0.5))),
+                InkWell(
+                    splashColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      Uri uri = Uri.https('pws-agency.com');
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri);
+                      }
+                    },
+                    child: Text(' pws_agency', style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w100, color: Colors.grey.withOpacity(0.5)))),
+              ],
+            ),
             const SizedBox(height: 20),
           ],
         ),
@@ -349,7 +366,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
           child: Align(
               alignment: Alignment.topLeft,
               child: Text('Links',
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w900)),
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.w700)),
         ),),
         const SizedBox(height: 15),
         Container(
@@ -384,7 +401,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
                       Text(links[index][0],
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    decoration: TextDecoration.underline,
+                                //    decoration: TextDecoration.underline,
                                 color: _linkHovering[index] ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodyMedium!.color,
                                   )),
                     ],

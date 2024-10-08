@@ -61,7 +61,7 @@ class LinkedTextRowWidgetState extends State<LinkedTextRowWidget> {
                           : widget.usePrimaryColor
                               ? Theme.of(context).primaryColor
                               : Theme.of(context).textTheme.bodyLarge!.color,
-                      decoration: TextDecoration.underline,
+                      //decoration: TextDecoration.underline,
                     )),
             onTap: () async {
               // Open link
@@ -479,7 +479,13 @@ class AboutScreenState extends State<AboutScreen> {
                     Row(
                       children: [
                         Text('made with ',
-                            style: Theme.of(context).textTheme.bodyLarge),
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .color!
+                                .withOpacity(0.5),
+                          ),),
                         Image.asset(
                           // If dark, use different image
                           Theme.of(context).brightness == Brightness.dark
