@@ -267,7 +267,7 @@ class SecretScreenState extends State<SecretScreen> {
                                         child:
                                             const CircularProgressIndicator())
                                     : const Text('Make the secret secret',
-                                style: TextStyle(fontSize: 17),)),
+                                style: TextStyle(fontSize: 16),)),
                           ),
                         ),
                         SizedBox(width: 10),

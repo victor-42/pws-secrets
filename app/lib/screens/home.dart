@@ -354,10 +354,10 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
               _stateManager.reloadHomeInformation();
               setState(() {});
             },
-            label: Text('RELOAD',
+            label: Text('Reload',
             style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w100,
+              fontWeight: FontWeight.w500,
             ),)),
 
         const SizedBox(height: 40),
