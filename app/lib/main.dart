@@ -25,9 +25,9 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.dark;
 
-  void toggleTheme(isDark) {
+  void setThemeMode(ThemeMode mode) {
     setState(() {
-      _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+      _themeMode = mode;
     });
   }
 
@@ -40,7 +40,7 @@ class MyAppState extends State<MyApp> {
       darkTheme: SecretsTheme.darkTheme,
       home: MyHomePage(
         title: 'PWS Secrets',
-        onThemeToggle: toggleTheme,
+        setThemeMode: setThemeMode,
       ),
     );
   }
@@ -49,10 +49,10 @@ class MyAppState extends State<MyApp> {
 
 class MyHomePage extends StatefulWidget {
   final String title;
-  final Function(bool) onThemeToggle;
+  final Function(ThemeMode) setThemeMode;
 
   const MyHomePage(
-      {super.key, required this.title, required this.onThemeToggle});
+      {super.key, required this.title, required this.setThemeMode});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -86,15 +86,22 @@ class _MyHomePageState extends State<MyHomePage> {
           centerTitle: true,
           actions: [
             IconButton(
-              icon: _themeMode == ThemeMode.dark
+              icon: Theme.of(context).brightness == Brightness.dark
                   ? const Icon(Icons.light_mode)
                   : const Icon(Icons.dark_mode),
               onPressed: () {
-                widget.onThemeToggle(_themeMode == ThemeMode.light);
                 setState(() {
-                  _themeMode = _themeMode == ThemeMode.light
-                      ? ThemeMode.dark
-                      : ThemeMode.light;
+                  if (_themeMode == ThemeMode.system) {
+                    widget.setThemeMode(ThemeMode.dark);
+                    _themeMode = ThemeMode.dark;
+                  } else if (_themeMode == ThemeMode.light) {
+                    widget.setThemeMode(ThemeMode.dark);
+                    _themeMode = ThemeMode.dark;
+
+                  } else if (_themeMode == ThemeMode.dark) {
+                    widget.setThemeMode(ThemeMode.light);
+                    _themeMode = ThemeMode.light;
+                  }
                 });
               },
             ),
