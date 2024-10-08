@@ -76,7 +76,8 @@ class _LoginFormState extends State<LoginForm> {
                   labelStyle: TextStyle(
                     color: Theme.of(context).brightness == Brightness.light
                         ? Color(0xff252525).withOpacity(0.8)
-                        : Color(0xffB3B3B3).withOpacity(0.7),                    fontWeight: FontWeight.w100,
+                        : Color(0xffB3B3B3).withOpacity(0.7),
+                    fontWeight: FontWeight.w100,
                   ),
                   border: OutlineInputBorder()),
               validator: (value) {
@@ -91,7 +92,8 @@ class _LoginFormState extends State<LoginForm> {
                 labelStyle: TextStyle(
                   color: Theme.of(context).brightness == Brightness.light
                       ? Color(0xff252525).withOpacity(0.8)
-                      : Color(0xffB3B3B3).withOpacity(0.7),                  fontWeight: FontWeight.w100,
+                      : Color(0xffB3B3B3).withOpacity(0.7),
+                  fontWeight: FontWeight.w100,
                 ),
                 border: OutlineInputBorder(),
                 suffixIconConstraints: BoxConstraints(
