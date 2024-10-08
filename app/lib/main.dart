@@ -86,9 +86,9 @@ class _MyHomePageState extends State<MyHomePage> {
           centerTitle: true,
           actions: [
             IconButton(
-              icon: _themeMode == ThemeMode.light
-                  ? const Icon(Icons.dark_mode)
-                  : const Icon(Icons.light_mode),
+              icon: _themeMode == ThemeMode.dark
+                  ? const Icon(Icons.light_mode)
+                  : const Icon(Icons.dark_mode),
               onPressed: () {
                 widget.onThemeToggle(_themeMode == ThemeMode.light);
                 setState(() {
