@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:app/state-manager.dart';
 import 'package:app/theme.dart';
@@ -135,6 +134,7 @@ class WelcomeTexts extends StatelessWidget {
 class PinnedMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    bool _mobile = MediaQuery.of(context).size.width < breakpointSmall;
     return Container(
       width: double.infinity,
       constraints: BoxConstraints(maxWidth: 700),
@@ -173,7 +173,7 @@ class PinnedMessage extends StatelessWidget {
                       Text(
                         'Share a secret ',
                         style: TextStyle(
-                            fontSize: 40,
+                            fontSize: _mobile ? 27 :  40,
                             fontFamily: 'SpaceGrotesk',
                             fontWeight: FontWeight.w700,
                             color: Theme.of(context).brightness == Brightness.dark
@@ -196,7 +196,7 @@ class PinnedMessage extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                         style: TextStyle(
-                            fontSize: 30,
+                            fontSize: 23,
                             fontFamily: 'SpaceGrotesk',
                             color: Theme.of(context).textTheme.bodyMedium!.color,
                             fontWeight: FontWeight.w500
@@ -315,7 +315,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
                     width: _mobile?20:100,
                   ),
                   Text(
-                      'no one has saved the meta information yet, please reload',
+                      'no one has saved the meta information ${_mobile ? '\n' : ''} yet, please reload',
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Theme.of(context)
                                 .textTheme
