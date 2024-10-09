@@ -61,7 +61,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<SecretScreenState> _secretScreenKey = GlobalKey<SecretScreenState>();
   final GlobalKey<AboutScreenState> _aboutScreenKey = GlobalKey<AboutScreenState>();
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.dark;
   int _selectedIndex = 0;
   int? _aboutAccordionIndex;
 
