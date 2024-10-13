@@ -25,9 +25,10 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.dark;
 
-  void setThemeMode(ThemeMode mode) {
+  void toggleThemeMode() {
     setState(() {
-      _themeMode = mode;
+      _themeMode =
+          _themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
     });
   }
 
@@ -40,28 +41,28 @@ class MyAppState extends State<MyApp> {
       darkTheme: SecretsTheme.darkTheme,
       home: MyHomePage(
         title: 'PWS Secrets',
-        setThemeMode: setThemeMode,
+        toggleThemeMode: toggleThemeMode,
       ),
     );
   }
 }
 
-
 class MyHomePage extends StatefulWidget {
   final String title;
-  final Function(ThemeMode) setThemeMode;
+  final Function() toggleThemeMode;
 
   const MyHomePage(
-      {super.key, required this.title, required this.setThemeMode});
+      {super.key, required this.title, required this.toggleThemeMode});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final GlobalKey<SecretScreenState> _secretScreenKey = GlobalKey<SecretScreenState>();
-  final GlobalKey<AboutScreenState> _aboutScreenKey = GlobalKey<AboutScreenState>();
-  ThemeMode _themeMode = ThemeMode.dark;
+  final GlobalKey<SecretScreenState> _secretScreenKey =
+      GlobalKey<SecretScreenState>();
+  final GlobalKey<AboutScreenState> _aboutScreenKey =
+      GlobalKey<AboutScreenState>();
   int _selectedIndex = 0;
   int? _aboutAccordionIndex;
 
@@ -73,10 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => _showStartupDialog(context));
     }
-    var brightness =
-        SchedulerBinding.instance.platformDispatcher.platformBrightness;
-    _themeMode =
-    brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
   }
 
   @override
@@ -91,17 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   : const Icon(Icons.dark_mode),
               onPressed: () {
                 setState(() {
-                  if (_themeMode == ThemeMode.system) {
-                    widget.setThemeMode(ThemeMode.dark);
-                    _themeMode = ThemeMode.dark;
-                  } else if (_themeMode == ThemeMode.light) {
-                    widget.setThemeMode(ThemeMode.dark);
-                    _themeMode = ThemeMode.dark;
-
-                  } else if (_themeMode == ThemeMode.dark) {
-                    widget.setThemeMode(ThemeMode.light);
-                    _themeMode = ThemeMode.light;
-                  }
+                  widget.toggleThemeMode();
                 });
               },
             ),
@@ -121,19 +108,21 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             LastSecretsScreen(
               onToNewSecrets: (int? mode) {
-              if (mode != null) {
-                _secretScreenKey.currentState?.changeMode(mode);
-              }
-              setState(() {
-                _selectedIndex = 1;
-              });
-            },
-            onToAbout: (int accordionIndex) {
-              setState(() {
-                _aboutScreenKey.currentState?.setAccordionIndex(accordionIndex);
-                _selectedIndex = 2;
-              });
-            },),
+                if (mode != null) {
+                  _secretScreenKey.currentState?.changeMode(mode);
+                }
+                setState(() {
+                  _selectedIndex = 1;
+                });
+              },
+              onToAbout: (int accordionIndex) {
+                setState(() {
+                  _aboutScreenKey.currentState
+                      ?.setAccordionIndex(accordionIndex);
+                  _selectedIndex = 2;
+                });
+              },
+            ),
             SecretScreen(
               key: _secretScreenKey,
             ),
@@ -155,10 +144,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Image.asset(
-                      Theme.of(context).brightness == Brightness.dark
+                    Theme.of(context).brightness == Brightness.dark
                         ? 'assets/secret-icons/pirate_white.png'
                         : 'assets/secret-icons/pirate.png',
-                    color: _selectedIndex == 1 ? Theme.of(context).primaryColor : null,
+                    color: _selectedIndex == 1
+                        ? Theme.of(context).primaryColor
+                        : null,
                     height: 24,
                   ),
                   label: 'Secret',
@@ -170,12 +161,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
               currentIndex: _selectedIndex,
               onTap: (int index) => {
-                setState(
+                    setState(
                       () {
-                    _selectedIndex = index;
-                  },
-                )
-              }),
+                        _selectedIndex = index;
+                      },
+                    )
+                  }),
         ));
   }
 
@@ -183,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext context) => RevealScreen(),
       fullscreenDialog:
-      true, // This makes the page slide up from the bottom and include a close button on iOS.
+          true, // This makes the page slide up from the bottom and include a close button on iOS.
     ));
   }
 }
