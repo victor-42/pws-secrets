@@ -14,9 +14,8 @@ import 'package:uuid/uuid.dart';
 class StateManager {
   SharedPreferences? _prefs;
 
-  String apiUrl = '${Uri.base.origin}/api/';
-
-  //String apiUrl = 'http://localhost:8000/api/';
+  //String apiUrl = '${Uri.base.origin}/api/';
+  String apiUrl = 'http://localhost:8000/api/';
   List<String> _archivedUuidList = [];
   DateTime? oldExpiration;
   List<SecretArchive>? oldArchives;
@@ -56,7 +55,7 @@ class StateManager {
       if (response.statusCode != 200) {
         return null;
       } else {
-        return jsonDecode(response.body);
+        return jsonDecode(utf8.decode(response.bodyBytes));
       }
     });
   }

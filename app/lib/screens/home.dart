@@ -203,10 +203,10 @@ class PinnedMessage extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: '...with a link that operates ',
+                            text: '...share sensitive information securely with a one-time link that ',
                           ),
                           TextSpan(
-                              text: 'just once \n',
+                              text: 'self-destructs',
                               style: TextStyle(
                                   decoration: TextDecoration.underline,
                                   decorationColor: Theme.of(context)
@@ -215,7 +215,7 @@ class PinnedMessage extends StatelessWidget {
                                   color:
                                       Theme.of(context).colorScheme.primary)),
                           TextSpan(
-                            text: 'before self-destructing',
+                            text: ' after being accessed, ensuring your data stays private.',
                           ),
                         ]),
                   ),
