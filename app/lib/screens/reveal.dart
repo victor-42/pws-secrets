@@ -149,7 +149,7 @@ class ImageRevealScreenState extends State<ImageRevealScreen> {
         ),
         SizedBox(height: 20),
         Text(widget.secretObj['note'] ?? '',
-            style: Theme.of(context).textTheme.headlineLarge),
+            style: Theme.of(context).textTheme.headlineSmall),
       ],
     );
   }
@@ -180,7 +180,7 @@ class LoginRevealScreenState extends State<LoginRevealScreen> {
                     child: Text(widget.secretObj['username'] ?? '',
                         style: Theme.of(context)
                             .textTheme
-                            .headlineLarge
+                            .headlineSmall
                             ?.copyWith(color: primary_color)),
                   ),
                 ],
@@ -192,15 +192,15 @@ class LoginRevealScreenState extends State<LoginRevealScreen> {
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
                 onPressed: () {
-                  Clipboard.setData(new ClipboardData(
-                      text: widget.secretObj['password'] ?? ''));
+                  Clipboard.setData(
+                      ClipboardData(text: widget.secretObj['password'] ?? ''));
                 },
                 icon: Icon(Icons.copy)),
             Flexible(
               child: Text(widget.secretObj['password'] ?? '',
                   style: Theme.of(context)
                       .textTheme
-                      .headlineLarge
+                      .headlineSmall
                       ?.copyWith(color: primary_color)),
             )
           ]),
@@ -223,7 +223,7 @@ class NoteRevealScreenState extends State<NoteRevealScreen> {
     return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 800),
         child: Text(widget.secretObj['note'] ?? '',
-            style: Theme.of(context).textTheme.headlineLarge));
+            style: Theme.of(context).textTheme.headlineSmall));
   }
 }
 

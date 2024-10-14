@@ -93,14 +93,24 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
           ],
-          title: Image.asset(
-            Theme.of(context).brightness == Brightness.dark
-                ? 'assets/logo/secrets_white_small.png'
-                : 'assets/logo/secrets_black_small.png',
-            fit: BoxFit.contain,
-            filterQuality: FilterQuality.high,
-            isAntiAlias: true,
-            height: 32,
+          title: InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            onTap: () {
+              setState(() {
+                _selectedIndex = 0;
+              });
+            },
+            child: Image.asset(
+              Theme.of(context).brightness == Brightness.dark
+                  ? 'assets/logo/secrets_white_small.png'
+                  : 'assets/logo/secrets_black_small.png',
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.high,
+              isAntiAlias: true,
+              height: 32,
+            ),
           ),
         ),
         body: IndexedStack(
