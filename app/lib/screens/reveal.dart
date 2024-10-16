@@ -139,7 +139,7 @@ class ImageRevealScreenState extends State<ImageRevealScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 800),
+          constraints: BoxConstraints(maxWidth: 800, maxHeight: 800),
           child: Image.memory(
             base64Decode(
               widget.secretObj['image'] ?? '',
