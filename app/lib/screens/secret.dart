@@ -112,7 +112,30 @@ class SecretScreenState extends State<SecretScreen> {
                     : 'i',
             obj,
             _secretPreferences)
-        .then((url) {
+        .then((pathAndStatus) {
+      var url = pathAndStatus[0];
+      if (pathAndStatus[1] == 413) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Secret too large. Please reduce the size to a maximum of 30MB.'),
+          ),
+        );
+        setState(() {
+          _loading = false;
+        });
+        return;
+      }
+      else if  (pathAndStatus[1] != 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An Error occurred while creating a secret.'),
+          ),
+        );
+        setState(() {
+          _loading = false;
+        });
+        return;
+      }
       if (url == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

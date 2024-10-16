@@ -145,14 +145,17 @@ class StateManager {
     return await _prefs?.getString('Secret');
   }
 
-  Future<String?> createSecret(
+  Future<List<dynamic>> createSecret(
       String type, dynamic secret, SecretPreferences preferences) async {
     // Generate uuid
     var uuid = const Uuid().v4();
 
     callb(response) {
+      if (response.statusCode == 413) {
+        return [null, 413];
+      } else
       if (response.statusCode != 201) {
-        return null;
+        return [null, response.statusCode];
       } else {
         if (preferences.saveMeta) {
           _archivedUuidList.add(uuid);
@@ -160,8 +163,8 @@ class StateManager {
         }
 
         String pathname = window.location.pathname.toString();
-        return '${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname, '')}${pathname == '/' ? '' : '/'}secret/'.replaceAll('/#', '/') +
-            jsonDecode(response.body)['enc'];
+        return ['${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname, '')}${pathname == '/' ? '' : '/'}secret/'.replaceAll('/#', '/') +
+            jsonDecode(response.body)['enc'], null];
       }
     }
 
