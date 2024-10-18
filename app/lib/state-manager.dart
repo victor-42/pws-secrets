@@ -151,9 +151,6 @@ class StateManager {
     var uuid = const Uuid().v4();
 
     callb(response) {
-      if (response.statusCode == 413) {
-        return [null, 413];
-      } else
       if (response.statusCode != 201) {
         return [null, response.statusCode];
       } else {
@@ -164,7 +161,7 @@ class StateManager {
 
         String pathname = window.location.pathname.toString();
         return ['${window.location.href.replaceAll(pathname == '/' ? 'LOLULOVER' : pathname, '')}${pathname == '/' ? '' : '/'}secret/'.replaceAll('/#', '/') +
-            jsonDecode(response.body)['enc'], null];
+            jsonDecode(response.body)['enc'], 201];
       }
     }
 
