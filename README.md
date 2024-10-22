@@ -1,8 +1,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://secrets.pws-agency.com/">
-    <img src="frontend/src/assets/images/one_secrets.png" alt="Logo" width="200" height="38">
+  <a href="https://pws-secrets.com/">
+    <img src="app/assets/logo/pws_black.png" alt="Logo" width="200" height="38">
   </a>
 
   <h3 align="center">README</h3>
@@ -188,7 +188,7 @@ The Message ID refers to the Sqlite DB Entry including:
 - Message ID
 - Expiration Datetime
 - Opened at Datetime (obviously including opened flag)
-- Message Type 
+- Message Type
 
 This information is saved to reduce the information needed in the URL. So that more space is available for the encrypted data.
 
