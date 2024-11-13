@@ -208,7 +208,7 @@ class PinnedMessage extends StatelessWidget {
                           TextSpan(
                               text: 'self-destructs',
                               style: TextStyle(
-                                  decoration: TextDecoration.underline,
+                                  //decoration: TextDecoration.underline,
                                   decorationColor: Theme.of(context)
                                       .colorScheme
                                       .primary,

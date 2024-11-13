@@ -474,7 +474,7 @@ class SecretScreenState extends State<SecretScreen> {
                           child: Icon(Icons.copy),
                         ),
                         border: OutlineInputBorder(),
-                        hintText: 'https://pws-secrets.com/secret/Asdfjkl1234...',
+                        hintText: 'https://pws-secrets.com/secret/gAAAAABnEm1p26eYrXpGF2pG2o...',
                         hintStyle: TextStyle(
                           fontFamily: 'ChivoDivo',
                           // Different colors on different light / dark themes
