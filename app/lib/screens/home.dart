@@ -374,6 +374,7 @@ class LastSecretsWidgetState extends State<LastSecretsWidget> {
           height: 100,
           child: ListView.builder(
               itemCount: links.length,
+              physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return InkWell(
                   onHover: (value) {

@@ -116,8 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ? 'assets/logo/secrets_white_small.png'
                   : 'assets/logo/secrets_black_small.png',
               fit: BoxFit.contain,
-              filterQuality: FilterQuality.high,
-              isAntiAlias: true,
               height: 32,
             ),
           ),
