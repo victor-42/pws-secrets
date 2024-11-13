@@ -9,6 +9,7 @@ import 'package:app/state-manager.dart';
 import 'package:app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   setupLocator();
@@ -72,8 +73,16 @@ class _MyHomePageState extends State<MyHomePage> {
     var url = window.location.href;
     if (url.contains('/secret/')) {
       WidgetsBinding.instance
-          .addPostFrameCallback((_) => _showStartupDialog(context));
+          .addPostFrameCallback((_) => _showRevealDialog(context));
     }
+
+    SharedPreferences.getInstance().then((inst) async => {
+      if (inst.getBool('alreadyVisited') ?? false) {
+        _selectedIndex = 1
+      } else {
+        inst.setBool('alreadyVisited', true)
+      }
+    });
   }
 
   @override
@@ -180,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
   }
 
-  void _showStartupDialog(BuildContext context) {
+  void _showRevealDialog(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext context) => RevealScreen(),
       fullscreenDialog:
