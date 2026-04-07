@@ -11,9 +11,9 @@
     share a secret note, access data or images via a web link that will self-destruct after it is read by your intended recipient.
     <br />
     <br />
-    <a href="https://git.pws-agency.com/pws/secrets.pws-agency.com/-/issues">Report Bug</a>
+    <a href="https://github.com/victor-42/pws-secrets/issues">Report Bug</a>
     ·
-    <a href="https://git.pws-agency.com/pws/secrets.pws-agency.com/-/issues">Request Feature</a>
+    <a href="https://github.com/victor-42/pws-secrets/pulls">Request Feature</a>
     <br />
     <br />
   </p>
@@ -38,12 +38,10 @@
 ## About The Project
 
 <p align="center">
-  <a href="https://secrets.pws-agency.com/home">
-    <img src="frontend/src/assets/images/pws_secret.png" alt="pws_secrets App" >
-  </a>
+  <img src="frontend/src/assets/images/pws_secret.png" alt="pws_secrets" >
 </p>
 
-The application pws_secrets is a small django+python project that is open source and published under the [MIT](https://git.pws-agency.com/pws/secrets.pws-agency.com/-/blob/master/LICENSE) license. So you can have a look at the program code on our GitLab server - if you notice any bugs or just like the app, we'd love to hear from you!
+The application pws_secrets is a small django+python project that is open source and published under the [MIT](https://github.com/victor-42/pws-secrets/blob/master/LICENSE) license. So you can have a look at the program code on our GitLab server - if you notice any bugs or just like the app, we'd love to hear from you!
 
 We've also created an app for each OS - you can find out more [here](#Download).
 
@@ -123,9 +121,9 @@ To start a test server, use this command (activate the venv first):
 
 We have built a app with [nativefier](https://github.com/nativefier/nativefier) for each OS. You can download it here:
 
-- [macOS](https://git.pws-agency.com/pws/secrets.pws-agency.com/-/blob/master/downloads/macOS)
-- [Windows](https://git.pws-agency.com/pws/secrets.pws-agency.com/-/blob/master/downloads/Windows)
-- [Linux](https://git.pws-agency.com/pws/secrets.pws-agency.com/-/blob/master/downloads/Linux)
+- [macOS](https://github.com/victor-42/pws-secrets/blob/master/downloads/macOS)
+- [Windows](https://github.com/victor-42/pws-secrets/blob/master/downloads/Windows)
+- [Linux](https://github.com/victor-42/pws-secrets/blob/master/downloads/Linux)
 
 #### Installation macOS
 
@@ -144,7 +142,7 @@ Download the zip file from the directory. Unzip the file in a directory you want
 
 1. Is pws_secrets really private?
 
-We are confident that pws_secrets is both private and secure, and we are constantly working to make it that way! For more details please read our [privacy policy](https://secrets.pws-agency.com/info).
+We are confident that pws_secrets is both private and secure, and we are constantly working to make it that way! For more details please read our [privacy policy](https://pws-secrets.com/info).
 
 2. How can I send my note? Is there a way to send the link directly from the website?
 
@@ -200,7 +198,7 @@ UUIDs are used to prevent guessing of the ID's.
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://git.pws-agency.com/pws/secrets.pws-agency.com/-/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/victor-42/pws-secrets/issues) for a list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -216,7 +214,7 @@ Contributions are what make the open source community such an amazing place to b
 <!-- LICENSE -->
 ## License
 
-Distributed under the [MIT](https://git.pws-agency.com/pws/secrets.pws-agency.com/-/blob/master/LICENSE) License. See `LICENSE` for more information.
+Distributed under the [MIT](https://github.com/victor-42/pws-secrets/blob/master/LICENSE) License. See `LICENSE` for more information.
 
 <!-- CONTACT -->
 ## Contact
